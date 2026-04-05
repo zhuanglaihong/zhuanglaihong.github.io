@@ -16,7 +16,7 @@
       --teal:      #64ffda;
       --teal-dim:  rgba(100,255,218,.1);
       --font-mono: 'Fira Code', monospace;
-      --font-sans: 'Inter', sans-serif;
+      --font-sans: 'Microsoft YaHei', '微软雅黑', 'Inter', sans-serif;
       --radius:    4px;
       --ease:      cubic-bezier(.645,.045,.355,1);
     }
@@ -94,13 +94,13 @@
     .sidebar-nav ul {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 16px;
     }
     .sidebar-nav a {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 6px 0;
+      padding: 4px 0;
       font-family: var(--font-mono);
       font-size: .85rem;
       letter-spacing: .12em;
@@ -160,7 +160,26 @@
     }
     section:last-child { margin-bottom: 0; }
 
-    /* section label */
+    /* 一级标题 */
+    .sec-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      letter-spacing: -.01em;
+    }
+    .sec-title::after {
+      content: '';
+      display: block;
+      height: 1px;
+      flex: 1;
+      background: var(--bg3);
+    }
+
+    /* section label (mobile only) */
     .sec-label {
       font-family: var(--font-mono);
       font-size: .75rem;
@@ -168,7 +187,7 @@
       text-transform: uppercase;
       color: var(--teal);
       margin-bottom: 28px;
-      display: none; /* shown on mobile */
+      display: none;
     }
 
     /* ============================
@@ -288,19 +307,17 @@
       border-radius: 3px;
     }
 
-    /* 经历子分区标签 */
+    /* 二级标题（工作经历 / 教育经历） */
     .tl-group { margin-bottom: 8px; }
     .tl-group-label {
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 0 0 12px 0;
-      margin-bottom: 4px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--teal);
+      padding-bottom: 12px;
+      margin-bottom: 8px;
       border-bottom: 1px solid var(--bg3);
     }
-    .tl-group + .tl-group { margin-top: 36px; }
+    .tl-group + .tl-group { margin-top: 44px; }
 
     /* ============================
        PROJECTS
@@ -594,7 +611,7 @@
 
     <!-- EXPERIENCE -->
     <section id="experience">
-      <p class="sec-label">经历</p>
+      <h2 class="sec-title">经历</h2>
       <!-- 工作经历 -->
       <div class="tl-group">
         <div class="tl-group-label">工作经历</div>
@@ -670,8 +687,10 @@
 
     <!-- PROJECTS -->
     <section id="projects">
-      <p class="sec-label">项目</p>
-      <div class="projects">
+      <h2 class="sec-title">项目</h2>
+      <div class="tl-group">
+        <div class="tl-group-label">研究项目</div>
+        <div class="projects">
 
         <div class="proj-item">
           <div class="proj-period">2024.12<br>— 2025.06</div>
@@ -723,13 +742,16 @@
           </div>
         </div>
 
+        </div>
       </div>
     </section>
 
     <!-- PAPERS -->
     <section id="papers">
-      <p class="sec-label">论文</p>
-      <div class="papers">
+      <h2 class="sec-title">论文</h2>
+      <div class="tl-group">
+        <div class="tl-group-label">期刊论文</div>
+        <div class="papers">
 
         <div class="paper-item">
           <div class="paper-year">审稿中</div>
@@ -769,15 +791,16 @@
           </div>
         </div>
 
+        </div>
       </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="content-footer">
-      <p>
+      <!-- <p>
         参考 <a href="https://brittanychiang.com" target="_blank">Brittany Chiang</a> 的设计风格，
         由庄赖宏构建 &nbsp;·&nbsp; 2025
-      </p>
+      </p> -->
     </footer>
 
   </main>
