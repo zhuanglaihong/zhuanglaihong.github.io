@@ -27,7 +27,7 @@
       background: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1.7;
     }
     a { color: inherit; text-decoration: none; }
@@ -81,7 +81,7 @@
     }
 
     .sidebar-bio {
-      font-size: .9rem;
+      font-size: 1rem;
       color: var(--text-dim);
       max-width: 300px;
       line-height: 1.65;
@@ -102,7 +102,7 @@
       gap: 14px;
       padding: 6px 0;
       font-family: var(--font-mono);
-      font-size: .78rem;
+      font-size: .85rem;
       letter-spacing: .12em;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -176,7 +176,7 @@
     ============================ */
     .about-text p {
       color: var(--text-dim);
-      font-size: .95rem;
+      font-size: 1.05rem;
       margin-bottom: 14px;
       line-height: 1.75;
     }
@@ -203,7 +203,7 @@
     .skill-group:hover { border-color: var(--teal); transform: translateY(-2px); }
     .skill-group-name {
       font-family: var(--font-mono);
-      font-size: .7rem;
+      font-size: .78rem;
       letter-spacing: .1em;
       text-transform: uppercase;
       color: var(--teal);
@@ -212,10 +212,10 @@
     .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .skill-tag {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .82rem;
       color: var(--text-dim);
       background: var(--bg3);
-      padding: 2px 9px;
+      padding: 3px 10px;
       border-radius: 3px;
     }
 
@@ -237,7 +237,7 @@
 
     .tl-period {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .8rem;
       color: var(--text-dim);
       padding-top: 4px;
       line-height: 1.5;
@@ -246,7 +246,7 @@
 
     .tl-body {}
     .tl-title {
-      font-size: .97rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--text);
       margin-bottom: 2px;
@@ -257,7 +257,7 @@
     }
     .tl-title .arrow {
       color: var(--teal);
-      font-size: .8rem;
+      font-size: .85rem;
       opacity: 0;
       transition: opacity .2s, transform .2s;
       transform: translateX(-4px);
@@ -267,12 +267,12 @@
       transform: translateX(0);
     }
     .tl-sub {
-      font-size: .83rem;
+      font-size: .92rem;
       color: var(--teal);
       margin-bottom: 10px;
     }
     .tl-desc {
-      font-size: .87rem;
+      font-size: .97rem;
       color: var(--text-dim);
       line-height: 1.68;
       margin-bottom: 12px;
@@ -280,13 +280,27 @@
     .tl-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tl-tag {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .8rem;
       color: var(--teal);
       background: var(--teal-dim);
       border: 1px solid rgba(100,255,218,.2);
-      padding: 2px 10px;
+      padding: 3px 10px;
       border-radius: 3px;
     }
+
+    /* 经历子分区标签 */
+    .tl-group { margin-bottom: 8px; }
+    .tl-group-label {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0 0 12px 0;
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .tl-group + .tl-group { margin-top: 36px; }
 
     /* ============================
        PROJECTS
@@ -305,7 +319,7 @@
 
     .proj-period {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .8rem;
       color: var(--text-dim);
       padding-top: 4px;
       line-height: 1.5;
@@ -313,7 +327,7 @@
 
     .proj-body {}
     .proj-title {
-      font-size: .97rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--text);
       margin-bottom: 8px;
@@ -331,7 +345,7 @@
     .proj-title a:hover { color: var(--teal); }
     .proj-title a svg { flex-shrink: 0; }
     .proj-desc {
-      font-size: .87rem;
+      font-size: .97rem;
       color: var(--text-dim);
       line-height: 1.68;
       margin-bottom: 12px;
@@ -339,11 +353,11 @@
     .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .proj-tag {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .8rem;
       color: var(--teal);
       background: var(--teal-dim);
       border: 1px solid rgba(100,255,218,.2);
-      padding: 2px 10px;
+      padding: 3px 10px;
       border-radius: 3px;
     }
 
@@ -364,14 +378,14 @@
 
     .paper-year {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .8rem;
       color: var(--text-dim);
       padding-top: 4px;
     }
 
     .paper-body {}
     .paper-title {
-      font-size: .92rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text);
       font-style: italic;
@@ -388,7 +402,7 @@
     .paper-title a:hover { color: var(--teal); }
     .paper-title svg { flex-shrink: 0; margin-top: 3px; }
     .paper-desc {
-      font-size: .85rem;
+      font-size: .95rem;
       color: var(--text-dim);
       margin-bottom: 10px;
       line-height: 1.6;
@@ -396,8 +410,8 @@
     .paper-meta { display: flex; gap: 8px; flex-wrap: wrap; }
     .paper-badge {
       font-family: var(--font-mono);
-      font-size: .7rem;
-      padding: 2px 9px;
+      font-size: .78rem;
+      padding: 3px 10px;
       border-radius: 3px;
     }
     .badge-teal {
@@ -581,70 +595,76 @@
     <!-- EXPERIENCE -->
     <section id="experience">
       <p class="sec-label">经历</p>
-      <div class="timeline">
+      <!-- 工作经历 -->
+      <div class="tl-group">
+        <div class="tl-group-label">工作经历</div>
+        <div class="timeline">
 
-        <!-- 硕士 -->
-        <div class="tl-item">
-          <div class="tl-period">2024.09<br>— 至今</div>
-          <div class="tl-body">
-            <div class="tl-title">
-              大连理工大学
-              <span class="arrow">↗</span>
-            </div>
-            <div class="tl-sub">智慧城市建造与管理 · 硕士</div>
-            <p class="tl-desc">
-              持续开展 LLM 与水文模型结合的科研工作，参与实验室项目研发，
-              在国际期刊发表相关论文，同期于产学研合作企业实习。
-            </p>
-            <div class="tl-tags">
-              <span class="tl-tag">LLM</span>
-              <span class="tl-tag">Agent</span>
-              <span class="tl-tag">水文模型</span>
+          <div class="tl-item">
+            <div class="tl-period">2024.09<br>— 2025.06</div>
+            <div class="tl-body">
+              <div class="tl-title">
+                大连智水慧成科技有限责任公司
+                <span class="arrow">↗</span>
+              </div>
+              <div class="tl-sub">研发部 · 实习生</div>
+              <p class="tl-desc">
+                大连理工大学产学研合作企业，专注于水利信息化与智慧水务技术研发。
+                参与 RAG 问答系统构建、洪水预报模型开发与 FastAPI 服务化部署，
+                独立完成从数据处理到模型上线的完整流程。
+              </p>
+              <div class="tl-tags">
+                <span class="tl-tag">RAG</span>
+                <span class="tl-tag">Python</span>
+                <span class="tl-tag">FastAPI</span>
+                <span class="tl-tag">Docker</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 实习 -->
-        <div class="tl-item">
-          <div class="tl-period">2024.09<br>— 2025.06</div>
-          <div class="tl-body">
-            <div class="tl-title">
-              大连智水慧成科技有限责任公司
-              <span class="arrow">↗</span>
-            </div>
-            <div class="tl-sub">研发部 · 实习生</div>
-            <p class="tl-desc">
-              大连理工大学产学研合作企业，专注于水利信息化与智慧水务技术研发。
-              参与 RAG 问答系统构建、洪水预报模型开发与 FastAPI 服务化部署，
-              独立完成从数据处理到模型上线的完整流程。
-            </p>
-            <div class="tl-tags">
-              <span class="tl-tag">RAG</span>
-              <span class="tl-tag">Python</span>
-              <span class="tl-tag">FastAPI</span>
-              <span class="tl-tag">Docker</span>
-            </div>
-          </div>
         </div>
+      </div>
 
-        <!-- 本科 -->
-        <div class="tl-item">
-          <div class="tl-period">2020.09<br>— 2024.06</div>
-          <div class="tl-body">
-            <div class="tl-title">大连理工大学</div>
-            <div class="tl-sub">人工智能 · 本科</div>
-            <p class="tl-desc">
-              系统学习机器学习、深度学习、自然语言处理等核心课程，
-              掌握 PyTorch 框架与模型训练全流程，为后续科研打下扎实基础。
-            </p>
-            <div class="tl-tags">
-              <span class="tl-tag">人工智能</span>
-              <span class="tl-tag">深度学习</span>
-              <span class="tl-tag">PyTorch</span>
+      <!-- 教育经历 -->
+      <div class="tl-group">
+        <div class="tl-group-label">教育经历</div>
+        <div class="timeline">
+
+          <div class="tl-item">
+            <div class="tl-period">2024.09<br>— 至今</div>
+            <div class="tl-body">
+              <div class="tl-title">大连理工大学</div>
+              <div class="tl-sub">智慧城市建造与管理 · 硕士</div>
+              <p class="tl-desc">
+                持续开展 LLM 与水文模型结合的科研工作，参与实验室项目研发，
+                在国际期刊发表相关论文，同期于产学研合作企业实习。
+              </p>
+              <div class="tl-tags">
+                <span class="tl-tag">LLM</span>
+                <span class="tl-tag">Agent</span>
+                <span class="tl-tag">水文模型</span>
+              </div>
             </div>
           </div>
-        </div>
 
+          <div class="tl-item">
+            <div class="tl-period">2020.09<br>— 2024.06</div>
+            <div class="tl-body">
+              <div class="tl-title">大连理工大学</div>
+              <div class="tl-sub">人工智能 · 本科</div>
+              <p class="tl-desc">
+                系统学习机器学习、深度学习、自然语言处理等核心课程，
+                掌握 PyTorch 框架与模型训练全流程，为后续科研打下扎实基础。
+              </p>
+              <div class="tl-tags">
+                <span class="tl-tag">人工智能</span>
+                <span class="tl-tag">深度学习</span>
+                <span class="tl-tag">PyTorch</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
