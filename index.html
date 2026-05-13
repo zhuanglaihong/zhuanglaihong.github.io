@@ -6,6 +6,8 @@
   <title>庄赖宏 | AI & LLM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- 站点内容数据 (改这个文件就能更新主页内容,不用动 HTML) -->
+  <script src="./data.js"></script>
   <style>
     :root {
       --bg:        #0a192f;
@@ -15,6 +17,12 @@
       --text-dim:  #8892b0;
       --teal:      #64ffda;
       --teal-dim:  rgba(100,255,218,.1);
+      /* 多 accent 色板(参考 SplashScreen.vue 的色彩体系) */
+      --accent-primary: #64ffda;        /* 青绿 — 主色,与 teal 一致 */
+      --accent-info:    #82aaff;        /* 冷蓝 */
+      --accent-success: #4ade80;        /* 绿 */
+      --accent-warning: #ffd166;        /* 暖黄 */
+      --accent-danger:  #ff7b72;        /* 暖红(预留) */
       --font-mono: 'Fira Code', monospace;
       --font-sans: 'Microsoft YaHei', '微软雅黑', 'Inter', sans-serif;
       --radius:    4px;
@@ -368,6 +376,48 @@
       margin-bottom: 12px;
     }
     .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .proj-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--accent-primary);
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.28);
+      border-radius: 3px;
+      transition: all 0.2s ease;
+    }
+    .proj-link:hover {
+      background: rgba(100,255,218,0.18);
+      border-color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+    .proj-link.video {
+      color: var(--accent-warning);
+      border-color: rgba(255,209,102,0.4);
+      background: rgba(255,209,102,0.05);
+    }
+    .proj-link.video:hover {
+      background: rgba(255,209,102,0.15);
+      border-color: var(--accent-warning);
+    }
+    /* button.proj-link 重置浏览器默认样式 */
+    button.proj-link {
+      font: inherit;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
     .proj-tag {
       font-family: var(--font-mono);
       font-size: .8rem;
@@ -486,343 +536,3303 @@
       }
       .skills-wrap { grid-template-columns: 1fr; }
     }
+
+    /* ============================
+       FX: 全局 Canvas 背景
+    ============================ */
+    #bg-fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    #bg-fx.ready { opacity: 1; }
+
+    /* ============================
+       FX: 侧栏角色打字机光标
+    ============================ */
+    .sidebar-role.typing::after,
+    .s1-role.typing::after {
+      content: '▍';
+      display: inline-block;
+      margin-left: 2px;
+      color: var(--teal);
+      animation: cur-blink 1s steps(2, end) infinite;
+    }
+    @keyframes cur-blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* ============================
+       FX: 开机过场遮罩
+    ============================ */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(ellipse at center, #0d2342 0%, #050d1c 70%, #02060e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+    #splash.exiting { opacity: 0; pointer-events: none; }
+    /* 内层 grid 背景肌理 */
+    #splash::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(100,255,218,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,255,218,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
+      pointer-events: none;
+    }
+    .splash-inner {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      color: var(--text);
+    }
+    .splash-hero { text-align: center; }
+    .splash-tagline {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 1.5px;
+      font-family: var(--font-sans);
+    }
+    .splash-sub {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+    .splash-terminal {
+      background: rgba(2, 8, 20, 0.72);
+      border: 1px solid rgba(100,255,218,0.18);
+      border-radius: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 0 60px rgba(100,255,218,0.04);
+      overflow: hidden;
+    }
+    .splash-term-hd {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-bottom: 1px solid rgba(100,255,218,0.12);
+      background: rgba(100,255,218,0.04);
+    }
+    .splash-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    .splash-term-label {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .splash-term-bd {
+      padding: 14px 18px;
+      font-size: 13px;
+      line-height: 1.85;
+      min-height: 130px;
+    }
+    .splash-line {
+      color: var(--text-dim);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: pre;
+    }
+    .splash-line.active { opacity: 1; }
+    .splash-line[data-line="1"] .splash-text { color: var(--teal); }
+    .splash-cur {
+      display: none;
+      width: 7px;
+      height: 14px;
+      background: var(--teal);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: cur-blink 0.9s steps(2, end) infinite;
+    }
+    .splash-line.typing .splash-cur { display: inline-block; }
+
+    .splash-progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .splash-progress {
+      flex: 1;
+      height: 4px;
+      background: rgba(100,255,218,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .splash-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), #a4ffe8);
+      box-shadow: 0 0 10px rgba(100,255,218,0.6);
+      transition: width 0.25s ease;
+    }
+    .splash-pct {
+      width: 44px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--teal);
+      letter-spacing: 1px;
+    }
+    .splash-checks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 16px;
+    }
+    .splash-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(100,255,218,0.03);
+      border: 1px solid rgba(100,255,218,0.1);
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--text-dim);
+      transition: all 0.3s ease;
+    }
+    .splash-check.ok {
+      color: var(--teal);
+      border-color: rgba(100,255,218,0.35);
+      background: rgba(100,255,218,0.08);
+    }
+    .splash-check-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: all 0.3s ease;
+    }
+    .splash-check.ok .splash-check-dot {
+      background: var(--teal);
+      box-shadow: 0 0 8px rgba(100,255,218,0.7);
+    }
+    .splash-check-label { flex: 1; }
+    .splash-check-st { font-size: 11px; letter-spacing: 1px; }
+
+    .splash-skip {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--teal);
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .splash-skip:hover {
+      background: rgba(100,255,218,0.14);
+      transform: translateY(-1px);
+    }
+    @media (max-width: 600px) {
+      .splash-tagline { font-size: 20px; }
+      .splash-checks { grid-template-columns: repeat(2, 1fr); }
+      .splash-term-bd { font-size: 12px; }
+    }
+
+    /* ============================================================
+       NEW SECTIONS: 通用 sec-intro / 紧凑 nav
+       ============================================================ */
+    .sec-intro {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin: -8px 0 28px;
+      line-height: 1.7;
+    }
+    /* 10 项 nav 压缩字号让侧栏不挤 */
+    .sidebar-nav a {
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      padding: 4px 0;
+    }
+
+    /* ============================================================
+       HOBBIES
+       ============================================================ */
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .hobby-card {
+      padding: 22px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      transition: all 0.25s var(--ease);
+    }
+    .hobby-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--teal);
+      box-shadow: 0 8px 24px rgba(2,12,27,0.5);
+    }
+    .hobby-icon {
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 12px rgba(100,255,218,0.25));
+    }
+    .hobby-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .hobby-desc {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .hobby-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .hobby-tag {
+      font-size: 11px;
+      color: var(--teal);
+      background: var(--teal-dim);
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+    }
+
+    /* ============================================================
+       READING
+       ============================================================ */
+    .reading-list { display: flex; flex-direction: column; gap: 8px; }
+    .reading-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      padding: 18px 16px;
+      border-radius: var(--radius);
+      transition: all 0.2s var(--ease);
+    }
+    .reading-item:hover {
+      background: var(--bg2);
+      padding-left: 22px;
+    }
+    .reading-cover {
+      width: 70px;
+      height: 100px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .reading-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .reading-body { display: flex; flex-direction: column; gap: 6px; }
+    .reading-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .reading-author {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+    }
+    .reading-summary {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin: 4px 0;
+    }
+    .reading-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 6px;
+    }
+    .reading-rating { color: var(--teal); font-size: 0.85rem; letter-spacing: 2px; }
+    .reading-rating .star-empty { color: var(--bg3); }
+    .reading-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.5px;
+    }
+    .badge-tag { color: var(--teal); background: var(--teal-dim); }
+    .badge-date { color: var(--text-dim); background: var(--bg3); }
+    .reading-link {
+      color: var(--teal);
+      font-size: 11px;
+      padding: 3px 9px;
+      border: 1px solid var(--teal-dim);
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      transition: all 0.2s ease;
+    }
+    .reading-link:hover {
+      background: var(--teal-dim);
+      border-color: var(--teal);
+    }
+
+    /* ============================================================
+       BLOG
+       ============================================================ */
+    .blog-list { display: flex; flex-direction: column; gap: 4px; }
+    .blog-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 24px;
+      padding: 20px 16px;
+      border-radius: var(--radius);
+      transition: all 0.2s var(--ease);
+    }
+    .blog-item:hover {
+      background: var(--bg2);
+      padding-left: 22px;
+    }
+    .blog-date {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .blog-rt {
+      display: block;
+      margin-top: 4px;
+      color: var(--teal);
+      font-size: 11px;
+    }
+    .blog-body { display: flex; flex-direction: column; gap: 8px; }
+    .blog-title a {
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    .blog-title a:hover { color: var(--teal); }
+    .blog-summary {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+    .blog-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .blog-tag {
+      font-size: 11px;
+      color: var(--teal);
+      background: var(--teal-dim);
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+    }
+
+    /* ============================================================
+       GALLERY
+       ============================================================ */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg2);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-mask {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(2,12,27,0.85) 0%, rgba(2,12,27,0) 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 14px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .gallery-item:hover .gallery-mask { opacity: 1; }
+    .gallery-cap-loc {
+      color: var(--teal);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+    .gallery-cap-txt {
+      color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .gallery-empty {
+      grid-column: 1 / -1;
+      padding: 50px 20px;
+      text-align: center;
+      color: var(--text-dim);
+      border: 1px dashed var(--bg3);
+      border-radius: var(--radius);
+      background: rgba(17,34,64,0.4);
+    }
+    .gallery-empty code {
+      font-family: var(--font-mono);
+      color: var(--teal);
+      background: var(--teal-dim);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(2,8,20,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      backdrop-filter: blur(6px);
+    }
+    #lightbox.open { opacity: 1; pointer-events: auto; }
+    .lb-stage {
+      max-width: 92vw;
+      max-height: 82vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.7);
+      border-radius: 4px;
+    }
+    .lb-close, .lb-prev, .lb-next {
+      position: absolute;
+      background: rgba(100,255,218,0.08);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--teal);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-close:hover, .lb-prev:hover, .lb-next:hover {
+      background: rgba(100,255,218,0.18);
+      transform: scale(1.05);
+    }
+    .lb-close { top: 24px; right: 24px; }
+    .lb-prev  { left: 24px;  top: 50%; transform: translateY(-50%); }
+    .lb-next  { right: 24px; top: 50%; transform: translateY(-50%); }
+    #lightbox.single .lb-prev,
+    #lightbox.single .lb-next { display: none; }
+    .lb-cap {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--text);
+      font-size: 0.92rem;
+      text-align: center;
+      max-width: 70vw;
+      padding: 8px 18px;
+      background: rgba(2,12,27,0.7);
+      border-radius: 4px;
+    }
+    .lb-cap-loc { color: var(--teal); font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; }
+
+    /* ============================================================
+       CONTACT
+       ============================================================ */
+    .contact-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 30px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+    }
+    .contact-callout {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .contact-callout-main {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .contact-callout-sub {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      background: rgba(100,255,218,0.04);
+      border: 1px solid rgba(100,255,218,0.12);
+      color: var(--text);
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .contact-item:hover {
+      background: rgba(100,255,218,0.1);
+      border-color: var(--teal);
+      transform: translateX(3px);
+    }
+    .contact-item-icon {
+      width: 22px;
+      flex-shrink: 0;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contact-item-label {
+      width: 56px;
+      flex-shrink: 0;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .contact-item-value {
+      flex: 1;
+      color: var(--text);
+    }
+    .contact-item.copied .contact-item-value::after {
+      content: '已复制 ✓';
+      color: var(--teal);
+      margin-left: 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    /* ============================================================
+       RESOURCES (我的资源)
+       ============================================================ */
+    .resources-list { display: flex; flex-direction: column; gap: 8px; }
+    .resource-item {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      gap: 22px;
+      align-items: center;
+      padding: 18px 18px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      transition: all 0.22s var(--ease);
+      color: inherit;
+    }
+    .resource-item:hover {
+      background: var(--bg2);
+      border-color: var(--bg3);
+      transform: translateY(-1px);
+    }
+    .resource-type {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      border-radius: var(--radius);
+      background: rgba(100,255,218,0.05);
+      border: 1px solid var(--bg3);
+    }
+    .resource-type[data-type="book"]   { color: var(--accent-info); }
+    .resource-type[data-type="site"]   { color: var(--accent-primary); }
+    .resource-type[data-type="paper"]  { color: var(--accent-warning); }
+    .resource-type[data-type="file"]   { color: var(--accent-success); }
+    .resource-type[data-type="course"] { color: var(--accent-danger); }
+    .resource-type-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .resource-type-name {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+    }
+    .resource-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .resource-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+    .resource-item:hover .resource-title { color: var(--accent-primary); }
+    .resource-author {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.3px;
+    }
+    .resource-desc {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-top: 2px;
+    }
+    .resource-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .resource-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-primary);
+      background: rgba(100,255,218,0.08);
+      padding: 2px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.5px;
+    }
+    .resource-arrow {
+      color: var(--text-dim);
+      font-size: 18px;
+      transition: all 0.2s ease;
+      padding-right: 6px;
+    }
+    .resource-item:hover .resource-arrow {
+      color: var(--accent-primary);
+      transform: translate(3px, -3px);
+    }
+
+    /* ============================================================
+       DEMOS
+       ============================================================ */
+    .demos-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .demo-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.25s var(--ease);
+    }
+    .demo-card.live { cursor: pointer; }
+    .demo-card.live:hover {
+      transform: translateY(-3px);
+      border-color: var(--teal);
+      box-shadow: 0 10px 30px rgba(2,12,27,0.5);
+    }
+    .demo-card.coming { opacity: 0.55; }
+    .demo-cover {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #112240, #0a192f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      color: var(--teal);
+      letter-spacing: 2px;
+      font-size: 13px;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .demo-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(2,12,27,0.45) 90%);
+      pointer-events: none;
+    }
+    .demo-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .demo-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .demo-desc {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+    .demo-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .demo-tag {
+      font-size: 11px;
+      color: var(--teal);
+      background: var(--teal-dim);
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+    }
+    .demo-cta {
+      margin-top: 8px;
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .demo-card.coming .demo-cta { color: var(--text-dim); }
+
+    /* Demo 模态框 */
+    #demo-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(2,8,20,0.92);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    #demo-modal.open { opacity: 1; pointer-events: auto; }
+    .dm-frame {
+      width: 100%;
+      max-width: 920px;
+      height: 86vh;
+      max-height: 760px;
+      background: linear-gradient(180deg, #0d1d36, #0a192f);
+      border: 1px solid rgba(100,255,218,0.25);
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .dm-hd {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(100,255,218,0.12);
+      background: rgba(100,255,218,0.03);
+      flex-shrink: 0;
+    }
+    .dm-dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dm-title {
+      flex: 1;
+      margin-left: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+    .dm-close {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 8px;
+      transition: color 0.2s ease;
+    }
+    .dm-close:hover { color: var(--teal); }
+    .dm-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    /* HydroAgent demo 内部样式 */
+    .hd-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .hd-btn {
+      background: rgba(100,255,218,0.08);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--teal);
+      padding: 7px 16px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hd-btn:hover:not(:disabled) {
+      background: rgba(100,255,218,0.18);
+    }
+    .hd-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .hd-progress {
+      margin-left: auto;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      align-self: center;
+    }
+    .hd-conversation {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .hd-turn { display: flex; flex-direction: column; gap: 10px; }
+    .hd-user {
+      align-self: flex-end;
+      max-width: 80%;
+      padding: 10px 14px;
+      background: var(--teal-dim);
+      border: 1px solid rgba(100,255,218,0.2);
+      border-radius: 12px 12px 2px 12px;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+    .hd-thinking {
+      background: rgba(17,34,64,0.6);
+      border-left: 2px solid var(--teal);
+      padding: 12px 14px;
+      border-radius: 0 6px 6px 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.9;
+    }
+    .hd-thinking-label {
+      color: var(--teal);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .hd-thinking-step {
+      display: block;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.3s ease;
+    }
+    .hd-thinking-step.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .hd-thinking-step::before {
+      content: '▸';
+      color: var(--teal);
+      margin-right: 8px;
+    }
+    .hd-final {
+      align-self: flex-start;
+      max-width: 92%;
+      padding: 14px 16px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: 12px 12px 12px 2px;
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+    .hd-final strong { color: var(--teal); }
+
+    /* ============================================================
+       响应式
+       ============================================================ */
+    @media (max-width: 880px) {
+      .hobbies-grid { grid-template-columns: 1fr; }
+      .demos-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .contact-block { grid-template-columns: 1fr; gap: 24px; padding: 22px; }
+      .reading-item { grid-template-columns: 60px 1fr; gap: 16px; }
+      .blog-item { grid-template-columns: 80px 1fr; gap: 16px; }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .lb-close, .lb-prev, .lb-next { width: 38px; height: 38px; }
+      .dm-frame { height: 92vh; }
+    }
+
+    /* ============================================================
+       DECK MODE — 整个 .layout 已被 .deck 替换
+       ============================================================ */
+    body { overflow: hidden; }                /* deck 模式不让 body 滚 */
+    .deck {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 顶栏(经典视图按钮) */
+    .deck-top {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      z-index: 100;
+    }
+    .deck-classic-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+    }
+    .deck-classic-btn:hover {
+      background: rgba(100,255,218,0.14);
+      transform: translateY(-1px);
+    }
+
+    /* Scene 通用 */
+    .scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      overflow-y: auto;
+      animation: sceneIn 0.5s ease-out;
+    }
+    .scene.active { display: block; }
+    @keyframes sceneIn {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    /* (scene-3 切换动画已不再需要) */
+    .scene-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 100px;
+      min-height: 100%;
+    }
+    /* Scene 1 内容卡跟 Scene 2 一致铺开 */
+    .scene-1 .scene-inner {
+      max-width: 1700px;
+      padding: 70px 80px 100px;
+    }
+    /* Scene 2 几乎铺满整个视口,沿用 vue 的舞台尺度(max-width 2500 + padding 80) */
+    .scene-2 .scene-inner {
+      max-width: 2500px;
+      padding: 50px 80px 110px;
+    }
+
+    /* ─── Scene 1: 核心简历 (vue 风格 · 深色工业感) ─── */
+    .scene-1 {
+      background: radial-gradient(ellipse at 50% -10%, rgba(100,255,218,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 110%, rgba(130,170,255,0.05) 0%, transparent 50%);
+    }
+    /* s1-inner 不再限宽,跟 .scene-1 .scene-inner (1700) 一致;hero 内部限宽保持居中紧凑 */
+    .s1-inner { display: flex; flex-direction: column; align-items: stretch; padding-top: 70px; }
+    .s1-hero, .s1-tabs, .s1-cta { align-self: center; }
+    /* tab 内容卡铺满 inner (跟 Scene 2 模块详情一样宽) */
+    .s1-tab-body { width: 100%; }
+    .s1-hero {
+      text-align: center;
+      margin-bottom: 44px;
+      animation: stageItemIn 0.6s ease-out both;
+    }
+    @keyframes stageItemIn {
+      from { opacity: 0; transform: translateY(12px); }
+    }
+    .s1-avatar {
+      width: 124px;
+      height: 124px;
+      margin: 0 auto 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, #4ad9c7 45%, #2a8b7c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      font-weight: 700;
+      color: var(--bg);
+      box-shadow:
+        0 0 0 1px rgba(100,255,218,0.4),
+        0 0 0 6px rgba(100,255,218,0.08),
+        0 16px 48px rgba(2,12,27,0.7),
+        inset 0 0 20px rgba(255,255,255,0.15);
+      position: relative;
+    }
+    .s1-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      border: 1px dashed rgba(100,255,218,0.18);
+      animation: spin 30s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .s1-avatar span { font-family: var(--font-sans); }
+    .s1-name {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .s1-role {
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .s1-affil {
+      color: var(--text-dim);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+    }
+
+    /* tab 栏 - 横向并排,大间距,无背景框 */
+    .s1-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      animation: stageItemIn 0.5s ease-out 0.1s both;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .s1-tab {
+      --tab-color: var(--accent-primary);
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 24px;
+      background: rgba(17,34,64,0.5);
+      border: 1px solid var(--bg3);
+      color: var(--text-dim);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.25s var(--ease);
+      position: relative;
+    }
+    .s1-tab[data-color="primary"] { --tab-color: var(--accent-primary); }
+    .s1-tab[data-color="info"]    { --tab-color: var(--accent-info); }
+    .s1-tab[data-color="success"] { --tab-color: var(--accent-success); }
+    .s1-tab[data-color="warning"] { --tab-color: var(--accent-warning); }
+    .s1-tab-icon {
+      color: var(--tab-color);
+      font-size: 14px;
+      filter: drop-shadow(0 0 4px currentColor);
+    }
+    .s1-tab:hover {
+      color: var(--text);
+      border-color: var(--tab-color);
+      transform: translateY(-2px);
+    }
+    .s1-tab.active {
+      color: var(--text);
+      border-color: var(--tab-color);
+      background: linear-gradient(180deg, rgba(17,34,64,0.85), color-mix(in oklab, var(--tab-color) 14%, transparent));
+      box-shadow:
+        0 0 0 1px var(--tab-color),
+        0 8px 24px color-mix(in oklab, var(--tab-color) 25%, transparent);
+    }
+    .s1-tab.active::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--tab-color);
+      box-shadow: 0 0 12px var(--tab-color);
+    }
+
+    /* tab 内容卡片框 — 工业感深色容器 */
+    .s1-tab-body {
+      width: 100%;
+      min-height: 280px;
+      margin-bottom: 40px;
+      padding: 32px 40px;
+      background:
+        linear-gradient(180deg, rgba(17,34,64,0.6), rgba(10,25,47,0.85)),
+        repeating-linear-gradient(45deg, transparent 0 6px, rgba(100,255,218,0.02) 6px 7px);
+      border: 1px solid var(--bg3);
+      border-radius: 6px;
+      box-shadow: 0 12px 40px rgba(2,12,27,0.4), inset 0 0 60px rgba(100,255,218,0.02);
+      animation: stageItemIn 0.5s ease-out 0.15s both;
+      position: relative;
+      overflow: hidden;
+    }
+    .s1-tab-body::before, .s1-tab-body::after {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      pointer-events: none;
+    }
+    .s1-tab-body::before {
+      top: -1px; left: -1px;
+      border-top: 1px solid var(--accent-primary);
+      border-left: 1px solid var(--accent-primary);
+    }
+    .s1-tab-body::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 1px solid var(--accent-primary);
+      border-right: 1px solid var(--accent-primary);
+    }
+    .s1-tab-pane {
+      display: none;
+      animation: stageItemIn 0.4s ease-out;
+    }
+    .s1-tab-pane.active { display: block; }
+
+    .s1-cta {
+      display: flex;
+      gap: 14px;
+      animation: stageItemIn 0.5s ease-out 0.25s both;
+    }
+    .s1-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      border: 1px solid transparent;
+      text-transform: uppercase;
+    }
+    .s1-btn.primary {
+      background: linear-gradient(135deg, var(--accent-primary), #4ad9c7);
+      color: var(--bg);
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(100,255,218,0.3);
+    }
+    .s1-btn.primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(100,255,218,0.4); }
+    .s1-btn.ghost {
+      background: transparent;
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+    .s1-btn.ghost:hover {
+      background: rgba(100,255,218,0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(100,255,218,0.2);
+    }
+
+    /* ─── Scene 2: 体系架构 (3D 星图 + 内联详情) ─── */
+    .s2-inner {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    /* 上半屏 hero — 星图占满首屏 */
+    .s2-hero {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 120px);
+    }
+    .s2-header { text-align: center; margin-bottom: 18px; flex-shrink: 0; }
+    .s2-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--accent-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .s2-sub {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+    .s2-stage {
+      flex: 1;
+      position: relative;
+      min-height: 600px;
+      width: 100%;
+    }
+    .s2-scroll-hint {
+      text-align: center;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 18px 0 8px;
+      flex-shrink: 0;
+      animation: hintBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(6px); opacity: 1; }
+    }
+    /* 下半屏 detail wrap — 铺满 inner 容器宽度 */
+    .s2-detail-wrap {
+      flex: 0 0 auto;
+      width: 100%;
+      padding: 40px 0 0;
+      border-top: 1px dashed var(--bg3);
+      margin-top: 32px;
+    }
+    .s2-module {
+      width: 100%;
+    }
+    .s2-detail-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+    .s2-de-icon {
+      font-size: 36px;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+    .s2-de-text {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+    .s2-module:not([hidden]) {
+      animation: stageItemIn 0.5s ease-out;
+    }
+    .s2-module-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--bg3);
+      letter-spacing: 1px;
+    }
+    .s2-module-icon {
+      color: var(--accent-primary);
+      font-size: 1.3rem;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+    .s2-module .sec-intro {
+      margin-bottom: 24px;
+    }
+    #s2-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    #s2-canvas.dragging { cursor: grabbing; }
+    .s2-tooltip {
+      position: absolute;
+      padding: 5px 12px;
+      background: rgba(2,12,27,0.92);
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -130%);
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+      z-index: 5;
+    }
+    .s2-tooltip.show { opacity: 1; }
+    .s2-mobile-grid { display: none; }
+    @media (max-width: 720px) {
+      #s2-canvas { display: none; }
+      .s2-mobile-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 24px 12px;
+        align-content: center;
+      }
+      .s2-mobile-node {
+        padding: 22px 16px;
+        text-align: center;
+        background: var(--bg2);
+        border: 1px solid var(--bg3);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+      .s2-mobile-node:active { transform: scale(0.97); }
+      .s2-mobile-node-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+        color: var(--teal);
+      }
+      .s2-mobile-node-label {
+        color: var(--text);
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+    }
+
+    /* (Scene 3 已并入 Scene 2 内联展示,旧样式移除) */
+
+    /* ─── 全局导航控件 (vue 风格:两侧中部大箭头) ─── */
+    .deck-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 96px;
+      background: rgba(17,34,64,0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(100,255,218,0.25);
+      color: var(--accent-primary);
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      z-index: 80;
+      letter-spacing: 1px;
+    }
+    .deck-arrow:hover:not(:disabled) {
+      background: rgba(100,255,218,0.18);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 24px rgba(100,255,218,0.25);
+      width: 64px;
+    }
+    .deck-arrow:disabled,
+    .deck-arrow.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%) translateX(var(--off, 0));
+    }
+    .deck-arrow-prev {
+      left: 0;
+      border-left: none;
+      border-radius: 0 6px 6px 0;
+      --off: -100%;
+    }
+    .deck-arrow-next {
+      right: 0;
+      border-right: none;
+      border-radius: 6px 0 0 6px;
+      --off: 100%;
+    }
+    .deck-arrow-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--text-dim);
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .deck-arrow:hover:not(:disabled) .deck-arrow-label { color: var(--accent-primary); }
+
+    /* Scene 2 专属:左上「← 核心简历」按钮 — 简洁方框,跟原 s3-back 风格一致 */
+    .deck-home-btn {
+      position: fixed;
+      top: 22px;
+      left: 22px;
+      z-index: 90;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .deck[data-current-scene="2"] .deck-home-btn { display: inline-flex; }
+    .deck-home-btn:hover {
+      background: rgba(100,255,218,0.14);
+    }
+    .dhb-icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .deck-dots {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 50;
+    }
+    .deck-dots .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(100,255,218,0.2);
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      padding: 0;
+    }
+    .deck-dots .dot:hover { background: rgba(100,255,218,0.45); }
+    .deck-dots .dot.active {
+      background: var(--teal);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* 响应式 */
+    @media (max-width: 720px) {
+      .scene-inner { padding: 60px 22px 90px; }
+      .s2-inner { padding: 50px 22px 90px; }
+      .s1-name { font-size: 1.6rem; }
+      .s1-avatar { width: 90px; height: 90px; font-size: 38px; }
+      .s1-tabs { font-size: 12px; }
+      .s1-tab { padding: 9px 12px; font-size: 13px; }
+      .s1-cta { flex-direction: column; width: 100%; }
+      .deck-classic-btn { font-size: 11px; padding: 6px 10px; }
+      .deck-arrow { width: 38px; height: 64px; font-size: 24px; }
+      .deck-arrow-label { display: none; }
+      .deck-dots { bottom: 22px; }
+      .deck-home-btn { top: 14px; left: 14px; padding: 8px 14px 8px 10px; font-size: 11px; }
+      .dhb-text { display: none; }
+    }
   </style>
 </head>
 <body>
 
-<div class="layout">
+<!-- ==================== 全局 Canvas 背景 ==================== -->
+<canvas id="bg-fx" aria-hidden="true"></canvas>
 
-  <!-- ==================== LEFT SIDEBAR ==================== -->
-  <header id="sidebar">
-    <div class="sidebar-top">
-      <h1 class="sidebar-name">庄赖宏</h1>
-      <p class="sidebar-role">AI &amp; 大模型应用开发者</p>
-      <p class="sidebar-bio">
-        大连理工大学硕士在读，专注于 LLM 应用开发、RAG 系统构建与 AI Agent 设计。
-      </p>
+<!-- ==================== 开机过场遮罩 ==================== -->
+<div id="splash" aria-hidden="true">
+  <div class="splash-inner">
+    <div class="splash-hero">
+      <div class="splash-tagline">庄赖宏 · AI &amp; 大模型应用开发者</div>
+      <div class="splash-sub">PORTFOLIO · BOOTING</div>
+    </div>
+    <div class="splash-terminal">
+      <div class="splash-term-hd">
+        <span class="splash-dot dot-r"></span>
+        <span class="splash-dot dot-y"></span>
+        <span class="splash-dot dot-g"></span>
+        <span class="splash-term-label">portfolio.boot.log</span>
+      </div>
+      <div class="splash-term-bd">
+        <p class="splash-line" data-line="1"><span class="splash-text"></span><span class="splash-cur"></span></p>
+        <p class="splash-line" data-line="2"><span class="splash-text"></span><span class="splash-cur"></span></p>
+        <p class="splash-line" data-line="3"><span class="splash-text"></span><span class="splash-cur"></span></p>
+        <p class="splash-line" data-line="4"><span class="splash-text"></span><span class="splash-cur"></span></p>
+        <p class="splash-line" data-line="5"><span class="splash-text"></span><span class="splash-cur"></span></p>
+      </div>
+    </div>
+    <div class="splash-progress-wrap">
+      <div class="splash-progress"><div class="splash-progress-fill"></div></div>
+      <span class="splash-pct">0%</span>
+    </div>
+    <div class="splash-checks">
+      <div class="splash-check" data-mod="LLM"><span class="splash-check-dot"></span><span class="splash-check-label">LLM 推理</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="RAG"><span class="splash-check-dot"></span><span class="splash-check-label">RAG 检索</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="AGENT"><span class="splash-check-dot"></span><span class="splash-check-label">Agent 框架</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="MM"><span class="splash-check-dot"></span><span class="splash-check-label">多模态</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="ENG"><span class="splash-check-dot"></span><span class="splash-check-label">工程化</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="DATA"><span class="splash-check-dot"></span><span class="splash-check-label">数据管线</span><span class="splash-check-st">···</span></div>
+    </div>
+  </div>
+  <button class="splash-skip" type="button" id="splash-skip">跳过 [Esc]</button>
+</div>
 
-      <nav class="sidebar-nav">
-        <ul>
-          <li><a href="#about"      class="active"><span class="nav-line"></span>关于</a></li>
-          <li><a href="#experience"              ><span class="nav-line"></span>经历</a></li>
-          <li><a href="#projects"                ><span class="nav-line"></span>项目</a></li>
-          <li><a href="#papers"                  ><span class="nav-line"></span>论文</a></li>
-        </ul>
+
+<!-- ==================== Deck (Scene 1 / 2 / 3) ==================== -->
+<div class="deck" id="deck">
+
+  <!-- ════════════════ SCENE 1: 核心简历 ════════════════ -->
+  <section class="scene scene-1 active" data-scene="1">
+    <div class="scene-inner s1-inner">
+
+      <!-- 中心 hero 区(头像 + 名字) -->
+      <div class="s1-hero">
+        <div class="s1-avatar"><span>庄</span></div>
+        <h1 class="s1-name">庄赖宏</h1>
+        <div class="s1-role">AI &amp; 大模型应用开发者</div>
+        <div class="s1-affil">大连理工大学 · 智慧城市建造与管理硕士</div>
+      </div>
+
+      <!-- 4 个 tab (技能=基本信息,默认选中) -->
+      <nav class="s1-tabs" role="tablist">
+        <button class="s1-tab active" data-tab="skills" data-color="primary" role="tab"><span class="s1-tab-icon">◆</span>基本与技能</button>
+        <button class="s1-tab"        data-tab="exp"    data-color="info"    role="tab"><span class="s1-tab-icon">◈</span>教育与实习</button>
+        <button class="s1-tab"        data-tab="proj"   data-color="success" role="tab"><span class="s1-tab-icon">◉</span>研究项目</button>
+        <button class="s1-tab"        data-tab="papers" data-color="warning" role="tab"><span class="s1-tab-icon">◎</span>发表论文</button>
       </nav>
+
+      <!-- tab 内容区 -->
+      <div class="s1-tab-body">
+
+        <!-- TAB: 经历 -->
+        <div class="s1-tab-pane" data-pane="exp">
+          <div class="tl-group">
+            <div class="tl-group-label">工作经历</div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-period">2024.09<br>— 2025.06</div>
+                <div class="tl-body">
+                  <div class="tl-title">大连智水慧成科技有限责任公司<span class="arrow">↗</span></div>
+                  <div class="tl-sub">研发部 · 实习生</div>
+                  <p class="tl-desc">大连理工大学产学研合作企业,专注于水利信息化与智慧水务技术研发。参与 RAG 问答系统构建、洪水预报模型开发与 FastAPI 服务化部署,独立完成从数据处理到模型上线的完整流程。</p>
+                  <div class="tl-tags">
+                    <span class="tl-tag">RAG</span><span class="tl-tag">Python</span><span class="tl-tag">FastAPI</span><span class="tl-tag">Docker</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-group">
+            <div class="tl-group-label">教育经历</div>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-period">2024.09<br>— 至今</div>
+                <div class="tl-body">
+                  <div class="tl-title">大连理工大学</div>
+                  <div class="tl-sub">智慧城市建造与管理 · 硕士</div>
+                  <p class="tl-desc">持续开展 LLM 与水文模型结合的科研工作,参与实验室项目研发,在国际期刊发表相关论文,同期于产学研合作企业实习。</p>
+                  <div class="tl-tags"><span class="tl-tag">LLM</span><span class="tl-tag">Agent</span><span class="tl-tag">水文模型</span></div>
+                </div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-period">2020.09<br>— 2024.06</div>
+                <div class="tl-body">
+                  <div class="tl-title">大连理工大学</div>
+                  <div class="tl-sub">人工智能 · 本科</div>
+                  <p class="tl-desc">系统学习机器学习、深度学习、自然语言处理等核心课程,掌握 PyTorch 框架与模型训练全流程,为后续科研打下扎实基础。</p>
+                  <div class="tl-tags"><span class="tl-tag">人工智能</span><span class="tl-tag">深度学习</span><span class="tl-tag">PyTorch</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: 项目 -->
+        <div class="s1-tab-pane" data-pane="proj">
+          <div class="tl-group">
+            <div class="tl-group-label">研究项目</div>
+            <div class="projects">
+              <div class="proj-item">
+                <div class="proj-period">2024.12<br>— 2025.06</div>
+                <div class="proj-body">
+                  <div class="proj-title">
+                    <a href="https://github.com/zhuanglaihong/hydroclaw" target="_blank">基于 RAG 的水库调度知识库问答系统<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+                  </div>
+                  <p class="proj-desc">面向水库调度规程问答场景,构建基于 RAG 的专业知识问答系统。设计父子分段策略处理长文本与表格数据,基于 Dify 搭建混合检索 + Rerank 推理链路,通过 Prompt 约束控制输出格式与回答边界,降低幻觉风险,并构建类 Agent 工作流实现自动化评测闭环。</p>
+                  <div class="proj-tags"><span class="proj-tag">RAG</span><span class="proj-tag">Dify</span><span class="proj-tag">Prompt Engineering</span><span class="proj-tag">混合检索</span><span class="proj-tag">Rerank</span></div>
+                  <div class="proj-links">
+                    <button type="button" class="proj-link video proj-demo-btn" data-demo="hydroagent" title="点击查看 HydroAgent 内嵌 scripted 演示">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21" /></svg>
+                      在线演示
+                    </button>
+                    <a class="proj-link" href="https://github.com/zhuanglaihong/hydroclaw" target="_blank" rel="noopener">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                      源代码
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="proj-item">
+                <div class="proj-period">2024.09<br>— 2024.12</div>
+                <div class="proj-body">
+                  <div class="proj-title">
+                    <a href="https://gitcode.com/dlut-water/llm-backend" target="_blank">面向无资料流域的洪水预报模型研究<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+                  </div>
+                  <p class="proj-desc">面向内蒙古地区少资料与无资料流域洪水预报场景,构建多源气象水文数据集(覆盖 46 个流域)。基于 LSTM 与 Encoder-Decoder 架构开展通用水文模型研究,通过「预训练 + 少样本微调」迁移学习策略,部分方案精度提升 20%。负责 FastAPI 接口开发与 Docker 容器化部署,支撑模型服务化交付。</p>
+                  <div class="proj-tags"><span class="proj-tag">LSTM</span><span class="proj-tag">Encoder-Decoder</span><span class="proj-tag">迁移学习</span><span class="proj-tag">FastAPI</span><span class="proj-tag">Docker</span></div>
+                  <div class="proj-links">
+                    <a class="proj-link" href="https://gitcode.com/dlut-water/llm-backend" target="_blank" rel="noopener">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                      源代码
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: 论文 -->
+        <div class="s1-tab-pane" data-pane="papers">
+          <div class="tl-group">
+            <div class="tl-group-label">期刊论文</div>
+            <div class="papers">
+              <div class="paper-item">
+                <div class="paper-year">审稿中</div>
+                <div class="paper-body">
+                  <div class="paper-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="margin-top:3px;flex-shrink:0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    HydroClaw v1.0: An LLM-powered Agentic Framework for Automated Hydrological Model Calibration with Structured Domain Knowledge
+                  </div>
+                  <p class="paper-desc">基于 LLM 的水文模型率定 Agent 框架,实现任务拆解、工具调用与自动化实验流程。</p>
+                  <div class="paper-meta">
+                    <span class="paper-badge badge-teal">一作</span>
+                    <span class="paper-badge badge-teal">二区期刊</span>
+                    <span class="paper-badge badge-dim">审稿中</span>
+                  </div>
+                </div>
+              </div>
+              <div class="paper-item">
+                <div class="paper-year">2025</div>
+                <div class="paper-body">
+                  <div class="paper-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="margin-top:3px;flex-shrink:0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <a href="https://www.sciencedirect.com/science/article/abs/pii/S1364815226000423" target="_blank">A Python Framework for Differentiable Hydrological Modeling and Research Workflow Automation</a>
+                  </div>
+                  <p class="paper-desc">参与可微水文建模框架搭建及论文相关实验支撑工作。</p>
+                  <div class="paper-meta">
+                    <span class="paper-badge badge-teal">四作</span>
+                    <span class="paper-badge badge-teal">二区期刊</span>
+                    <a href="https://www.sciencedirect.com/science/article/abs/pii/S1364815226000423" target="_blank" class="paper-badge badge-link">论文链接 ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: 技能(关于+skills) — 默认选中 -->
+        <div class="s1-tab-pane active" data-pane="skills">
+          <div class="about-text">
+            <p>本科毕业于<span class="hl">大连理工大学人工智能专业</span>,目前在大连理工大学攻读<span class="hl">智慧城市建造与管理硕士</span>学位。具备扎实的深度学习与编程基础,持续关注 <span class="hl">Transformer、LLM 与 Agent</span> 相关技术,具有论文阅读、实验复现、模型优化与场景落地能力。</p>
+            <p>日常使用 <span class="hl">Cursor、Claude Code</span> 等 AI 编程工具,熟悉 RAG、Agent、Prompt Engineering、工具调用与自动评测流程。英语能力良好(CET-6),具备英文论文阅读与技术写作能力。</p>
+          </div>
+          <div class="skills-wrap">
+            <div class="skill-group">
+              <div class="skill-group-name">编程与框架</div>
+              <div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">PyTorch</span><span class="skill-tag">FastAPI</span><span class="skill-tag">Docker</span><span class="skill-tag">Linux</span></div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-name">大模型相关</div>
+              <div class="skill-tags"><span class="skill-tag">RAG</span><span class="skill-tag">Agent</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">Dify</span><span class="skill-tag">工具调用</span></div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-name">模型基础</div>
+              <div class="skill-tags"><span class="skill-tag">Transformer</span><span class="skill-tag">LSTM</span><span class="skill-tag">Seq2Seq</span><span class="skill-tag">时序预测</span></div>
+            </div>
+            <div class="skill-group">
+              <div class="skill-group-name">科研能力</div>
+              <div class="skill-tags"><span class="skill-tag">英文论文阅读</span><span class="skill-tag">实验复现</span><span class="skill-tag">技术写作</span><span class="skill-tag">CET-6</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部 CTA -->
+      <div class="s1-cta">
+        <a class="s1-btn primary" href="resume.pdf" target="_blank">下载简历 PDF</a>
+        <button class="s1-btn ghost" type="button" data-goto-scene="2">了解我更多 →</button>
+      </div>
     </div>
+  </section>
 
-    <div class="sidebar-social">
-      <!-- GitHub -->
-      <a href="https://github.com/zhuanglaihong" target="_blank" title="GitHub">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-          <path d="M9 18c-4.51 2-5-2-7-2"/>
-        </svg>
-      </a>
-      <!-- Email -->
-      <a href="mailto:zlh994182204@163.com" title="邮件">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-      </a>
-      <!-- Resume -->
-      <a href="resume.pdf" target="_blank" title="简历 PDF">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-          <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/>
-          <line x1="16" y1="17" x2="8" y2="17"/>
-          <line x1="10" y1="9" x2="8" y2="9"/>
-        </svg>
-      </a>
+  <!-- ════════════════ SCENE 2: 体系架构(3D 星图) ════════════════ -->
+  <section class="scene scene-2" data-scene="2">
+    <div class="scene-inner s2-inner">
+
+      <!-- 上半屏:星图 hero -->
+      <div class="s2-hero" id="s2-hero">
+        <div class="s2-header">
+          <div class="s2-title">个人空间</div>
+        </div>
+        <div class="s2-stage" id="s2-stage">
+          <canvas id="s2-canvas"></canvas>
+          <div class="s2-mobile-grid" id="s2-mobile-grid"><!-- mobile fallback,JS 挂载 --></div>
+          <div class="s2-tooltip" id="s2-tooltip"></div>
+        </div>
+        <div class="s2-scroll-hint">点击节点 ↓ 查看详情</div>
+      </div>
+
+      <!-- 下半屏:模块详情(内联展示) -->
+      <div class="s2-detail-wrap" id="s2-detail-wrap">
+        <div class="s2-detail-empty" id="s2-detail-empty">
+          <div class="s2-de-icon">✦</div>
+          <div class="s2-de-text">点击上方星图任一节点 · 详情会在这里展开</div>
+        </div>
+        <div class="s2-module" data-module="hobbies" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">◆</span>兴趣爱好</header>
+          <p class="sec-intro">职业之外,这些让我成为我。</p>
+          <div class="hobbies-grid" id="hobbies-list"></div>
+        </div>
+        <div class="s2-module" data-module="reading" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">◈</span>读书见闻</header>
+          <p class="sec-intro">最近读过的、还在反刍的、想推荐给你的。</p>
+          <div class="reading-list" id="reading-list"></div>
+        </div>
+        <div class="s2-module" data-module="blog" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">◉</span>博客 · 技术随笔</header>
+          <p class="sec-intro">想清楚一件事,就写下来 —— 给自己,也给可能路过的你。</p>
+          <div class="blog-list" id="blog-list"></div>
+        </div>
+        <div class="s2-module" data-module="gallery" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">◎</span>旅行 · 摄影</header>
+          <p class="sec-intro">一些值得停下来看的瞬间。</p>
+          <div class="gallery-grid" id="gallery-list"></div>
+        </div>
+        <div class="s2-module" data-module="resources" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">⌬</span>我的资源</header>
+          <p class="sec-intro">书籍 PDF、好用网站、值得反复读的论文 —— 学习路上收藏的入口。</p>
+          <div class="resources-list" id="resources-list"></div>
+        </div>
+        <div class="s2-module" data-module="contact" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">✦</span>联系我</header>
+          <div class="contact-block" id="contact-block"></div>
+        </div>
+      </div>
+
     </div>
-  </header>
+  </section>
 
-  <!-- ==================== RIGHT CONTENT ==================== -->
-  <main id="content">
+  <!-- 底部 page dots (2 个 — Scene 1 / Scene 2) -->
+  <nav class="deck-dots" aria-label="scene 导航">
+    <button class="dot active" data-dot="1" aria-label="Scene 1"></button>
+    <button class="dot"        data-dot="2" aria-label="Scene 2"></button>
+  </nav>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <p class="sec-label">关于</p>
-      <div class="about-text">
-        <p>
-          你好，我是庄赖宏，本科毕业于<span class="hl">大连理工大学人工智能专业</span>，
-          目前在大连理工大学攻读<span class="hl">智慧城市建造与管理硕士</span>学位。
-        </p>
-        <p>
-          我具备扎实的深度学习与编程基础，持续关注
-          <span class="hl">Transformer、LLM 与 Agent</span> 相关技术，
-          具有论文阅读、实验复现、模型优化与场景落地能力，
-          能够快速理解业务问题并推进技术实现。
-        </p>
-        <p>
-          日常使用 <span class="hl">Cursor、Claude Code</span> 等 AI 编程工具，
-          熟悉 RAG、Agent、Prompt Engineering、工具调用与自动评测流程。
-          英语能力良好（CET-6），具备英文论文阅读与技术写作能力。
-        </p>
-        <p>
-          平时喜欢<span class="hl">阅读与历史</span>，音乐上会弹吉他和吹口琴。
-          热衷于探索各种有趣的<span class="hl">开源工具</span>，喜欢用技术解决实际问题。
-        </p>
-      </div>
+  <!-- 两侧大箭头 (vue 风格) -->
+  <button class="deck-arrow deck-arrow-prev" data-dir="prev" aria-label="上一页">
+    <span class="deck-arrow-icon">‹</span>
+    <span class="deck-arrow-label">PREV</span>
+  </button>
+  <button class="deck-arrow deck-arrow-next" data-dir="next" aria-label="下一页">
+    <span class="deck-arrow-icon">›</span>
+    <span class="deck-arrow-label">NEXT</span>
+  </button>
 
-      <div class="skills-wrap">
-        <div class="skill-group">
-          <div class="skill-group-name">编程与框架</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Python</span>
-            <span class="skill-tag">PyTorch</span>
-            <span class="skill-tag">FastAPI</span>
-            <span class="skill-tag">Docker</span>
-            <span class="skill-tag">Linux</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-name">大模型相关</div>
-          <div class="skill-tags">
-            <span class="skill-tag">RAG</span>
-            <span class="skill-tag">Agent</span>
-            <span class="skill-tag">Prompt Engineering</span>
-            <span class="skill-tag">Dify</span>
-            <span class="skill-tag">工具调用</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-name">模型基础</div>
-          <div class="skill-tags">
-            <span class="skill-tag">Transformer</span>
-            <span class="skill-tag">LSTM</span>
-            <span class="skill-tag">Seq2Seq</span>
-            <span class="skill-tag">时序预测</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-name">科研能力</div>
-          <div class="skill-tags">
-            <span class="skill-tag">英文论文阅读</span>
-            <span class="skill-tag">实验复现</span>
-            <span class="skill-tag">技术写作</span>
-            <span class="skill-tag">CET-6</span>
-          </div>
-        </div>
-      </div>
-    </section>
+  <!-- Scene 2 专属顶部「← 简历」返回按钮 -->
+  <button class="deck-home-btn" type="button" data-goto-scene="1" aria-label="返回核心简历">
+    <span class="dhb-icon">←</span>
+    <span class="dhb-text">核心简历</span>
+  </button>
+</div>
 
-    <!-- EXPERIENCE -->
-    <section id="experience">
-      <h2 class="sec-title">经历</h2>
-      <!-- 工作经历 -->
-      <div class="tl-group">
-        <div class="tl-group-label">工作经历</div>
-        <div class="timeline">
 
-          <div class="tl-item">
-            <div class="tl-period">2024.09<br>— 2025.06</div>
-            <div class="tl-body">
-              <div class="tl-title">
-                大连智水慧成科技有限责任公司
-                <span class="arrow">↗</span>
-              </div>
-              <div class="tl-sub">研发部 · 实习生</div>
-              <p class="tl-desc">
-                大连理工大学产学研合作企业，专注于水利信息化与智慧水务技术研发。
-                参与 RAG 问答系统构建、洪水预报模型开发与 FastAPI 服务化部署，
-                独立完成从数据处理到模型上线的完整流程。
-              </p>
-              <div class="tl-tags">
-                <span class="tl-tag">RAG</span>
-                <span class="tl-tag">Python</span>
-                <span class="tl-tag">FastAPI</span>
-                <span class="tl-tag">Docker</span>
-              </div>
-            </div>
-          </div>
+<!-- ==================== Lightbox (gallery 全屏看图) ==================== -->
+<div id="lightbox" aria-hidden="true">
+  <button class="lb-close" type="button" aria-label="关闭">&times;</button>
+  <button class="lb-prev" type="button" aria-label="上一张">&lsaquo;</button>
+  <button class="lb-next" type="button" aria-label="下一张">&rsaquo;</button>
+  <div class="lb-stage"><img class="lb-img" alt="" /></div>
+  <div class="lb-cap"></div>
+</div>
 
-        </div>
-      </div>
-
-      <!-- 教育经历 -->
-      <div class="tl-group">
-        <div class="tl-group-label">教育经历</div>
-        <div class="timeline">
-
-          <div class="tl-item">
-            <div class="tl-period">2024.09<br>— 至今</div>
-            <div class="tl-body">
-              <div class="tl-title">大连理工大学</div>
-              <div class="tl-sub">智慧城市建造与管理 · 硕士</div>
-              <p class="tl-desc">
-                持续开展 LLM 与水文模型结合的科研工作，参与实验室项目研发，
-                在国际期刊发表相关论文，同期于产学研合作企业实习。
-              </p>
-              <div class="tl-tags">
-                <span class="tl-tag">LLM</span>
-                <span class="tl-tag">Agent</span>
-                <span class="tl-tag">水文模型</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="tl-item">
-            <div class="tl-period">2020.09<br>— 2024.06</div>
-            <div class="tl-body">
-              <div class="tl-title">大连理工大学</div>
-              <div class="tl-sub">人工智能 · 本科</div>
-              <p class="tl-desc">
-                系统学习机器学习、深度学习、自然语言处理等核心课程，
-                掌握 PyTorch 框架与模型训练全流程，为后续科研打下扎实基础。
-              </p>
-              <div class="tl-tags">
-                <span class="tl-tag">人工智能</span>
-                <span class="tl-tag">深度学习</span>
-                <span class="tl-tag">PyTorch</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJECTS -->
-    <section id="projects">
-      <h2 class="sec-title">项目</h2>
-      <div class="tl-group">
-        <div class="tl-group-label">研究项目</div>
-        <div class="projects">
-
-        <div class="proj-item">
-          <div class="proj-period">2024.12<br>— 2025.06</div>
-          <div class="proj-body">
-            <div class="proj-title">
-              <a href="https://github.com/zhuanglaihong/hydroclaw" target="_blank">
-                基于 RAG 的水库调度知识库问答系统
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-            </div>
-            <p class="proj-desc">
-              面向水库调度规程问答场景，构建基于 RAG 的专业知识问答系统。
-              设计父子分段策略处理长文本与表格数据，基于 Dify 搭建混合检索 + Rerank 推理链路，
-              通过 Prompt 约束控制输出格式与回答边界，降低幻觉风险，
-              并构建类 Agent 工作流实现自动化评测闭环。
-            </p>
-            <div class="proj-tags">
-              <span class="proj-tag">RAG</span>
-              <span class="proj-tag">Dify</span>
-              <span class="proj-tag">Prompt Engineering</span>
-              <span class="proj-tag">混合检索</span>
-              <span class="proj-tag">Rerank</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="proj-item">
-          <div class="proj-period">2024.09<br>— 2024.12</div>
-          <div class="proj-body">
-            <div class="proj-title">
-              <a href="https://gitcode.com/dlut-water/llm-backend" target="_blank">
-                面向无资料流域的洪水预报模型研究
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-            </div>
-            <p class="proj-desc">
-              面向内蒙古地区少资料与无资料流域洪水预报场景，构建多源气象水文数据集（覆盖 46 个流域）。
-              基于 LSTM 与 Encoder-Decoder 架构开展通用水文模型研究，
-              通过「预训练 + 少样本微调」迁移学习策略，部分方案精度提升 20%。
-              负责 FastAPI 接口开发与 Docker 容器化部署，支撑模型服务化交付。
-            </p>
-            <div class="proj-tags">
-              <span class="proj-tag">LSTM</span>
-              <span class="proj-tag">Encoder-Decoder</span>
-              <span class="proj-tag">迁移学习</span>
-              <span class="proj-tag">FastAPI</span>
-              <span class="proj-tag">Docker</span>
-            </div>
-          </div>
-        </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- PAPERS -->
-    <section id="papers">
-      <h2 class="sec-title">论文</h2>
-      <div class="tl-group">
-        <div class="tl-group-label">期刊论文</div>
-        <div class="papers">
-
-        <div class="paper-item">
-          <div class="paper-year">审稿中</div>
-          <div class="paper-body">
-            <div class="paper-title">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="margin-top:3px;flex-shrink:0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-              HydroClaw v1.0: An LLM-powered Agentic Framework for Automated Hydrological Model Calibration with Structured Domain Knowledge
-            </div>
-            <p class="paper-desc">
-              基于 LLM 的水文模型率定 Agent 框架，实现任务拆解、工具调用与自动化实验流程。
-            </p>
-            <div class="paper-meta">
-              <span class="paper-badge badge-teal">一作</span>
-              <span class="paper-badge badge-teal">二区期刊</span>
-              <span class="paper-badge badge-dim">审稿中</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="paper-item">
-          <div class="paper-year">2025</div>
-          <div class="paper-body">
-            <div class="paper-title">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" style="margin-top:3px;flex-shrink:0"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
-              <a href="https://www.sciencedirect.com/science/article/abs/pii/S1364815226000423" target="_blank">
-                A Python Framework for Differentiable Hydrological Modeling and Research Workflow Automation
-              </a>
-            </div>
-            <p class="paper-desc">
-              参与可微水文建模框架搭建及论文相关实验支撑工作。
-            </p>
-            <div class="paper-meta">
-              <span class="paper-badge badge-teal">四作</span>
-              <span class="paper-badge badge-teal">二区期刊</span>
-              <a href="https://www.sciencedirect.com/science/article/abs/pii/S1364815226000423" target="_blank" class="paper-badge badge-link">论文链接 ↗</a>
-            </div>
-          </div>
-        </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="content-footer">
-      <!-- <p>
-        参考 <a href="https://brittanychiang.com" target="_blank">Brittany Chiang</a> 的设计风格，
-        由庄赖宏构建 &nbsp;·&nbsp; 2025
-      </p> -->
-    </footer>
-
-  </main>
+<!-- ==================== Demo 模态框 ==================== -->
+<div id="demo-modal" aria-hidden="true">
+  <div class="dm-frame">
+    <div class="dm-hd">
+      <span class="dm-dot dot-r"></span>
+      <span class="dm-dot dot-y"></span>
+      <span class="dm-dot dot-g"></span>
+      <span class="dm-title">demo</span>
+      <button class="dm-close" type="button" aria-label="关闭">&times;</button>
+    </div>
+    <div class="dm-body" id="dm-body"></div>
+  </div>
 </div>
 
 <script>
-  // 左侧导航 scroll-spy
-  const sections = document.querySelectorAll('main section[id]');
-  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  /* Scene Deck 模式 — 不再使用 scroll-spy (旧侧栏 nav 已移除)
+     scroll-spy 逻辑由 Scene 路由替代,见下方 goToScene() */
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(a => {
-          const active = a.getAttribute('href') === '#' + entry.target.id;
-          a.classList.toggle('active', active);
+  /* =========================================================
+     FX 模块开关 — 想关掉某项把对应值改成 false 即可
+     ========================================================= */
+  const FX = {
+    BG_CANVAS: true,   // 全局背景
+    SPLASH:    true,   // 开机过场
+    TYPEWRITER:true,   // 侧栏角色打字机
+  };
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =========================================================
+     模块 1: 全局 Canvas 背景 (grid + connections)
+     ========================================================= */
+  (function initBgFx() {
+    if (!FX.BG_CANVAS) return;
+    const canvas = document.getElementById('bg-fx');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const TEAL = '100, 255, 218';
+    const NODE_COUNT = 36;
+    const NODE_MAX_DIST = 150;
+    const GRID_SIZE = 64;
+
+    let w = 0, h = 0, dpr = 1;
+    let nodes = [];
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width  = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function initNodes() {
+      nodes = [];
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: (Math.random() - 0.5) * 0.22,
+          r: 1 + Math.random() * 1.4,
         });
       }
-    });
-  }, { rootMargin: '-30% 0px -60% 0px' });
+    }
 
-  sections.forEach(s => observer.observe(s));
+    function drawGrid(t) {
+      ctx.strokeStyle = `rgba(${TEAL}, 0.045)`;
+      ctx.lineWidth = 1;
+      const offset = (t * 0.012) % GRID_SIZE;
+      for (let x = -offset; x < w; x += GRID_SIZE) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = -offset; y < h; y += GRID_SIZE) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      // 缓慢下移的扫描带
+      const scanH = 180;
+      const scanY = (t * 0.045) % (h + scanH * 2) - scanH;
+      const grad = ctx.createLinearGradient(0, scanY - scanH/2, 0, scanY + scanH/2);
+      grad.addColorStop(0, `rgba(${TEAL}, 0)`);
+      grad.addColorStop(0.5, `rgba(${TEAL}, 0.045)`);
+      grad.addColorStop(1, `rgba(${TEAL}, 0)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, scanY - scanH/2, w, scanH);
+    }
+
+    function drawConnections() {
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx = -n.vx;
+        if (n.y < 0 || n.y > h) n.vy = -n.vy;
+        ctx.fillStyle = `rgba(${TEAL}, 0.55)`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < NODE_MAX_DIST) {
+            const alpha = (1 - dist / NODE_MAX_DIST) * 0.22;
+            ctx.strokeStyle = `rgba(${TEAL}, ${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    let rafId = null;
+    function loop(t) {
+      if (document.hidden) { rafId = null; return; }
+      ctx.clearRect(0, 0, w, h);
+      drawGrid(t);
+      drawConnections();
+      rafId = requestAnimationFrame(loop);
+    }
+    function start() { if (!rafId) rafId = requestAnimationFrame(loop); }
+    function stop()  { if (rafId) cancelAnimationFrame(rafId); rafId = null; }
+
+    resize();
+    initNodes();
+    window.addEventListener('resize', () => { resize(); initNodes(); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop(); else start();
+    });
+
+    requestAnimationFrame(() => canvas.classList.add('ready'));
+
+    if (prefersReducedMotion) {
+      // 静态画一帧后停止
+      drawGrid(0);
+      drawConnections();
+    } else {
+      start();
+    }
+  })();
+
+  /* =========================================================
+     工具: 打字机函数 (返回 Promise,可被取消)
+     ========================================================= */
+  function typewriter(el, text, speed) {
+    speed = speed || 45;
+    let cancelled = false;
+    const p = new Promise((resolve) => {
+      el.textContent = '';
+      let i = 0;
+      function step() {
+        if (cancelled) { el.textContent = text; resolve(); return; }
+        if (i >= text.length) { resolve(); return; }
+        el.textContent += text[i++];
+        setTimeout(step, speed);
+      }
+      step();
+    });
+    p.cancel = () => { cancelled = true; };
+    return p;
+  }
+
+  /* =========================================================
+     模块 2 + 3: 开机过场遮罩 + 侧栏角色打字机
+     ========================================================= */
+  (function initSplash() {
+    const splash = document.getElementById('splash');
+    const sidebarRole = document.querySelector('.s1-role');  // 新 Scene 1 的角色行
+    if (!splash) return;
+
+    const urlParams = new URLSearchParams(location.search);
+    const forcePlay = urlParams.get('splash') === '1';
+    const seen = sessionStorage.getItem('splash_seen') === '1';
+    const shouldSkipFully = !FX.SPLASH || (!forcePlay && (seen || prefersReducedMotion));
+
+    if (shouldSkipFully) {
+      splash.remove();
+      return;
+    }
+
+    // 准备侧栏角色文字 — 先记下原文,清空,等开机过场结束后再打字呈现
+    let sidebarOriginalText = '';
+    if (FX.TYPEWRITER && sidebarRole) {
+      sidebarOriginalText = sidebarRole.textContent.trim();
+      sidebarRole.textContent = '';
+    }
+
+    const bootLines = [
+      '> [SYS] 初始化作品集运行时...',
+      '> [LLM] 加载大模型应用模块',
+      '> [RAG] 挂载向量检索与知识库',
+      '> [AGENT] 注册 Agent 与工具链',
+      '> [NET] 连接 GitHub / Papers 元数据',
+    ];
+    const lineEls = splash.querySelectorAll('.splash-line');
+    const fill = splash.querySelector('.splash-progress-fill');
+    const pct  = splash.querySelector('.splash-pct');
+    const checks = splash.querySelectorAll('.splash-check');
+    const skipBtn = splash.querySelector('#splash-skip');
+
+    let currentTw = null;
+    let aborted = false;
+
+    function fastForward() {
+      if (aborted) return;
+      aborted = true;
+      if (currentTw && currentTw.cancel) currentTw.cancel();
+      // 全部行展示完整
+      lineEls.forEach((el, i) => {
+        el.classList.add('active');
+        el.classList.remove('typing');
+        if (bootLines[i]) el.querySelector('.splash-text').textContent = bootLines[i];
+      });
+      // 进度条满
+      if (fill) fill.style.width = '100%';
+      if (pct)  pct.textContent  = '100%';
+      // 自检全部 ok
+      checks.forEach(c => {
+        c.classList.add('ok');
+        c.querySelector('.splash-check-st').textContent = '✓';
+      });
+      // 立刻退场
+      setTimeout(exit, 280);
+    }
+
+    function exit() {
+      splash.classList.add('exiting');
+      setTimeout(() => {
+        splash.remove();
+        sessionStorage.setItem('splash_seen', '1');
+        // 触发侧栏打字机
+        if (FX.TYPEWRITER && sidebarRole && sidebarOriginalText) {
+          sidebarRole.classList.add('typing');
+          const tw = typewriter(sidebarRole, sidebarOriginalText, 55);
+          tw.then(() => {
+            setTimeout(() => sidebarRole.classList.remove('typing'), 1400);
+          });
+        }
+      }, 520);
+    }
+
+    // 跳过按钮 / Esc / Enter
+    if (skipBtn) skipBtn.addEventListener('click', fastForward);
+    const keyHandler = (e) => {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        fastForward();
+        window.removeEventListener('keydown', keyHandler);
+      }
+    };
+    window.addEventListener('keydown', keyHandler);
+
+    // ---------------- 主序列 ----------------
+    async function runSequence() {
+      // 终端逐行打字
+      for (let i = 0; i < bootLines.length; i++) {
+        if (aborted) return;
+        const el = lineEls[i];
+        if (!el) continue;
+        el.classList.add('active', 'typing');
+        const txt = el.querySelector('.splash-text');
+        currentTw = typewriter(txt, bootLines[i], 22);
+        await currentTw;
+        el.classList.remove('typing');
+        if (i < bootLines.length - 1 && !aborted) {
+          await new Promise(r => setTimeout(r, 120));
+        }
+      }
+      if (aborted) return;
+
+      // 进度条 + 自检并行推进
+      const totalMs = 1400;
+      const startT = performance.now();
+      function progressStep() {
+        if (aborted) return;
+        const t = (performance.now() - startT) / totalMs;
+        const v = Math.min(1, t);
+        const v100 = Math.round(v * 100);
+        if (fill) fill.style.width = v100 + '%';
+        if (pct)  pct.textContent = v100 + '%';
+        if (v < 1) requestAnimationFrame(progressStep);
+      }
+      requestAnimationFrame(progressStep);
+
+      // 自检逐项点亮(错峰)
+      checks.forEach((c, i) => {
+        setTimeout(() => {
+          if (aborted) return;
+          c.classList.add('ok');
+          c.querySelector('.splash-check-st').textContent = '✓';
+        }, 150 + i * 180);
+      });
+
+      // 等进度+自检结束
+      await new Promise(r => setTimeout(r, totalMs + 200));
+      if (aborted) return;
+      // 微停顿后退出
+      await new Promise(r => setTimeout(r, 350));
+      if (!aborted) exit();
+    }
+
+    runSequence();
+  })();
+
+  /* =========================================================
+     工具: HTML 转义 + 简易模板
+     ========================================================= */
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  // 简单的 inline-markdown:支持 **bold**(用于 hd-final)
+  function inlineMd(s) {
+    return escapeHtml(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  /* =========================================================
+     渲染: 兴趣爱好
+     ========================================================= */
+  function renderHobbies() {
+    const container = document.getElementById('hobbies-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.hobbies || [];
+    container.innerHTML = items.map(h => `
+      <div class="hobby-card">
+        <div class="hobby-icon">${escapeHtml(h.icon || '★')}</div>
+        <div class="hobby-title">${escapeHtml(h.title)}</div>
+        <div class="hobby-desc">${escapeHtml(h.desc)}</div>
+        <div class="hobby-tags">
+          ${(h.tags || []).map(t => `<span class="hobby-tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* =========================================================
+     渲染: 读书见闻
+     ========================================================= */
+  function renderReading() {
+    const container = document.getElementById('reading-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.reading || [];
+    container.innerHTML = items.map(r => {
+      const stars = Array.from({length: 5}, (_, i) =>
+        `<span class="${i < (r.rating||0) ? '' : 'star-empty'}">★</span>`
+      ).join('');
+      const cover = r.cover
+        ? `<img src="${escapeHtml(r.cover)}" alt="${escapeHtml(r.title)}" loading="lazy" />`
+        : `<span>暂无封面</span>`;
+      const linkBadge = r.link
+        ? `<a href="${escapeHtml(r.link)}" target="_blank" rel="noopener" class="reading-link">原文 ↗</a>`
+        : '';
+      return `
+        <div class="reading-item">
+          <div class="reading-cover">${cover}</div>
+          <div class="reading-body">
+            <div class="reading-title">${escapeHtml(r.title)}</div>
+            <div class="reading-author">${escapeHtml(r.author || '')}</div>
+            <div class="reading-summary">${escapeHtml(r.summary || '')}</div>
+            <div class="reading-meta">
+              <span class="reading-rating">${stars}</span>
+              ${(r.tags || []).map(t => `<span class="reading-badge badge-tag">${escapeHtml(t)}</span>`).join('')}
+              ${r.finished ? `<span class="reading-badge badge-date">${escapeHtml(r.finished)}</span>` : ''}
+              ${linkBadge}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* =========================================================
+     渲染: 博客列表
+     ========================================================= */
+  function renderBlog() {
+    const container = document.getElementById('blog-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.blog || [];
+    if (items.length === 0) {
+      container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">还没有发布的文章 —— 给我点时间。</p>`;
+      return;
+    }
+    container.innerHTML = items.map(p => `
+      <div class="blog-item">
+        <div class="blog-date">
+          ${escapeHtml(p.date || '')}
+          ${p.readingTime ? `<span class="blog-rt">~ ${p.readingTime} 分钟</span>` : ''}
+        </div>
+        <div class="blog-body">
+          <div class="blog-title">
+            <a href="./post.html?id=${encodeURIComponent(p.id)}">${escapeHtml(p.title)}</a>
+          </div>
+          <div class="blog-summary">${escapeHtml(p.summary || '')}</div>
+          <div class="blog-tags">
+            ${(p.tags || []).map(t => `<span class="blog-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* =========================================================
+     渲染: 旅行 · 摄影 (含 lightbox)
+     ========================================================= */
+  function renderGallery() {
+    const container = document.getElementById('gallery-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.gallery || [];
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="gallery-empty">
+          照片上传中 —— 在 <code>assets/gallery/</code> 放图片,再到 <code>data.js</code> 的
+          <code>gallery</code> 数组添加条目即可。
+        </div>`;
+      return;
+    }
+    container.innerHTML = items.map((g, idx) => `
+      <div class="gallery-item" data-idx="${idx}">
+        <img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.caption || '')}" loading="lazy" />
+        <div class="gallery-mask">
+          ${g.location ? `<div class="gallery-cap-loc">${escapeHtml(g.location)} · ${escapeHtml(g.date || '')}</div>` : ''}
+          <div class="gallery-cap-txt">${escapeHtml(g.caption || '')}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // Lightbox 交互
+    const lb     = document.getElementById('lightbox');
+    const lbImg  = lb.querySelector('.lb-img');
+    const lbCap  = lb.querySelector('.lb-cap');
+    const lbPrev = lb.querySelector('.lb-prev');
+    const lbNext = lb.querySelector('.lb-next');
+    const lbClose= lb.querySelector('.lb-close');
+    let cur = 0;
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      const g = items[cur];
+      lbImg.src = g.src;
+      lbImg.alt = g.caption || '';
+      lbCap.innerHTML =
+        (g.location ? `<span class="lb-cap-loc">${escapeHtml(g.location)} · ${escapeHtml(g.date || '')}</span><br>` : '') +
+        escapeHtml(g.caption || '');
+    }
+    function open(i) {
+      show(i);
+      lb.classList.add('open');
+      // 1 张时也隐藏翻页;>=2 张时显示
+      lb.classList.toggle('single', items.length <= 1);
+      lb.setAttribute('aria-hidden', 'false');
+    }
+    function close() {
+      lb.classList.remove('open', 'single');
+      lb.setAttribute('aria-hidden', 'true');
+    }
+    container.querySelectorAll('.gallery-item').forEach(el => {
+      el.addEventListener('click', () => open(parseInt(el.dataset.idx, 10)));
+    });
+    lbPrev.addEventListener('click', () => show(cur - 1));
+    lbNext.addEventListener('click', () => show(cur + 1));
+    lbClose.addEventListener('click', close);
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    window.addEventListener('keydown', (e) => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft')  show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  }
+
+  /* =========================================================
+     渲染: 联系我
+     ========================================================= */
+  function renderContact() {
+    const container = document.getElementById('contact-block');
+    if (!container || !window.SITE_DATA) return;
+    const c = SITE_DATA.contact || {};
+    const ICON = {
+      email:    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+      github:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>',
+      wechat:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8.5A1.5 1.5 0 1 1 9 5.5a1.5 1.5 0 0 1 0 3zm5 0A1.5 1.5 0 1 1 14 5.5a1.5 1.5 0 0 1 0 3zM11.5 2C5.7 2 1 5.5 1 10c0 2.4 1.4 4.5 3.6 6L4 18l2.7-1.6c.7.1 1.4.2 2.2.3-.2-.5-.3-1.1-.3-1.7 0-3.6 3.4-6.5 7.5-6.5.4 0 .8 0 1.2.1C16.5 4.5 14.2 2 11.5 2zM17 9c-3.6 0-6.5 2.5-6.5 5.5S13.4 20 17 20c.7 0 1.4-.1 2-.3l2.3 1.3-.6-1.9c1.5-1 2.3-2.5 2.3-4.1C23 11.5 20.6 9 17 9z"/></svg>',
+      location: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s-8-7-8-13a8 8 0 0 1 16 0c0 6-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg>',
+      resume:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    };
+    container.innerHTML = `
+      <div class="contact-callout">
+        <div class="contact-callout-main">${escapeHtml(c.callout || '有想法?随时聊。')}</div>
+        <div class="contact-callout-sub">${escapeHtml(c.sub || '')}</div>
+      </div>
+      <div class="contact-items">
+        ${(c.items || []).map(it => `
+          <div class="contact-item" data-type="${escapeHtml(it.type)}" data-value="${escapeHtml(it.value)}" data-href="${escapeHtml(it.href || '')}" data-qr="${escapeHtml(it.qr || '')}">
+            <span class="contact-item-icon">${ICON[it.type] || '●'}</span>
+            <span class="contact-item-label">${escapeHtml(it.label)}</span>
+            <span class="contact-item-value">${escapeHtml(it.value)}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    // 点击处理:邮箱 → 复制到剪贴板;微信 → 弹出二维码;其他 → 打开链接
+    container.querySelectorAll('.contact-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const type = el.dataset.type;
+        const href = el.dataset.href;
+        const value = el.dataset.value;
+        const qr = el.dataset.qr;
+
+        if (type === 'wechat' && qr) {
+          // 用 lightbox 显示二维码 (单图模式,隐藏左右翻页)
+          const lb = document.getElementById('lightbox');
+          const lbImg = lb.querySelector('.lb-img');
+          const lbCap = lb.querySelector('.lb-cap');
+          lbImg.src = qr;
+          lbImg.alt = '微信二维码';
+          lbCap.textContent = '扫码加我微信';
+          lb.classList.add('open', 'single');
+          return;
+        }
+        if (type === 'email') {
+          // 同时打开邮件并复制地址
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(value).then(() => {
+              el.classList.add('copied');
+              setTimeout(() => el.classList.remove('copied'), 1800);
+            });
+          }
+          if (href) window.location.href = href;
+          return;
+        }
+        if (href) {
+          window.open(href, type === 'resume' ? '_blank' : '_blank');
+        }
+      });
+    });
+  }
+
+  /* =========================================================
+     渲染: 我的资源
+     ========================================================= */
+  function renderResources() {
+    const container = document.getElementById('resources-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.resources || [];
+    const TYPE_META = {
+      book:   { icon: '📖', name: 'BOOK' },
+      site:   { icon: '🌐', name: 'SITE' },
+      paper:  { icon: '📄', name: 'PAPER' },
+      file:   { icon: '📁', name: 'FILE' },
+      course: { icon: '▶',  name: 'COURSE' },
+    };
+    if (items.length === 0) {
+      container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">资源还在整理中。</p>`;
+      return;
+    }
+    container.innerHTML = items.map(r => {
+      const t = TYPE_META[r.type] || TYPE_META.file;
+      const href = r.url && r.url !== '#TODO-upload-pdf' ? r.url : '#';
+      const isExternal = href.startsWith('http');
+      const target = isExternal ? ' target="_blank" rel="noopener"' : '';
+      return `
+        <a class="resource-item" href="${escapeHtml(href)}"${target}>
+          <div class="resource-type" data-type="${escapeHtml(r.type)}">
+            <span class="resource-type-icon">${t.icon}</span>
+            <span class="resource-type-name">${t.name}</span>
+          </div>
+          <div class="resource-body">
+            <div class="resource-title">${escapeHtml(r.title)}</div>
+            ${r.author ? `<div class="resource-author">${escapeHtml(r.author)}</div>` : ''}
+            ${r.desc ? `<div class="resource-desc">${escapeHtml(r.desc)}</div>` : ''}
+            ${(r.tags && r.tags.length) ? `<div class="resource-tags">${r.tags.map(tg => `<span class="resource-tag">${escapeHtml(tg)}</span>`).join('')}</div>` : ''}
+          </div>
+          <div class="resource-arrow">↗</div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  /* =========================================================
+     渲染 + 注册: Demo 列表 + 模态框 + hydroagent (保留基础设施 — 未来可复用)
+     ========================================================= */
+  const _demoRegistry = {};
+  function registerDemo(id, mountFn) { _demoRegistry[id] = mountFn; }
+
+  function openDemo(id) {
+    const demo = (SITE_DATA.demos || []).find(d => d.id === id);
+    if (!demo || !demo.entry) return;
+    const modal = document.getElementById('demo-modal');
+    const body  = document.getElementById('dm-body');
+    const title = modal.querySelector('.dm-title');
+    title.textContent = demo.title || id;
+    body.innerHTML = '';
+    const mount = _demoRegistry[demo.entry];
+    if (mount) {
+      try { mount(body, demo); }
+      catch (err) {
+        body.innerHTML = `<p style="color:#ff6b6b">Demo 加载失败: ${escapeHtml(err.message)}</p>`;
+      }
+    } else {
+      body.innerHTML = `<p style="color:var(--text-dim)">Demo "${escapeHtml(demo.entry)}" 未注册。</p>`;
+    }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeDemo() {
+    const modal = document.getElementById('demo-modal');
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.getElementById('dm-body').innerHTML = '';
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const dm = document.getElementById('demo-modal');
+      if (dm && dm.classList.contains('open')) closeDemo();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (e.target.classList && e.target.classList.contains('dm-close')) closeDemo();
+    const modal = document.getElementById('demo-modal');
+    if (modal && e.target === modal) closeDemo();
+  });
+
+  function renderDemos() {
+    const container = document.getElementById('demos-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.demos || [];
+    container.innerHTML = items.map(d => {
+      const live = !!d.entry;
+      const cover = d.cover
+        ? `<img src="${escapeHtml(d.cover)}" alt="${escapeHtml(d.title)}" loading="lazy" />`
+        : `<span>${escapeHtml(d.title.toUpperCase())}</span>`;
+      return `
+        <div class="demo-card ${live ? 'live' : 'coming'}" data-demo="${escapeHtml(d.id)}">
+          <div class="demo-cover">${cover}</div>
+          <div class="demo-body">
+            <div class="demo-title">${escapeHtml(d.title)}</div>
+            <div class="demo-desc">${escapeHtml(d.desc || '')}</div>
+            <div class="demo-tags">
+              ${(d.tags || []).map(t => `<span class="demo-tag">${escapeHtml(t)}</span>`).join('')}
+            </div>
+            <div class="demo-cta">${live ? '进入演示 →' : '敬请期待'}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    container.querySelectorAll('.demo-card.live').forEach(el => {
+      el.addEventListener('click', () => openDemo(el.dataset.demo));
+    });
+  }
+
+  /* =========================================================
+     Demo 注册: HydroAgent (scripted 对话回放)
+     ========================================================= */
+  registerDemo('hydroagent', function mountHydroAgent(container, demo) {
+    const script = demo.script || [];
+    let cursor = 0;
+    let auto = false;
+
+    container.innerHTML = `
+      <div class="hd-controls">
+        <button class="hd-btn" data-act="next">下一步 →</button>
+        <button class="hd-btn" data-act="auto">自动播放 ▶</button>
+        <button class="hd-btn" data-act="reset">重置 ⟲</button>
+        <span class="hd-progress">0 / ${script.length}</span>
+      </div>
+      <div class="hd-conversation" id="hd-conv"></div>
+    `;
+    const conv = container.querySelector('#hd-conv');
+    const btnNext = container.querySelector('[data-act="next"]');
+    const btnAuto = container.querySelector('[data-act="auto"]');
+    const btnReset = container.querySelector('[data-act="reset"]');
+    const prog = container.querySelector('.hd-progress');
+
+    function updateProg() {
+      prog.textContent = `${cursor} / ${script.length}`;
+      btnNext.disabled = cursor >= script.length;
+    }
+    function reset() {
+      cursor = 0;
+      auto = false;
+      btnAuto.textContent = '自动播放 ▶';
+      conv.innerHTML = '';
+      updateProg();
+    }
+    async function next() {
+      if (cursor >= script.length) return;
+      const turn = script[cursor++];
+      updateProg();
+
+      // 用户问题
+      const turnEl = document.createElement('div');
+      turnEl.className = 'hd-turn';
+      turnEl.innerHTML = `
+        <div class="hd-user">${escapeHtml(turn.user || '')}</div>
+        <div class="hd-thinking">
+          <span class="hd-thinking-label">▎ AGENT 思考</span>
+          ${(turn.thinking || []).map(s => `<span class="hd-thinking-step">${escapeHtml(s)}</span>`).join('')}
+        </div>
+        <div class="hd-final"></div>
+      `;
+      conv.appendChild(turnEl);
+      conv.scrollTop = conv.scrollHeight;
+
+      // 思考步骤逐条点亮
+      const steps = turnEl.querySelectorAll('.hd-thinking-step');
+      for (let i = 0; i < steps.length; i++) {
+        await new Promise(r => setTimeout(r, 280));
+        steps[i].classList.add('show');
+        conv.scrollTop = conv.scrollHeight;
+      }
+      await new Promise(r => setTimeout(r, 400));
+
+      // 最终回答 — 打字机
+      const finalEl = turnEl.querySelector('.hd-final');
+      const text = turn.final || '';
+      const useTw = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!useTw) {
+        finalEl.innerHTML = inlineMd(text);
+      } else {
+        for (let i = 0; i < text.length; i++) {
+          finalEl.innerHTML = inlineMd(text.slice(0, i + 1)) + '<span style="color:var(--teal)">▍</span>';
+          if (i % 3 === 0) conv.scrollTop = conv.scrollHeight;
+          await new Promise(r => setTimeout(r, 14));
+        }
+        finalEl.innerHTML = inlineMd(text);
+      }
+      conv.scrollTop = conv.scrollHeight;
+    }
+    async function autoPlay() {
+      auto = !auto;
+      btnAuto.textContent = auto ? '暂停 ❚❚' : '自动播放 ▶';
+      while (auto && cursor < script.length) {
+        await next();
+        if (auto) await new Promise(r => setTimeout(r, 900));
+      }
+      if (cursor >= script.length) {
+        auto = false;
+        btnAuto.textContent = '自动播放 ▶';
+      }
+    }
+
+    btnNext.addEventListener('click', next);
+    btnAuto.addEventListener('click', autoPlay);
+    btnReset.addEventListener('click', reset);
+
+    updateProg();
+  });
+
+  /* =========================================================
+     启动所有渲染
+     ========================================================= */
+  function renderAll() {
+    if (!window.SITE_DATA) {
+      console.warn('SITE_DATA 未加载,请检查 data.js 是否正确引入');
+      return;
+    }
+    renderHobbies();
+    renderReading();
+    renderBlog();
+    renderGallery();
+    renderContact();
+    renderResources();
+
+    // Scene 路由初始化 (替代旧的 scroll-spy)
+    if (typeof initDeckRouter === 'function') initDeckRouter();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderAll);
+  } else {
+    renderAll();
+  }
+
+  /* =========================================================
+     项目卡的"在线演示"按钮 — 触发对应 demo modal
+     ========================================================= */
+  (function initProjectDemoButtons() {
+    document.querySelectorAll('.proj-demo-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const demoId = btn.dataset.demo;
+        if (demoId && typeof openDemo === 'function') openDemo(demoId);
+      });
+    });
+  })();
+
+  /* =========================================================
+     Scene Deck — Scene 1 Tab 切换
+     ========================================================= */
+  (function initScene1Tabs() {
+    const tabs = document.querySelectorAll('.s1-tab');
+    const panes = document.querySelectorAll('.s1-tab-pane');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.tab;
+        tabs.forEach(t => t.classList.toggle('active', t === tab));
+        panes.forEach(p => p.classList.toggle('active', p.dataset.pane === key));
+      });
+    });
+  })();
+
+  /* =========================================================
+     Scene Deck — 路由 (Scene 1/2 + Scene 2 内联模块 + URL hash)
+     ========================================================= */
+  const MODULE_TITLES = {
+    hobbies:   '兴趣爱好',
+    reading:   '读书见闻',
+    blog:      '博客 · 技术随笔',
+    gallery:   '旅行 · 摄影',
+    resources: '我的资源',
+    contact:   '联系我',
+  };
+  let currentScene = 1;
+  let currentModule = null;
+  let routerInited = false;
+
+  function parseHash() {
+    const raw = location.hash.replace(/^#/, '');
+    if (!raw) return { scene: 1, module: null };
+    const [s, m] = raw.split('/');
+    const n = parseInt(s, 10);
+    if (!n || n < 1 || n > 2) {
+      // 兼容旧 #3/xxx 链接 → 等价于 #2/xxx
+      if (s === '3' && m && MODULE_TITLES[m]) return { scene: 2, module: m };
+      return { scene: 1, module: null };
+    }
+    if (n === 2 && m && MODULE_TITLES[m]) return { scene: 2, module: m };
+    return { scene: n, module: null };
+  }
+
+  // Scene 2 内联展示某个 module:渲染对应容器 + 平滑滚动过去
+  function showModuleInline(module, opts) {
+    opts = opts || {};
+    if (!module || !MODULE_TITLES[module]) return;
+    const empty = document.getElementById('s2-detail-empty');
+    if (empty) empty.style.display = 'none';
+    document.querySelectorAll('.s2-module').forEach(el => {
+      el.hidden = el.dataset.module !== module;
+    });
+    currentModule = module;
+    // 平滑滚动到该 module(在 Scene 2 容器内滚动)
+    if (!opts.skipScroll) {
+      const target = document.querySelector(`.s2-module[data-module="${module}"]`);
+      const scene2 = document.querySelector('.scene-2');
+      if (target && scene2) {
+        const targetTop = target.offsetTop - 40;
+        scene2.scrollTo({ top: targetTop, behavior: 'smooth' });
+      }
+    }
+  }
+
+  function applyScene(scene, module) {
+    const deck = document.getElementById('deck');
+    if (deck) deck.dataset.currentScene = String(scene);
+
+    // 切 scene 显隐
+    document.querySelectorAll('.deck > .scene').forEach(s => {
+      const n = parseInt(s.dataset.scene, 10);
+      s.classList.toggle('active', n === scene);
+    });
+
+    // dot 高亮
+    document.querySelectorAll('.deck-dots .dot').forEach(d => {
+      d.classList.toggle('active', parseInt(d.dataset.dot, 10) === scene);
+    });
+
+    // 箭头可用性 + label 文案
+    // Scene 1: prev 变成 "INTRO"(回看开场动画),点击 reload+?splash=1
+    // Scene 2: prev 是 "PREV"(回 Scene 1)
+    const prev = document.querySelector('.deck-arrow-prev');
+    const next = document.querySelector('.deck-arrow-next');
+    const prevLabel = prev && prev.querySelector('.deck-arrow-label');
+    if (prev) {
+      prev.disabled = false;
+      if (scene === 1) {
+        prev.dataset.action = 'replay-splash';
+        prev.setAttribute('aria-label', '重看开场动画');
+        if (prevLabel) prevLabel.textContent = 'INTRO';
+      } else {
+        prev.dataset.action = 'goto-prev';
+        prev.setAttribute('aria-label', '上一页');
+        if (prevLabel) prevLabel.textContent = 'PREV';
+      }
+    }
+    if (next) next.disabled = scene >= 2;
+
+    // Scene 2 启动 / 停止
+    if (scene === 2) {
+      if (typeof startConstellation === 'function') startConstellation();
+      // 如有 module,渲染并滚动到它(初次加载时延迟到 scene 切完成)
+      if (module) {
+        setTimeout(() => showModuleInline(module), 60);
+      } else {
+        // 没指定 module:重置为 empty 状态
+        const empty = document.getElementById('s2-detail-empty');
+        if (empty) empty.style.display = '';
+        document.querySelectorAll('.s2-module').forEach(el => el.hidden = true);
+        currentModule = null;
+        const scene2 = document.querySelector('.scene-2');
+        if (scene2) scene2.scrollTop = 0;
+      }
+    } else {
+      if (typeof stopConstellation === 'function') stopConstellation();
+    }
+
+    currentScene = scene;
+  }
+
+  function goToScene(scene, module, opts) {
+    opts = opts || {};
+    const targetHash = scene === 2 && module ? `#2/${module}` : (scene === 1 ? '' : `#${scene}`);
+    if (!opts.skipHistory) {
+      if (location.hash !== targetHash) {
+        history.pushState({ scene, module }, '', targetHash || (location.pathname + location.search));
+      }
+    }
+    applyScene(scene, module);
+  }
+
+  function initDeckRouter() {
+    if (routerInited) return;
+    routerInited = true;
+
+    // 初始 scene
+    const init = parseHash();
+    applyScene(init.scene, init.module);
+
+    // hashchange 监听
+    window.addEventListener('hashchange', () => {
+      const { scene, module } = parseHash();
+      applyScene(scene, module);
+    });
+    // popstate (浏览器后退键)
+    window.addEventListener('popstate', () => {
+      const { scene, module } = parseHash();
+      applyScene(scene, module);
+    });
+
+    // 箭头
+    const prev = document.querySelector('.deck-arrow-prev');
+    const next = document.querySelector('.deck-arrow-next');
+    if (prev) {
+      prev.addEventListener('click', () => {
+        if (prev.dataset.action === 'replay-splash') {
+          // Scene 1 时 prev 用于回看开场动画 — reload + ?splash=1 强制重播
+          sessionStorage.removeItem('splash_seen');
+          location.href = location.pathname + '?splash=1';
+        } else {
+          goToScene(Math.max(1, currentScene - 1));
+        }
+      });
+    }
+    if (next) next.addEventListener('click', () => goToScene(Math.min(2, currentScene + 1)));
+
+    // dots
+    document.querySelectorAll('.deck-dots .dot').forEach(d => {
+      d.addEventListener('click', () => {
+        const n = parseInt(d.dataset.dot, 10);
+        goToScene(n);
+      });
+    });
+
+    // data-goto-scene 按钮
+    document.querySelectorAll('[data-goto-scene]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const n = parseInt(btn.dataset.gotoScene, 10);
+        goToScene(n);
+      });
+    });
+
+    // ESC 键: Scene 2 已选中模块 → 重置回顶部(不切 scene)
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const dm = document.getElementById('demo-modal');
+      const lb = document.getElementById('lightbox');
+      if (dm && dm.classList.contains('open')) return;
+      if (lb && lb.classList.contains('open')) return;
+      if (currentScene === 2 && currentModule) {
+        // 清空 module 选中,滚回顶部
+        goToScene(2, null);
+      }
+    });
+
+    // 左右方向键切换 scene(1 ↔ 2)
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' && currentScene === 1) goToScene(2);
+      if (e.key === 'ArrowLeft' && currentScene === 2) goToScene(1);
+    });
+  }
+
+  /* =========================================================
+     Scene 2 — 3D 星图 (Canvas)
+     ========================================================= */
+  const STAR_MODULES = [
+    { id: 'hobbies',    label: '兴趣爱好',  icon: '◆', rgb: '100, 255, 218' }, // primary
+    { id: 'reading',    label: '读书见闻',  icon: '◈', rgb: '130, 170, 255' }, // info
+    { id: 'blog',       label: '博客',      icon: '◉', rgb: '74, 222, 128'  }, // success
+    { id: 'gallery',    label: '旅行·摄影', icon: '◎', rgb: '255, 209, 102' }, // warning
+    { id: 'resources',  label: '我的资源',  icon: '⌬', rgb: '100, 255, 218' },
+    { id: 'contact',    label: '联系我',    icon: '✦', rgb: '130, 170, 255' },
+  ];
+  let constellationStarted = false;
+  let constellationRaf = null;
+
+  function startConstellation() {
+    if (window.matchMedia('(max-width: 720px)').matches) {
+      mountMobileGrid();
+      return;
+    }
+    if (!constellationStarted) {
+      constellationStarted = true;
+      mountConstellation();
+    } else if (!constellationRaf && typeof window._constellationLoop === 'function') {
+      // 重新启动 RAF (从 Scene 3 切回 Scene 2 的情况)
+      constellationRaf = requestAnimationFrame(window._constellationLoop);
+    }
+  }
+  function stopConstellation() {
+    if (constellationRaf) cancelAnimationFrame(constellationRaf);
+    constellationRaf = null;
+  }
+
+  function mountMobileGrid() {
+    const grid = document.getElementById('s2-mobile-grid');
+    if (!grid || grid.dataset.mounted) return;
+    grid.dataset.mounted = '1';
+    const ICONS = { hobbies: '★', reading: '📖', blog: '✎', gallery: '◧', demos: '▶', contact: '✉' };
+    grid.innerHTML = STAR_MODULES.map(m => `
+      <div class="s2-mobile-node" data-module="${m.id}">
+        <div class="s2-mobile-node-icon">${ICONS[m.id] || '●'}</div>
+        <div class="s2-mobile-node-label">${m.label}</div>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.s2-mobile-node').forEach(el => {
+      el.addEventListener('click', () => {
+        const m = el.dataset.module;
+        goToScene(2, m);  // 更新 URL hash 为 #2/xxx
+        showModuleInline(m);
+      });
+    });
+  }
+
+  function mountConstellation() {
+    const canvas = document.getElementById('s2-canvas');
+    const stage  = document.getElementById('s2-stage');
+    const tooltip= document.getElementById('s2-tooltip');
+    if (!canvas || !stage) return;
+    const ctx = canvas.getContext('2d');
+    const TEAL = '100, 255, 218';
+
+    // ── 太阳系平面分布:6 个节点均匀分布在 X-Z 平面上 ──
+    // 所有节点 y = 0,在水平平面上绕中心环绕(像绕日轨道)
+    const N = STAR_MODULES.length;
+    const RADIUS = 1.0;
+    const nodes = STAR_MODULES.map((m, i) => {
+      const theta = (i / N) * Math.PI * 2;
+      return {
+        id: m.id,
+        label: m.label,
+        icon: m.icon,
+        rgb: m.rgb,
+        x: RADIUS * Math.cos(theta),
+        y: 0,
+        z: RADIUS * Math.sin(theta),
+      };
+    });
+
+    let w = 0, h = 0, dpr = 1;
+    // rotX 固定为俯视约 22°,产生椭圆轨道感(从上方俯视太阳系)
+    let rotY = 0.3;
+    const ROT_X_FIXED = 0.38;
+    let rotX = ROT_X_FIXED;
+    let velY = 0;        // 不自动旋转,只在拖拽时累积惯性
+    let isDragging = false, dragPrev = { x: 0, y: 0 };
+    let hoverIdx = -1;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = stage.getBoundingClientRect();
+      w = rect.width;
+      h = rect.height;
+      canvas.width  = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function project(n) {
+      // 先 Y 轴旋转(主要的太阳系自转)
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x1 =  n.x * cosY + n.z * sinY;
+      const z1 = -n.x * sinY + n.z * cosY;
+      // 再 X 轴旋转(固定俯视角)
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const y2 = n.y * cosX - z1 * sinX;
+      const z2 = n.y * sinX + z1 * cosX;
+      // 透视投影
+      const D = 3.0;
+      const persp = D / (D + z2);
+      const cx = w / 2, cy = h / 2;
+      // 水平铺得宽,垂直压扁 — 形成"从前方略俯视"的椭圆视觉
+      const scaleX = w * 0.40;
+      const scaleY = h * 0.55;
+      return {
+        sx: cx + x1 * scaleX * persp,
+        sy: cy + y2 * scaleY * persp,
+        depth: z2,
+        scale: persp,
+      };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2;
+
+      // 投影所有节点
+      const projected = nodes.map(project);
+      // 节点排序(后方先画 → 前方覆盖)
+      const order = projected.map((p, i) => ({ i, p })).sort((a, b) => a.p.depth - b.p.depth);
+
+      // 0. 椭圆轨道线 (太阳系视觉) — 把 X-Z 平面上 r=RADIUS 的圆投影到屏幕
+      ctx.strokeStyle = `rgba(${TEAL}, 0.18)`;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 6]);
+      ctx.beginPath();
+      const segments = 96;
+      for (let s = 0; s <= segments; s++) {
+        const t = (s / segments) * Math.PI * 2;
+        const orb = project({ x: RADIUS * Math.cos(t), y: 0, z: RADIUS * Math.sin(t) });
+        if (s === 0) ctx.moveTo(orb.sx, orb.sy);
+        else ctx.lineTo(orb.sx, orb.sy);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 1. 节点-中心辐条连线(像太阳到行星的引力线)
+      ctx.lineWidth = 1;
+      for (const { i, p } of order) {
+        const alpha = 0.12 + 0.2 * p.scale;
+        const grad = ctx.createLinearGradient(cx, cy, p.sx, p.sy);
+        grad.addColorStop(0, `rgba(${TEAL}, ${alpha * 0.6})`);
+        grad.addColorStop(1, `rgba(${nodes[i].rgb}, ${alpha})`);
+        ctx.strokeStyle = grad;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(p.sx, p.sy);
+        ctx.stroke();
+      }
+
+      // 3. 中心 hub (静态,不旋转) — 放大到 50px
+      const hubR = 50;
+      const hubGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, hubR * 2.2);
+      hubGrad.addColorStop(0,    `rgba(${TEAL}, 0.95)`);
+      hubGrad.addColorStop(0.35, `rgba(${TEAL}, 0.4)`);
+      hubGrad.addColorStop(1,    `rgba(${TEAL}, 0)`);
+      ctx.fillStyle = hubGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, hubR * 2.2, 0, Math.PI * 2);
+      ctx.fill();
+      // hub 外圈描边
+      ctx.strokeStyle = `rgba(${TEAL}, 0.9)`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, hubR * 0.85, 0, Math.PI * 2);
+      ctx.stroke();
+      // hub 内部
+      ctx.fillStyle = 'rgba(2, 12, 27, 0.95)';
+      ctx.beginPath();
+      ctx.arc(cx, cy, hubR * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = `rgba(${TEAL}, 1)`;
+      ctx.font = '700 32px ' + getComputedStyle(document.body).getPropertyValue('--font-sans');
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('庄', cx, cy + 2);
+
+      // ────────── 4a. 第一遍: 所有节点的光晕/外圈/核心/icon ──────────
+      // 按深度从远到近画,近的节点会覆盖远的(符合 3D 直觉)
+      const nodeMeta = []; // 记录每个节点的渲染信息,第二遍画 label 时复用
+      for (const { i, p } of order) {
+        const isHover = hoverIdx === i;
+        const rgb = nodes[i].rgb;
+        // base 半径 24px,远点缩小到 ~13px,近点放大到 ~30px,hover 额外 +6
+        const r = (isHover ? 30 : 24) * (0.55 + 0.55 * p.scale);
+
+        // 大光晕(hover 时进一步放大)
+        const haloR = r * (isHover ? 4.2 : 3);
+        const haloGrad = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, haloR);
+        haloGrad.addColorStop(0,    `rgba(${rgb}, ${isHover ? 0.6 : 0.4})`);
+        haloGrad.addColorStop(0.5,  `rgba(${rgb}, ${isHover ? 0.18 : 0.1})`);
+        haloGrad.addColorStop(1,    `rgba(${rgb}, 0)`);
+        ctx.fillStyle = haloGrad;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, haloR, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 外圈描边(增加金属感)
+        ctx.strokeStyle = `rgba(${rgb}, ${0.7 + 0.3 * p.scale})`;
+        ctx.lineWidth = isHover ? 2 : 1.2;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r + 2, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 节点核心(深色背景圆,让 icon 突出)
+        ctx.fillStyle = `rgba(2, 12, 27, ${0.85 + 0.15 * p.scale})`;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 节点核心(渐变填充淡光)
+        const coreGrad = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, r);
+        coreGrad.addColorStop(0, `rgba(${rgb}, ${0.18 * p.scale})`);
+        coreGrad.addColorStop(1, `rgba(${rgb}, 0)`);
+        ctx.fillStyle = coreGrad;
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // ICON
+        const iconSize = Math.floor(r * 0.95);
+        ctx.fillStyle = `rgba(${rgb}, ${0.75 + 0.25 * p.scale})`;
+        ctx.font = `${iconSize}px ${getComputedStyle(document.body).getPropertyValue('--font-sans')}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(nodes[i].icon, p.sx, p.sy + 1);
+
+        nodeMeta.push({ i, p, r, isHover });
+      }
+
+      // ────────── 4b. 第二遍: 所有 label (在所有节点之后画,带深色描边 + 圆角背景框) ──────────
+      // 太阳系平面 6 个节点都始终可见,全部绘制 label
+      const fontFamily = getComputedStyle(document.body).getPropertyValue('--font-sans');
+      for (const { i, p, r, isHover } of nodeMeta) {
+        const label = nodes[i].label;
+        const fontSize = Math.floor(13 * (0.85 + 0.35 * p.scale));
+        const fontWeight = isHover ? '600' : '500';
+        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        const tx = p.sx;
+        const ty = p.sy + r + 18;
+
+        // label 背景胶囊框(半透明深色,提升对比)
+        const textW = ctx.measureText(label).width;
+        const padX = 8, padY = 4;
+        const bgW = textW + padX * 2, bgH = fontSize + padY * 2;
+        const bgX = tx - bgW / 2, bgY = ty - bgH / 2;
+        const radius = bgH / 2;
+        ctx.fillStyle = `rgba(2, 12, 27, ${0.7 + 0.25 * p.scale})`;
+        ctx.beginPath();
+        ctx.moveTo(bgX + radius, bgY);
+        ctx.arcTo(bgX + bgW, bgY,            bgX + bgW, bgY + bgH, radius);
+        ctx.arcTo(bgX + bgW, bgY + bgH,      bgX,       bgY + bgH, radius);
+        ctx.arcTo(bgX,       bgY + bgH,      bgX,       bgY,        radius);
+        ctx.arcTo(bgX,       bgY,            bgX + bgW, bgY,        radius);
+        ctx.closePath();
+        ctx.fill();
+
+        // 描边(在文字外围画一圈深色描边,即使背景透明也能保持可读)
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(2, 12, 27, 0.85)';
+        ctx.strokeText(label, tx, ty);
+
+        // 文字主体
+        const rgb = nodes[i].rgb;
+        ctx.fillStyle = isHover
+          ? `rgba(${rgb}, 1)`
+          : `rgba(204, 214, 246, ${0.7 + 0.3 * p.scale})`;
+        ctx.fillText(label, tx, ty);
+      }
+
+      // 保存 projected 给 hit-test 用
+      canvas._projected = projected;
+    }
+
+    function loop() {
+      if (document.hidden || currentScene !== 2) {
+        constellationRaf = null;
+        return;
+      }
+      if (!prefersReducedMotion) {
+        if (!isDragging) {
+          // 仅在拖拽结束后保留惯性,逐步衰减到 0
+          if (Math.abs(velY) > 0.0001) {
+            rotY += velY;
+            velY *= 0.94;
+          } else {
+            velY = 0;
+          }
+          rotX = ROT_X_FIXED;
+        }
+      }
+      draw();
+      constellationRaf = requestAnimationFrame(loop);
+    }
+
+    // ── 命中检测 (太阳系平面所有节点都可见 = 都可点击,不再过滤 depth) ──
+    function hitTest(mx, my) {
+      const ps = canvas._projected;
+      if (!ps) return -1;
+      let best = -1, bestDist = 60;
+      for (let i = 0; i < ps.length; i++) {
+        const dx = ps[i].sx - mx, dy = ps[i].sy - my;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < bestDist) { best = i; bestDist = d; }
+      }
+      return best;
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      canvas.classList.add('dragging');
+      dragPrev = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const dx = e.clientX - dragPrev.x;
+        // 平面太阳系:只允许水平拖拽改变 rotY,rotX 锁定为俯视角
+        velY = dx * 0.005;
+        rotY += velY;
+        rotX = ROT_X_FIXED;
+        dragPrev = { x: e.clientX, y: e.clientY };
+      } else {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const idx = hitTest(mx, my);
+        if (idx !== hoverIdx) {
+          hoverIdx = idx;
+          if (idx >= 0) {
+            canvas.style.cursor = 'pointer';
+            const p = canvas._projected[idx];
+            tooltip.style.left = p.sx + 'px';
+            tooltip.style.top  = p.sy + 'px';
+            tooltip.textContent = nodes[idx].label;
+            tooltip.classList.add('show');
+          } else {
+            canvas.style.cursor = '';
+            tooltip.classList.remove('show');
+          }
+        }
+      }
+    });
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      canvas.classList.remove('dragging');
+      // 不再自转,velY 由 loop 内部自然衰减到 0
+    });
+    canvas.addEventListener('click', (e) => {
+      if (isDragging) return;
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const idx = hitTest(mx, my);
+      if (idx >= 0) {
+        const mid = nodes[idx].id;
+        goToScene(2, mid);          // 更新 URL hash
+        showModuleInline(mid);      // 渲染并平滑滚动到下方对应模块
+      }
+    });
+
+    // 触屏简单支持
+    canvas.addEventListener('touchstart', (e) => {
+      if (!e.touches.length) return;
+      isDragging = true;
+      dragPrev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    });
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isDragging || !e.touches.length) return;
+      e.preventDefault();
+      const dx = e.touches[0].clientX - dragPrev.x;
+      // 同样只允许水平拖拽
+      velY = dx * 0.005;
+      rotY += velY;
+      rotX = ROT_X_FIXED;
+      dragPrev = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: false });
+    canvas.addEventListener('touchend', () => { isDragging = false; });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopConstellation();
+      else if (currentScene === 2) {
+        if (!constellationRaf) constellationRaf = requestAnimationFrame(loop);
+      }
+    });
+
+    // 暴露 loop 给外部 startConstellation 重启用
+    window._constellationLoop = loop;
+
+    // 启动
+    if (prefersReducedMotion) {
+      draw();  // 静态一帧
+    } else {
+      constellationRaf = requestAnimationFrame(loop);
+    }
+  }
 </script>
 
 </body>

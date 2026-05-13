@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章 | 庄赖宏</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="./data.js"></script>
+  <style>
+    :root {
+      --bg:        #0a192f;
+      --bg2:       #112240;
+      --bg3:       #233554;
+      --text:      #ccd6f6;
+      --text-dim:  #8892b0;
+      --teal:      #64ffda;
+      --teal-dim:  rgba(100,255,218,.1);
+      --font-mono: 'Fira Code', monospace;
+      --font-sans: 'Microsoft YaHei', '微软雅黑', 'Inter', sans-serif;
+      --radius:    4px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* 背景 Canvas (复用主页效果) */
+    #bg-fx {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    #bg-fx.ready { opacity: 1; }
+
+    /* 顶部条 */
+    .post-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(10,25,47,0.86);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--bg3);
+      padding: 14px 32px;
+    }
+    .post-back {
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 1px;
+      transition: opacity 0.2s ease;
+    }
+    .post-back:hover { opacity: 0.7; }
+
+    /* 文章容器 */
+    .post-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 32px 80px;
+    }
+    .post-header {
+      margin-bottom: 48px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .post-tag {
+      color: var(--teal);
+      background: var(--teal-dim);
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .post-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+    .post-meta {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .post-meta span + span::before {
+      content: ' · ';
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+
+    /* 文章正文 */
+    article.post-body { color: var(--text); }
+    article.post-body h2 {
+      font-size: 1.4rem;
+      color: var(--text);
+      margin: 40px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    article.post-body h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 28px 0 12px;
+    }
+    article.post-body p {
+      margin-bottom: 18px;
+      color: #b8c4d8;
+    }
+    article.post-body p strong, article.post-body p em {
+      color: var(--text);
+    }
+    article.post-body p em { font-style: normal; color: var(--teal); }
+    article.post-body ol, article.post-body ul {
+      margin: 0 0 22px 0;
+      padding-left: 24px;
+      color: #b8c4d8;
+    }
+    article.post-body li { margin-bottom: 8px; }
+    article.post-body blockquote {
+      border-left: 3px solid var(--teal);
+      padding: 4px 16px;
+      margin: 20px 0;
+      color: var(--text-dim);
+      background: rgba(100,255,218,0.04);
+    }
+    article.post-body code {
+      font-family: var(--font-mono);
+      background: var(--bg2);
+      color: var(--teal);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.88em;
+    }
+    article.post-body pre {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    article.post-body pre code {
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+    }
+    article.post-body a {
+      color: var(--teal);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+    article.post-body a:hover { border-bottom-color: var(--teal); }
+
+    /* 上下篇导航 */
+    .post-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--bg3);
+    }
+    .post-nav-card {
+      padding: 18px 20px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .post-nav-card:hover:not(.disabled) {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+    .post-nav-card.disabled { opacity: 0.3; pointer-events: none; }
+    .post-nav-card.next { text-align: right; }
+    .post-nav-label {
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .post-nav-title { color: var(--text); font-weight: 600; }
+
+    /* 错误页 */
+    .post-error {
+      max-width: 600px;
+      margin: 120px auto;
+      padding: 0 32px;
+      text-align: center;
+    }
+    .post-error h1 {
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+    .post-error p {
+      color: var(--text-dim);
+      margin-bottom: 24px;
+    }
+    .post-error a {
+      color: var(--teal);
+      border: 1px solid var(--teal);
+      padding: 8px 20px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+    .post-error a:hover { background: var(--teal-dim); }
+
+    @media (max-width: 600px) {
+      .post-title { font-size: 1.6rem; }
+      .post-wrap { padding: 40px 22px 60px; }
+      .post-nav { grid-template-columns: 1fr; }
+      .post-nav-card.next { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-fx" aria-hidden="true"></canvas>
+
+<nav class="post-topbar">
+  <a href="./index.html#2/blog" class="post-back">← 返回主页</a>
+</nav>
+
+<div id="post-root"></div>
+
+<script>
+  /* ===== 背景 Canvas (简化版,只渲染网格 + 少量节点) ===== */
+  (function initBgFx() {
+    const canvas = document.getElementById('bg-fx');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const TEAL = '100, 255, 218';
+    let w, h, dpr;
+    let nodes = [];
+    const NODE_COUNT = 24;
+    const NODE_MAX_DIST = 140;
+    const GRID_SIZE = 64;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width  = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function initNodes() {
+      nodes = [];
+      for (let i = 0; i < NODE_COUNT; i++) {
+        nodes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18,
+          r: 1 + Math.random() * 1.2,
+        });
+      }
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = `rgba(${TEAL}, 0.04)`;
+      ctx.lineWidth = 1;
+      const offset = (t * 0.01) % GRID_SIZE;
+      for (let x = -offset; x < w; x += GRID_SIZE) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = -offset; y < h; y += GRID_SIZE) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      for (const n of nodes) {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx = -n.vx;
+        if (n.y < 0 || n.y > h) n.vy = -n.vy;
+        ctx.fillStyle = `rgba(${TEAL}, 0.45)`;
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+      }
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < NODE_MAX_DIST) {
+            const a = (1 - d / NODE_MAX_DIST) * 0.18;
+            ctx.strokeStyle = `rgba(${TEAL}, ${a})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    let rafId = null;
+    function loop(t) {
+      if (document.hidden) { rafId = null; return; }
+      draw(t);
+      rafId = requestAnimationFrame(loop);
+    }
+    resize();
+    initNodes();
+    window.addEventListener('resize', () => { resize(); initNodes(); });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { if (rafId) cancelAnimationFrame(rafId); rafId = null; }
+      else if (!rafId) rafId = requestAnimationFrame(loop);
+    });
+    canvas.classList.add('ready');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      draw(0);
+    } else {
+      rafId = requestAnimationFrame(loop);
+    }
+  })();
+
+  /* ===== 渲染文章 ===== */
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function renderPost() {
+    const root = document.getElementById('post-root');
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+
+    if (!window.SITE_DATA || !SITE_DATA.blog) {
+      root.innerHTML = `
+        <div class="post-error">
+          <h1>数据未加载</h1>
+          <p>data.js 没有加载成功,请检查浏览器控制台。</p>
+          <a href="./index.html">回主页</a>
+        </div>`;
+      return;
+    }
+
+    const posts = SITE_DATA.blog;
+    const idx = posts.findIndex(p => p.id === id);
+    if (idx === -1) {
+      root.innerHTML = `
+        <div class="post-error">
+          <h1>文章不存在</h1>
+          <p>没有找到 id 为 <code>${escapeHtml(id || '(空)')}</code> 的文章。</p>
+          <a href="./index.html#2/blog">返回博客列表</a>
+        </div>`;
+      document.title = '文章不存在 | 庄赖宏';
+      return;
+    }
+
+    const post = posts[idx];
+    const prev = posts[idx + 1];   // 数组按时间倒序,后一个是更早的
+    const next = posts[idx - 1];
+
+    document.title = `${post.title} | 庄赖宏`;
+
+    root.innerHTML = `
+      <div class="post-wrap">
+        <header class="post-header">
+          <div class="post-tags">
+            ${(post.tags || []).map(t => `<span class="post-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+          <h1 class="post-title">${escapeHtml(post.title)}</h1>
+          <div class="post-meta">
+            <span>${escapeHtml(post.date || '')}</span>
+            ${post.readingTime ? `<span>~ ${post.readingTime} 分钟</span>` : ''}
+          </div>
+        </header>
+
+        <article class="post-body">${post.body || ''}</article>
+
+        <nav class="post-nav">
+          ${prev ? `
+            <a class="post-nav-card prev" href="./post.html?id=${encodeURIComponent(prev.id)}">
+              <span class="post-nav-label">← 上一篇</span>
+              <span class="post-nav-title">${escapeHtml(prev.title)}</span>
+            </a>
+          ` : `<div class="post-nav-card prev disabled"><span class="post-nav-label">← 上一篇</span><span class="post-nav-title">没有了</span></div>`}
+          ${next ? `
+            <a class="post-nav-card next" href="./post.html?id=${encodeURIComponent(next.id)}">
+              <span class="post-nav-label">下一篇 →</span>
+              <span class="post-nav-title">${escapeHtml(next.title)}</span>
+            </a>
+          ` : `<div class="post-nav-card next disabled"><span class="post-nav-label">下一篇 →</span><span class="post-nav-title">还没写</span></div>`}
+        </nav>
+      </div>
+    `;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderPost);
+  } else {
+    renderPost();
+  }
+</script>
+
+</body>
+</html>
