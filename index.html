@@ -1173,6 +1173,163 @@
     }
 
     /* ============================================================
+       MUSIC (私人电台)
+       ============================================================ */
+    .music-list { display: flex; flex-direction: column; gap: 12px; }
+    .music-item {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 18px;
+      padding: 16px 18px;
+      background: rgba(255,123,114,0.04);
+      border: 1px solid rgba(255,123,114,0.15);
+      border-radius: var(--radius);
+      transition: all 0.25s var(--ease);
+    }
+    .music-item:hover {
+      border-color: rgba(255,123,114,0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(2,12,27,0.4);
+    }
+    .music-cover {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #2a1c20, #4a2a30);
+      color: var(--accent-danger);
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+    .music-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .music-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .music-meta-line {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .music-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .music-artist {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+    }
+    .music-duration {
+      margin-left: auto;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+    .music-note {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+      line-height: 1.65;
+      font-style: italic;
+    }
+    .music-player {
+      margin-top: 6px;
+      width: 100%;
+      height: 36px;
+      border-radius: 18px;
+      filter: hue-rotate(-20deg) saturate(0.6) brightness(0.9);
+    }
+    .music-player::-webkit-media-controls-panel {
+      background-color: rgba(17,34,64,0.7);
+    }
+    .music-todo {
+      padding: 8px 10px;
+      margin-top: 6px;
+      background: rgba(255,209,102,0.05);
+      border: 1px dashed rgba(255,209,102,0.3);
+      border-radius: 3px;
+      color: var(--accent-warning);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       Scene 2 底部联系方式图标行
+       ============================================================ */
+    .s2-footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px dashed var(--bg3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .s2-contact-bar {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .s2-cb-item {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(100,255,218,0.05);
+      border: 1px solid var(--bg3);
+      border-radius: 50%;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      position: relative;
+    }
+    .s2-cb-item:hover {
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+      background: rgba(100,255,218,0.12);
+      transform: translateY(-3px);
+    }
+    .s2-cb-item .s2-cb-tip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 10px;
+      background: rgba(2,12,27,0.92);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      border-radius: 3px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .s2-cb-item:hover .s2-cb-tip { opacity: 1; }
+    .s2-cb-item.copied .s2-cb-tip {
+      opacity: 1;
+      color: var(--accent-success);
+      border-color: var(--accent-success);
+    }
+    .s2-footer-sign {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* ============================================================
        RESOURCES (我的资源)
        ============================================================ */
     .resources-list { display: flex; flex-direction: column; gap: 8px; }
@@ -2111,14 +2268,14 @@
   <div class="splash-inner">
     <div class="splash-hero">
       <div class="splash-tagline">庄赖宏 · 一个 AI 时代的持续学习者</div>
-      <div class="splash-sub">PORTFOLIO · BOOTING</div>
+      <div class="splash-sub">LEARNER · INITIALIZING</div>
     </div>
     <div class="splash-terminal">
       <div class="splash-term-hd">
         <span class="splash-dot dot-r"></span>
         <span class="splash-dot dot-y"></span>
         <span class="splash-dot dot-g"></span>
-        <span class="splash-term-label">portfolio.boot.log</span>
+        <span class="splash-term-label">learner.boot.log</span>
       </div>
       <div class="splash-term-bd">
         <p class="splash-line" data-line="1"><span class="splash-text"></span><span class="splash-cur"></span></p>
@@ -2133,12 +2290,12 @@
       <span class="splash-pct">0%</span>
     </div>
     <div class="splash-checks">
-      <div class="splash-check" data-mod="LLM"><span class="splash-check-dot"></span><span class="splash-check-label">LLM 推理</span><span class="splash-check-st">···</span></div>
-      <div class="splash-check" data-mod="RAG"><span class="splash-check-dot"></span><span class="splash-check-label">RAG 检索</span><span class="splash-check-st">···</span></div>
-      <div class="splash-check" data-mod="AGENT"><span class="splash-check-dot"></span><span class="splash-check-label">Agent 框架</span><span class="splash-check-st">···</span></div>
-      <div class="splash-check" data-mod="MM"><span class="splash-check-dot"></span><span class="splash-check-label">多模态</span><span class="splash-check-st">···</span></div>
-      <div class="splash-check" data-mod="ENG"><span class="splash-check-dot"></span><span class="splash-check-label">工程化</span><span class="splash-check-st">···</span></div>
-      <div class="splash-check" data-mod="DATA"><span class="splash-check-dot"></span><span class="splash-check-label">数据管线</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="READ"><span class="splash-check-dot"></span><span class="splash-check-label">阅读与思考</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="WORK"><span class="splash-check-dot"></span><span class="splash-check-label">项目实战</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="TOOL"><span class="splash-check-dot"></span><span class="splash-check-label">工具应用</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="XDOM"><span class="splash-check-dot"></span><span class="splash-check-label">跨域探索</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="SHARE"><span class="splash-check-dot"></span><span class="splash-check-label">公开分享</span><span class="splash-check-st">···</span></div>
+      <div class="splash-check" data-mod="ASK"><span class="splash-check-dot"></span><span class="splash-check-label">持续追问</span><span class="splash-check-st">···</span></div>
     </div>
   </div>
   <button class="splash-skip" type="button" id="splash-skip">跳过 [Esc]</button>
@@ -2381,11 +2538,18 @@
           <p class="sec-intro">书籍 PDF、好用网站、值得反复读的论文 —— 学习路上收藏的入口。</p>
           <div class="resources-list" id="resources-list"></div>
         </div>
-        <div class="s2-module" data-module="contact" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">✦</span>联系我</header>
-          <div class="contact-block" id="contact-block"></div>
+        <div class="s2-module" data-module="music" hidden>
+          <header class="s2-module-head"><span class="s2-module-icon">♪</span>私人电台</header>
+          <p class="sec-intro">深夜耳机里反复播放的、想分享给路过的你。</p>
+          <div class="music-list" id="music-list"></div>
         </div>
       </div>
+
+      <!-- 底部联系方式图标行 -->
+      <footer class="s2-footer">
+        <div class="s2-contact-bar" id="s2-contact-bar"></div>
+        <div class="s2-footer-sign" id="s2-footer-sign"></div>
+      </footer>
 
     </div>
   </section>
@@ -2619,11 +2783,11 @@
     }
 
     const bootLines = [
-      '> [SYS] 初始化作品集运行时...',
-      '> [LLM] 加载大模型应用模块',
-      '> [RAG] 挂载向量检索与知识库',
-      '> [AGENT] 注册 Agent 与工具链',
-      '> [NET] 连接 GitHub / Papers 元数据',
+      '> [SYS]   初始化学习者运行时...',
+      '> [READ]  加载书架与读书笔记',
+      '> [WORK]  挂载项目与论文索引',
+      '> [TOOL]  注册常用工具与流程',
+      '> [NET]   连接 GitHub / 公开资源',
     ];
     const lineEls = splash.querySelectorAll('.splash-line');
     const fill = splash.querySelector('.splash-progress-fill');
@@ -2902,37 +3066,68 @@
   }
 
   /* =========================================================
-     渲染: 联系我
+     渲染: 私人电台 (音乐)
+     ========================================================= */
+  function renderMusic() {
+    const container = document.getElementById('music-list');
+    if (!container || !window.SITE_DATA) return;
+    const items = SITE_DATA.music || [];
+    if (items.length === 0) {
+      container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">电台暂未开播,稍后再来。</p>`;
+      return;
+    }
+    container.innerHTML = items.map(m => {
+      const cover = m.cover
+        ? `<img src="${escapeHtml(m.cover)}" alt="${escapeHtml(m.title)}" loading="lazy" />`
+        : `<span>♪</span>`;
+      const hasMp3 = m.src && !m.src.startsWith('#TODO');
+      const audio = hasMp3
+        ? `<audio class="music-player" controls preload="none" src="${escapeHtml(m.src)}"></audio>`
+        : `<div class="music-todo">MP3 待上传 — 把文件放到 ./assets/music/ 后,在 data.js 里替换 src 字段</div>`;
+      return `
+        <div class="music-item">
+          <div class="music-cover">${cover}</div>
+          <div class="music-body">
+            <div class="music-meta-line">
+              <span class="music-title">${escapeHtml(m.title)}</span>
+              <span class="music-artist">${escapeHtml(m.artist || '')}</span>
+              ${m.duration ? `<span class="music-duration">${escapeHtml(m.duration)}</span>` : ''}
+            </div>
+            ${m.note ? `<div class="music-note">${escapeHtml(m.note)}</div>` : ''}
+            ${audio}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* =========================================================
+     渲染: 联系方式 — 底部小图标行 (不再作为星图模块)
      ========================================================= */
   function renderContact() {
-    const container = document.getElementById('contact-block');
-    if (!container || !window.SITE_DATA) return;
+    const bar = document.getElementById('s2-contact-bar');
+    const sign = document.getElementById('s2-footer-sign');
+    if (!bar || !window.SITE_DATA) return;
     const c = SITE_DATA.contact || {};
     const ICON = {
-      email:    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
-      github:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>',
-      wechat:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8.5A1.5 1.5 0 1 1 9 5.5a1.5 1.5 0 0 1 0 3zm5 0A1.5 1.5 0 1 1 14 5.5a1.5 1.5 0 0 1 0 3zM11.5 2C5.7 2 1 5.5 1 10c0 2.4 1.4 4.5 3.6 6L4 18l2.7-1.6c.7.1 1.4.2 2.2.3-.2-.5-.3-1.1-.3-1.7 0-3.6 3.4-6.5 7.5-6.5.4 0 .8 0 1.2.1C16.5 4.5 14.2 2 11.5 2zM17 9c-3.6 0-6.5 2.5-6.5 5.5S13.4 20 17 20c.7 0 1.4-.1 2-.3l2.3 1.3-.6-1.9c1.5-1 2.3-2.5 2.3-4.1C23 11.5 20.6 9 17 9z"/></svg>',
-      location: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s-8-7-8-13a8 8 0 0 1 16 0c0 6-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg>',
-      resume:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>',
+      email:    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+      github:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>',
+      wechat:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 8.5A1.5 1.5 0 1 1 9 5.5a1.5 1.5 0 0 1 0 3zm5 0A1.5 1.5 0 1 1 14 5.5a1.5 1.5 0 0 1 0 3zM11.5 2C5.7 2 1 5.5 1 10c0 2.4 1.4 4.5 3.6 6L4 18l2.7-1.6c.7.1 1.4.2 2.2.3-.2-.5-.3-1.1-.3-1.7 0-3.6 3.4-6.5 7.5-6.5.4 0 .8 0 1.2.1C16.5 4.5 14.2 2 11.5 2zM17 9c-3.6 0-6.5 2.5-6.5 5.5S13.4 20 17 20c.7 0 1.4-.1 2-.3l2.3 1.3-.6-1.9c1.5-1 2.3-2.5 2.3-4.1C23 11.5 20.6 9 17 9z"/></svg>',
+      location: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s-8-7-8-13a8 8 0 0 1 16 0c0 6-8 13-8 13z"/><circle cx="12" cy="9" r="3"/></svg>',
+      resume:   '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>',
     };
-    container.innerHTML = `
-      <div class="contact-callout">
-        <div class="contact-callout-main">${escapeHtml(c.callout || '有想法?随时聊。')}</div>
-        <div class="contact-callout-sub">${escapeHtml(c.sub || '')}</div>
-      </div>
-      <div class="contact-items">
-        ${(c.items || []).map(it => `
-          <div class="contact-item" data-type="${escapeHtml(it.type)}" data-value="${escapeHtml(it.value)}" data-href="${escapeHtml(it.href || '')}" data-qr="${escapeHtml(it.qr || '')}">
-            <span class="contact-item-icon">${ICON[it.type] || '●'}</span>
-            <span class="contact-item-label">${escapeHtml(it.label)}</span>
-            <span class="contact-item-value">${escapeHtml(it.value)}</span>
-          </div>
-        `).join('')}
-      </div>
-    `;
 
-    // 点击处理:邮箱 → 复制到剪贴板;微信 → 弹出二维码;其他 → 打开链接
-    container.querySelectorAll('.contact-item').forEach(el => {
+    bar.innerHTML = (c.items || []).map(it => {
+      const tip = `${escapeHtml(it.label)} · ${escapeHtml(it.value)}`;
+      return `
+        <button type="button" class="s2-cb-item" data-type="${escapeHtml(it.type)}" data-value="${escapeHtml(it.value)}" data-href="${escapeHtml(it.href || '')}" data-qr="${escapeHtml(it.qr || '')}" aria-label="${escapeHtml(it.label)}">
+          ${ICON[it.type] || '●'}
+          <span class="s2-cb-tip">${tip}</span>
+        </button>
+      `;
+    }).join('');
+
+    bar.querySelectorAll('.s2-cb-item').forEach(el => {
       el.addEventListener('click', () => {
         const type = el.dataset.type;
         const href = el.dataset.href;
@@ -2940,7 +3135,6 @@
         const qr = el.dataset.qr;
 
         if (type === 'wechat' && qr) {
-          // 用 lightbox 显示二维码 (单图模式,隐藏左右翻页)
           const lb = document.getElementById('lightbox');
           const lbImg = lb.querySelector('.lb-img');
           const lbCap = lb.querySelector('.lb-cap');
@@ -2951,21 +3145,26 @@
           return;
         }
         if (type === 'email') {
-          // 同时打开邮件并复制地址
           if (navigator.clipboard) {
             navigator.clipboard.writeText(value).then(() => {
+              const tip = el.querySelector('.s2-cb-tip');
+              const old = tip.textContent;
+              tip.textContent = '已复制 ✓';
               el.classList.add('copied');
-              setTimeout(() => el.classList.remove('copied'), 1800);
+              setTimeout(() => {
+                el.classList.remove('copied');
+                tip.textContent = old;
+              }, 1600);
             });
           }
           if (href) window.location.href = href;
           return;
         }
-        if (href) {
-          window.open(href, type === 'resume' ? '_blank' : '_blank');
-        }
+        if (href) window.open(href, '_blank');
       });
     });
+
+    if (sign) sign.textContent = c.footer || '';
   }
 
   /* =========================================================
@@ -3191,8 +3390,9 @@
     renderReading();
     renderBlog();
     renderGallery();
-    renderContact();
     renderResources();
+    renderMusic();
+    renderContact();
 
     // Scene 路由初始化 (替代旧的 scroll-spy)
     if (typeof initDeckRouter === 'function') initDeckRouter();
@@ -3240,7 +3440,7 @@
     blog:      '博客 · 技术随笔',
     gallery:   '旅行 · 摄影',
     resources: '我的资源',
-    contact:   '联系我',
+    music:     '私人电台',
   };
   let currentScene = 1;
   let currentModule = null;
@@ -3430,7 +3630,7 @@
     { id: 'blog',       label: '博客',      icon: '◉', rgb: '74, 222, 128'  }, // success
     { id: 'gallery',    label: '旅行·摄影', icon: '◎', rgb: '255, 209, 102' }, // warning
     { id: 'resources',  label: '我的资源',  icon: '⌬', rgb: '100, 255, 218' },
-    { id: 'contact',    label: '联系我',    icon: '✦', rgb: '130, 170, 255' },
+    { id: 'music',      label: '私人电台',  icon: '♪', rgb: '255, 123, 114' }, // danger 暖红
   ];
   let constellationStarted = false;
   let constellationRaf = null;
