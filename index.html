@@ -22,7 +22,9 @@
       --accent-info:    #82aaff;        /* 冷蓝 */
       --accent-success: #4ade80;        /* 绿 */
       --accent-warning: #ffd166;        /* 暖黄 */
-      --accent-danger:  #ff7b72;        /* 暖红(预留) */
+      --accent-danger:  #ff7b72;        /* 暖红 */
+      --accent-purple:  #c084fc;        /* 紫色 — tool/podcast 用 */
+      --accent-gray:    #8892b0;        /* 灰色 — file 用 */
       --font-mono: 'Fira Code', monospace;
       --font-sans: 'Microsoft YaHei', '微软雅黑', 'Inter', sans-serif;
       --radius:    4px;
@@ -829,26 +831,120 @@
       border-radius: 3px;
       font-family: var(--font-mono);
     }
+    .hobby-related {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--bg3);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 8px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .hobby-related-label {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .hobby-related-link {
+      color: var(--accent-primary);
+      transition: opacity 0.2s ease;
+      border-bottom: 1px dotted transparent;
+    }
+    a.hobby-related-link:hover {
+      border-bottom-color: var(--accent-primary);
+    }
+    .hobby-related-sep {
+      color: var(--bg3);
+      font-size: 10px;
+    }
 
     /* ============================================================
        READING
        ============================================================ */
-    .reading-list { display: flex; flex-direction: column; gap: 8px; }
-    .reading-item {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 24px;
-      padding: 18px 16px;
-      border-radius: var(--radius);
+    .reading-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 14px 0 22px;
+    }
+    .reading-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(17,34,64,0.5);
+      border: 1px solid var(--bg3);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 20px;
       transition: all 0.2s var(--ease);
+    }
+    .reading-chip:hover {
+      color: var(--text);
+      border-color: var(--accent-info);
+    }
+    .reading-chip.active {
+      color: var(--bg);
+      background: var(--accent-info);
+      border-color: var(--accent-info);
+      font-weight: 600;
+    }
+    .reading-chip-count {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    .reading-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .reading-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 20px;
+      padding: 20px 20px;
+      background: rgba(17,34,64,0.35);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      transition: all 0.22s var(--ease);
     }
     .reading-item:hover {
       background: var(--bg2);
-      padding-left: 22px;
+      border-color: rgba(130,170,255,0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(2,12,27,0.4);
+    }
+    .reading-status-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 3px 9px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      border-radius: 3px;
+      z-index: 2;
+    }
+    .reading-status-badge.badge-reading {
+      color: var(--accent-warning);
+      background: rgba(255,209,102,0.12);
+      border: 1px solid rgba(255,209,102,0.4);
+    }
+    .reading-status-badge.badge-wishlist {
+      color: var(--accent-info);
+      background: rgba(130,170,255,0.12);
+      border: 1px solid rgba(130,170,255,0.4);
     }
     .reading-cover {
-      width: 70px;
-      height: 100px;
+      width: 100px;
+      height: 148px;
       border-radius: 3px;
       overflow: hidden;
       background: linear-gradient(135deg, var(--bg3), var(--bg2));
@@ -856,10 +952,22 @@
       align-items: center;
       justify-content: center;
       color: var(--text-dim);
-      font-size: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      flex-shrink: 0;
     }
     .reading-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .reading-cover-empty {
+      padding: 10px;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      color: rgba(204,214,246,0.4);
+      line-height: 1.3;
+    }
+    @media (max-width: 900px) {
+      .reading-list { grid-template-columns: 1fr; }
+    }
     .reading-body { display: flex; flex-direction: column; gap: 6px; }
     .reading-title {
       font-size: 1.05rem;
@@ -961,25 +1069,55 @@
     }
 
     /* ============================================================
-       GALLERY
+       GALLERY (瀑布流 + album 分组)
        ============================================================ */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    .gallery-grid { display: flex; flex-direction: column; gap: 32px; }
+    .gallery-album { display: flex; flex-direction: column; gap: 16px; }
+    .gallery-album-head {
+      display: flex;
+      align-items: baseline;
       gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--bg3);
     }
+    .gam-icon {
+      color: var(--accent-warning);
+      font-size: 14px;
+    }
+    .gam-title {
+      color: var(--text);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .gam-count {
+      margin-left: auto;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .gallery-masonry {
+      column-count: 3;
+      column-gap: 12px;
+    }
+    @media (max-width: 1200px) { .gallery-masonry { column-count: 3; } }
+    @media (max-width: 900px)  { .gallery-masonry { column-count: 2; } }
+    @media (max-width: 600px)  { .gallery-masonry { column-count: 1; } }
     .gallery-item {
       position: relative;
-      aspect-ratio: 4 / 3;
+      margin: 0 0 12px;
+      break-inside: avoid;
       border-radius: var(--radius);
       overflow: hidden;
       cursor: pointer;
       background: var(--bg2);
+      display: block;
     }
     .gallery-item img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      display: block;
       transition: transform 0.4s ease;
     }
     .gallery-item:hover img { transform: scale(1.06); }
@@ -1236,16 +1374,86 @@
       line-height: 1.65;
       font-style: italic;
     }
-    .music-player {
-      margin-top: 6px;
-      width: 100%;
-      height: 36px;
-      border-radius: 18px;
-      filter: hue-rotate(-20deg) saturate(0.6) brightness(0.9);
+    /* 自定义播放器 (隐藏原生 audio,自绘控件) */
+    .music-item audio { display: none; }
+    .mp-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
     }
-    .music-player::-webkit-media-controls-panel {
-      background-color: rgba(17,34,64,0.7);
+    .mp-play {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-danger), #d85a52);
+      border: none;
+      color: #1a0a0c;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s var(--ease);
+      box-shadow: 0 4px 14px rgba(255,123,114,0.35);
     }
+    .mp-play:hover {
+      transform: scale(1.06);
+      box-shadow: 0 6px 18px rgba(255,123,114,0.5);
+    }
+    .mp-play:active { transform: scale(0.96); }
+    .mp-icon-pause { display: none; }
+    .music-item.mp-playing .mp-icon-play  { display: none; }
+    .music-item.mp-playing .mp-icon-pause { display: block; }
+    .mp-bar {
+      flex: 1;
+      position: relative;
+      height: 4px;
+      background: rgba(255,123,114,0.15);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: height 0.15s ease;
+    }
+    .mp-bar:hover {
+      height: 6px;
+    }
+    .mp-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-danger), #ff9d96);
+      border-radius: 2px;
+      transition: width 0.1s linear;
+    }
+    .mp-handle {
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-danger);
+      transform: translateY(-50%) scale(0);
+      transition: transform 0.15s ease;
+      box-shadow: 0 0 8px rgba(255,123,114,0.6);
+      pointer-events: none;
+    }
+    .mp-bar:hover .mp-handle,
+    .music-item.mp-playing .mp-handle {
+      transform: translateY(-50%) scale(1);
+    }
+    .mp-time {
+      flex-shrink: 0;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      min-width: 76px;
+      text-align: right;
+    }
+    .mp-cur { color: var(--accent-danger); }
+
     .music-todo {
       padding: 8px 10px;
       margin-top: 6px;
@@ -1361,11 +1569,15 @@
       background: rgba(100,255,218,0.05);
       border: 1px solid var(--bg3);
     }
-    .resource-type[data-type="book"]   { color: var(--accent-info); }
-    .resource-type[data-type="site"]   { color: var(--accent-primary); }
-    .resource-type[data-type="paper"]  { color: var(--accent-warning); }
-    .resource-type[data-type="file"]   { color: var(--accent-success); }
-    .resource-type[data-type="course"] { color: var(--accent-danger); }
+    .resource-type[data-type="book"]    { color: var(--accent-info); }
+    .resource-type[data-type="site"]    { color: var(--accent-primary); }
+    .resource-type[data-type="app"]     { color: var(--accent-danger); }
+    .resource-type[data-type="tool"]    { color: var(--accent-purple); }
+    .resource-type[data-type="paper"]   { color: var(--accent-warning); }
+    .resource-type[data-type="dataset"] { color: var(--accent-success); }
+    .resource-type[data-type="course"]  { color: var(--accent-danger); }
+    .resource-type[data-type="podcast"] { color: var(--accent-purple); }
+    .resource-type[data-type="file"]    { color: var(--accent-gray); }
     .resource-type-icon {
       font-size: 22px;
       line-height: 1;
@@ -2128,6 +2340,293 @@
 
     /* (Scene 3 已并入 Scene 2 内联展示,旧样式移除) */
 
+    /* ============================================================
+       BLOG READER (全屏内联阅读态)
+       ============================================================ */
+    .blog-reader {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #0d1d36 0%, #0a192f 100%);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      animation: brSlideIn 0.45s var(--ease);
+    }
+    .blog-reader[hidden] { display: none; }
+    @keyframes brSlideIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .br-toolbar {
+      flex-shrink: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 32px;
+      background: rgba(10,25,47,0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--bg3);
+    }
+    /* 左侧目录 + 右侧正文 */
+    .br-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .br-toc {
+      flex-shrink: 0;
+      width: 280px;
+      overflow-y: auto;
+      padding: 22px 14px 32px;
+      border-right: 1px solid var(--bg3);
+      background: rgba(2,12,27,0.35);
+    }
+    .br-toc-head {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 0 12px 14px;
+      border-bottom: 1px dashed var(--bg3);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .br-toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .br-toc-list li { margin: 0; }
+    .br-toc-item {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      border-left: 2px solid transparent;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s var(--ease);
+      border-radius: 0 3px 3px 0;
+    }
+    .br-toc-item:hover {
+      background: rgba(100,255,218,0.04);
+      border-left-color: var(--text-dim);
+    }
+    .br-toc-item.active {
+      background: rgba(100,255,218,0.08);
+      border-left-color: var(--accent-primary);
+    }
+    .br-toc-date {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .br-toc-title {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .br-toc-item.active .br-toc-title { color: var(--accent-primary); font-weight: 600; }
+    .br-main {
+      flex: 1;
+      overflow-y: auto;
+      min-width: 0;
+    }
+    .br-back {
+      flex-shrink: 0;
+      background: rgba(100,255,218,0.06);
+      border: 1px solid rgba(100,255,218,0.3);
+      color: var(--accent-primary);
+      padding: 7px 14px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .br-back:hover { background: rgba(100,255,218,0.14); }
+    .br-title {
+      flex: 1;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.98rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .br-meta {
+      flex-shrink: 0;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    /* 文章正文(复用 post.html 的 article 样式) */
+    .br-article {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 32px 24px;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.85;
+    }
+    .br-article > h1.br-h1-inline {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+    .br-article > .br-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .br-article > .br-tags .br-tag {
+      color: var(--accent-primary);
+      background: var(--teal-dim);
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .br-article > .br-meta-line {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .br-article > .br-meta-line span + span::before {
+      content: ' · ';
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+    .br-article h2 {
+      font-size: 1.4rem;
+      color: var(--text);
+      margin: 40px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .br-article h3 {
+      font-size: 1.15rem;
+      color: var(--text);
+      margin: 28px 0 12px;
+    }
+    .br-article p {
+      margin-bottom: 18px;
+      color: #b8c4d8;
+    }
+    .br-article p strong { color: var(--text); }
+    .br-article p em {
+      font-style: normal;
+      color: var(--accent-primary);
+    }
+    .br-article ol, .br-article ul {
+      margin: 0 0 22px 0;
+      padding-left: 24px;
+      color: #b8c4d8;
+    }
+    .br-article li { margin-bottom: 8px; }
+    .br-article blockquote {
+      border-left: 3px solid var(--accent-primary);
+      padding: 4px 16px;
+      margin: 20px 0;
+      color: var(--text-dim);
+      background: rgba(100,255,218,0.04);
+    }
+    .br-article code {
+      font-family: var(--font-mono);
+      background: var(--bg2);
+      color: var(--accent-primary);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.88em;
+    }
+    .br-article pre {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+    .br-article pre code {
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+    }
+    .br-article a {
+      color: var(--accent-primary);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+    .br-article a:hover { border-bottom-color: var(--accent-primary); }
+    /* 上下篇导航 */
+    .br-nav {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .br-nav-card {
+      padding: 16px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.22s var(--ease);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .br-nav-card:hover:not(.disabled) {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+    .br-nav-card.disabled { opacity: 0.3; cursor: not-allowed; }
+    .br-nav-card.next { text-align: right; }
+    .br-nav-label {
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .br-nav-title {
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (max-width: 900px) {
+      /* 中小屏目录折叠为顶部小条(简化版,直接隐藏) */
+      .br-toc { display: none; }
+    }
+    @media (max-width: 720px) {
+      .br-toolbar { padding: 14px 18px; }
+      .br-article { padding: 32px 22px 16px; font-size: 16px; }
+      .br-article > h1.br-h1-inline { font-size: 1.6rem; }
+      .br-nav { grid-template-columns: 1fr; padding: 24px 22px 60px; }
+    }
+
     /* ─── 全局导航控件 (vue 风格:两侧中部大箭头) ─── */
     .deck-arrow {
       position: fixed;
@@ -2206,6 +2705,11 @@
       transition: all 0.2s ease;
     }
     .deck[data-current-scene="2"] .deck-home-btn { display: inline-flex; }
+    /* 博客阅读态时隐藏 deck-home-btn,避免与 .br-back 重叠 */
+    .deck.br-active .deck-home-btn { display: none; }
+    /* 博客阅读态时也隐藏左右两侧大箭头(reader 已经全屏覆盖,看不到也别占用 DOM 视觉) */
+    .deck.br-active .deck-arrow,
+    .deck.br-active .deck-dots { display: none; }
     .deck-home-btn:hover {
       background: rgba(100,255,218,0.14);
     }
@@ -2551,6 +3055,25 @@
         <div class="s2-footer-sign" id="s2-footer-sign"></div>
       </footer>
 
+    </div>
+
+    <!-- 博客阅读态(全屏覆盖 Scene 2,初始隐藏) -->
+    <div class="blog-reader" id="blog-reader" hidden aria-hidden="true">
+      <header class="br-toolbar">
+        <button type="button" class="br-back" id="br-back">← 返回列表</button>
+        <span class="br-title" id="br-title"></span>
+        <span class="br-meta" id="br-meta"></span>
+      </header>
+      <div class="br-body">
+        <aside class="br-toc">
+          <div class="br-toc-head">文章目录</div>
+          <ul class="br-toc-list" id="br-toc-list"></ul>
+        </aside>
+        <main class="br-main">
+          <article class="br-article" id="br-article"></article>
+          <nav class="br-nav" id="br-nav"></nav>
+        </main>
+      </div>
     </div>
   </section>
 
@@ -2919,46 +3442,127 @@
     const container = document.getElementById('hobbies-list');
     if (!container || !window.SITE_DATA) return;
     const items = SITE_DATA.hobbies || [];
-    container.innerHTML = items.map(h => `
-      <div class="hobby-card">
-        <div class="hobby-icon">${escapeHtml(h.icon || '★')}</div>
-        <div class="hobby-title">${escapeHtml(h.title)}</div>
-        <div class="hobby-desc">${escapeHtml(h.desc)}</div>
-        <div class="hobby-tags">
-          ${(h.tags || []).map(t => `<span class="hobby-tag">${escapeHtml(t)}</span>`).join('')}
+    container.innerHTML = items.map(h => {
+      const related = (h.related || []).filter(r => r && r.label);
+      const relatedHtml = related.length
+        ? `<div class="hobby-related">
+             <span class="hobby-related-label">延伸 →</span>
+             ${related.map(r => r.url
+               ? `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener" class="hobby-related-link">${escapeHtml(r.label)}</a>`
+               : `<span class="hobby-related-link">${escapeHtml(r.label)}</span>`
+             ).join('<span class="hobby-related-sep">·</span>')}
+           </div>`
+        : '';
+      return `
+        <div class="hobby-card">
+          <div class="hobby-icon">${escapeHtml(h.icon || '★')}</div>
+          <div class="hobby-title">${escapeHtml(h.title)}</div>
+          <div class="hobby-desc">${escapeHtml(h.desc)}</div>
+          <div class="hobby-tags">
+            ${(h.tags || []).map(t => `<span class="hobby-tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+          ${relatedHtml}
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   /* =========================================================
      渲染: 读书见闻
      ========================================================= */
+  let _readingFilter = 'all';  // 当前状态筛选: all / finished / reading / wishlist
+
   function renderReading() {
     const container = document.getElementById('reading-list');
     if (!container || !window.SITE_DATA) return;
-    const items = SITE_DATA.reading || [];
+    const allItems = SITE_DATA.reading || [];
+
+    // 顶部状态筛选 chips
+    const chipsHost = document.getElementById('reading-chips') || (() => {
+      const head = document.querySelector('.s2-module[data-module="reading"] .sec-intro');
+      if (!head) return null;
+      const div = document.createElement('div');
+      div.id = 'reading-chips';
+      div.className = 'reading-chips';
+      head.insertAdjacentElement('afterend', div);
+      return div;
+    })();
+
+    if (chipsHost) {
+      const counts = {
+        all:      allItems.length,
+        finished: allItems.filter(r => (r.status || 'finished') === 'finished').length,
+        reading:  allItems.filter(r => r.status === 'reading').length,
+        wishlist: allItems.filter(r => r.status === 'wishlist').length,
+      };
+      const STATUS_LABEL = { all: '全部', finished: '已读', reading: '在读', wishlist: '想读' };
+      chipsHost.innerHTML = ['all','finished','reading','wishlist']
+        .filter(k => k === 'all' || counts[k] > 0)
+        .map(k => `
+          <button class="reading-chip ${_readingFilter === k ? 'active' : ''}" data-status="${k}">
+            ${STATUS_LABEL[k]}
+            <span class="reading-chip-count">${counts[k]}</span>
+          </button>
+        `).join('');
+      chipsHost.querySelectorAll('.reading-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          _readingFilter = btn.dataset.status;
+          renderReading();
+        });
+      });
+    }
+
+    // 过滤
+    const items = _readingFilter === 'all'
+      ? allItems
+      : allItems.filter(r => (r.status || 'finished') === _readingFilter);
+
+    if (items.length === 0) {
+      container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">该状态下暂无条目。</p>`;
+      return;
+    }
+
+    const STATUS_BADGE = {
+      reading:  { label: '在读', cls: 'badge-reading' },
+      wishlist: { label: '想读', cls: 'badge-wishlist' },
+      // finished 不显示角标(默认状态)
+    };
+
     container.innerHTML = items.map(r => {
-      const stars = Array.from({length: 5}, (_, i) =>
-        `<span class="${i < (r.rating||0) ? '' : 'star-empty'}">★</span>`
-      ).join('');
+      const status = r.status || 'finished';
+      const stars = status === 'finished'
+        ? Array.from({length: 5}, (_, i) =>
+            `<span class="${i < (r.rating||0) ? '' : 'star-empty'}">★</span>`
+          ).join('')
+        : '';
       const cover = r.cover
         ? `<img src="${escapeHtml(r.cover)}" alt="${escapeHtml(r.title)}" loading="lazy" />`
-        : `<span>暂无封面</span>`;
+        : `<span class="reading-cover-empty">${escapeHtml((r.title || '').slice(0, 4))}</span>`;
       const linkBadge = r.link
         ? `<a href="${escapeHtml(r.link)}" target="_blank" rel="noopener" class="reading-link">原文 ↗</a>`
         : '';
+      const statusBadge = STATUS_BADGE[status]
+        ? `<span class="reading-status-badge ${STATUS_BADGE[status].cls}">${STATUS_BADGE[status].label}</span>`
+        : '';
+      // 时间显示:已读用 finished,在读用 started + "起",想读不显示
+      let timeBadge = '';
+      if (status === 'finished' && r.finished) {
+        timeBadge = `<span class="reading-badge badge-date">${escapeHtml(r.finished)}</span>`;
+      } else if (status === 'reading' && r.started) {
+        timeBadge = `<span class="reading-badge badge-date">${escapeHtml(r.started)} 起</span>`;
+      }
       return `
-        <div class="reading-item">
+        <div class="reading-item" data-status="${escapeHtml(status)}">
+          ${statusBadge}
           <div class="reading-cover">${cover}</div>
           <div class="reading-body">
             <div class="reading-title">${escapeHtml(r.title)}</div>
             <div class="reading-author">${escapeHtml(r.author || '')}</div>
             <div class="reading-summary">${escapeHtml(r.summary || '')}</div>
             <div class="reading-meta">
-              <span class="reading-rating">${stars}</span>
+              ${stars ? `<span class="reading-rating">${stars}</span>` : ''}
               ${(r.tags || []).map(t => `<span class="reading-badge badge-tag">${escapeHtml(t)}</span>`).join('')}
-              ${r.finished ? `<span class="reading-badge badge-date">${escapeHtml(r.finished)}</span>` : ''}
+              ${timeBadge}
               ${linkBadge}
             </div>
           </div>
@@ -2979,14 +3583,14 @@
       return;
     }
     container.innerHTML = items.map(p => `
-      <div class="blog-item">
+      <div class="blog-item" data-blog-id="${escapeHtml(p.id)}" role="button" tabindex="0">
         <div class="blog-date">
           ${escapeHtml(p.date || '')}
           ${p.readingTime ? `<span class="blog-rt">~ ${p.readingTime} 分钟</span>` : ''}
         </div>
         <div class="blog-body">
           <div class="blog-title">
-            <a href="./post.html?id=${encodeURIComponent(p.id)}">${escapeHtml(p.title)}</a>
+            <a href="./post.html?id=${encodeURIComponent(p.id)}" data-prevent-default>${escapeHtml(p.title)}</a>
           </div>
           <div class="blog-summary">${escapeHtml(p.summary || '')}</div>
           <div class="blog-tags">
@@ -2995,6 +3599,135 @@
         </div>
       </div>
     `).join('');
+
+    // 列表项点击 → 拦截 post.html 跳转,改为本页内联打开
+    container.querySelectorAll('.blog-item').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = el.dataset.blogId;
+        if (id) goToScene(2, 'blog', { article: id });
+      });
+    });
+  }
+
+  /* =========================================================
+     博客阅读态: 在 Scene 2 内全屏覆盖 + 滑入 + 上下篇导航
+     ========================================================= */
+  let _currentArticleId = null;
+
+  function openArticle(id) {
+    const reader = document.getElementById('blog-reader');
+    if (!reader || !window.SITE_DATA) return;
+    const posts = SITE_DATA.blog || [];
+    const idx = posts.findIndex(p => p.id === id);
+    if (idx < 0) return;
+    const post = posts[idx];
+
+    // 数组按时间倒序: 索引小=更新, prev=老一篇 (idx+1), next=新一篇 (idx-1)
+    const prev = posts[idx + 1];
+    const next = posts[idx - 1];
+
+    document.getElementById('br-title').textContent = post.title || '';
+    document.getElementById('br-meta').textContent =
+      `${post.date || ''}${post.readingTime ? ' · ~' + post.readingTime + ' 分钟' : ''}`;
+
+    // 正文 = 顶部标题块 + tags + 元信息 + body HTML
+    const tagsHtml = (post.tags || []).length
+      ? `<div class="br-tags">${post.tags.map(t => `<span class="br-tag">${escapeHtml(t)}</span>`).join('')}</div>`
+      : '';
+    document.getElementById('br-article').innerHTML = `
+      ${tagsHtml}
+      <h1 class="br-h1-inline">${escapeHtml(post.title)}</h1>
+      <div class="br-meta-line">
+        <span>${escapeHtml(post.date || '')}</span>
+        ${post.readingTime ? `<span>~ ${post.readingTime} 分钟</span>` : ''}
+      </div>
+      ${post.body || ''}
+    `;
+
+    // 上下篇导航
+    const navEl = document.getElementById('br-nav');
+    navEl.innerHTML = `
+      ${prev
+        ? `<button type="button" class="br-nav-card prev" data-go="${escapeHtml(prev.id)}"><span class="br-nav-label">← 上一篇</span><span class="br-nav-title">${escapeHtml(prev.title)}</span></button>`
+        : `<div class="br-nav-card prev disabled"><span class="br-nav-label">← 上一篇</span><span class="br-nav-title">没有了</span></div>`}
+      ${next
+        ? `<button type="button" class="br-nav-card next" data-go="${escapeHtml(next.id)}"><span class="br-nav-label">下一篇 →</span><span class="br-nav-title">${escapeHtml(next.title)}</span></button>`
+        : `<div class="br-nav-card next disabled"><span class="br-nav-label">下一篇 →</span><span class="br-nav-title">还没写</span></div>`}
+    `;
+    navEl.querySelectorAll('button.br-nav-card').forEach(btn => {
+      btn.addEventListener('click', () => goToScene(2, 'blog', { article: btn.dataset.go }));
+    });
+
+    reader.hidden = false;
+    reader.setAttribute('aria-hidden', 'false');
+    reader.scrollTop = 0;
+    _currentArticleId = id;
+    // 给 deck 加标记 → 隐藏 deck-home-btn / 箭头 / dots,避免与 br-back 冲突
+    const deck = document.getElementById('deck');
+    if (deck) deck.classList.add('br-active');
+    document.title = `${post.title} | 庄赖宏`;
+    // 渲染左侧目录
+    renderBlogToc(id);
+  }
+
+  function closeArticle(opts) {
+    opts = opts || {};
+    const reader = document.getElementById('blog-reader');
+    if (!reader) return;
+    reader.hidden = true;
+    reader.setAttribute('aria-hidden', 'true');
+    _currentArticleId = null;
+    const deck = document.getElementById('deck');
+    if (deck) deck.classList.remove('br-active');
+    document.title = '庄赖宏 | AI & LLM';
+    if (!opts.skipHistory) {
+      // 把 hash 退回 #2/blog
+      goToScene(2, 'blog');
+    }
+  }
+
+  // 渲染左侧文章目录
+  function renderBlogToc(currentId) {
+    const tocList = document.getElementById('br-toc-list');
+    if (!tocList || !window.SITE_DATA) return;
+    const posts = SITE_DATA.blog || [];
+    if (posts.length === 0) { tocList.innerHTML = ''; return; }
+    tocList.innerHTML = posts.map(p => `
+      <li>
+        <button type="button" class="br-toc-item ${p.id === currentId ? 'active' : ''}" data-toc-id="${escapeHtml(p.id)}">
+          <span class="br-toc-date">${escapeHtml(p.date || '')}</span>
+          <span class="br-toc-title">${escapeHtml(p.title)}</span>
+        </button>
+      </li>
+    `).join('');
+    tocList.querySelectorAll('.br-toc-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.tocId;
+        if (id && id !== _currentArticleId) goToScene(2, 'blog', { article: id });
+      });
+    });
+    // 滚动让当前项可见
+    const active = tocList.querySelector('.br-toc-item.active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  // 绑定返回按钮(单次绑定,DOM 中的 br-back 在 initDeckRouter 之后就绪)
+  function bindBlogReader() {
+    const back = document.getElementById('br-back');
+    if (back && !back.dataset.bound) {
+      back.dataset.bound = '1';
+      back.addEventListener('click', () => closeArticle());
+    }
+    // Esc 关闭(优先级低于 demo modal/lightbox)
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const dm = document.getElementById('demo-modal');
+      const lb = document.getElementById('lightbox');
+      if (dm && dm.classList.contains('open')) return;
+      if (lb && lb.classList.contains('open')) return;
+      if (_currentArticleId) closeArticle();
+    });
   }
 
   /* =========================================================
@@ -3012,20 +3745,47 @@
         </div>`;
       return;
     }
-    container.innerHTML = items.map((g, idx) => `
-      <div class="gallery-item" data-idx="${idx}">
-        <img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.caption || '')}" loading="lazy" />
-        <div class="gallery-mask">
-          ${g.location ? `<div class="gallery-cap-loc">${escapeHtml(g.location)} · ${escapeHtml(g.date || '')}</div>` : ''}
-          <div class="gallery-cap-txt">${escapeHtml(g.caption || '')}</div>
-        </div>
-      </div>
-    `).join('');
 
-    // Lightbox 交互
+    // 按 album 字段分组(同名 album 聚一组,无 album 字段进 _untitled 组)
+    const hasAlbums = items.some(g => g.album);
+    let groups;
+    if (hasAlbums) {
+      const map = new Map();
+      items.forEach((g, idx) => {
+        const key = g.album || '_untitled';
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push({ ...g, _idx: idx });
+      });
+      groups = Array.from(map.entries()).map(([name, gs]) => ({ name, items: gs }));
+    } else {
+      groups = [{ name: null, items: items.map((g, idx) => ({ ...g, _idx: idx })) }];
+    }
+
+    container.innerHTML = groups.map(group => {
+      const header = group.name && group.name !== '_untitled'
+        ? `<div class="gallery-album-head"><span class="gam-icon">◆</span><span class="gam-title">${escapeHtml(group.name)}</span><span class="gam-count">${group.items.length} 张</span></div>`
+        : '';
+      const masonry = `
+        <div class="gallery-masonry">
+          ${group.items.map(g => `
+            <div class="gallery-item" data-idx="${g._idx}">
+              <img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.caption || '')}" loading="lazy" />
+              <div class="gallery-mask">
+                ${g.location ? `<div class="gallery-cap-loc">${escapeHtml(g.location)} · ${escapeHtml(g.date || '')}</div>` : ''}
+                <div class="gallery-cap-txt">${escapeHtml(g.caption || '')}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      return `<div class="gallery-album">${header}${masonry}</div>`;
+    }).join('');
+
+    // ─── Lightbox 交互 ───
     const lb     = document.getElementById('lightbox');
     const lbImg  = lb.querySelector('.lb-img');
     const lbCap  = lb.querySelector('.lb-cap');
+    const lbStage= lb.querySelector('.lb-stage');
     const lbPrev = lb.querySelector('.lb-prev');
     const lbNext = lb.querySelector('.lb-next');
     const lbClose= lb.querySelector('.lb-close');
@@ -3042,7 +3802,6 @@
     function open(i) {
       show(i);
       lb.classList.add('open');
-      // 1 张时也隐藏翻页;>=2 张时显示
       lb.classList.toggle('single', items.length <= 1);
       lb.setAttribute('aria-hidden', 'false');
     }
@@ -3053,10 +3812,21 @@
     container.querySelectorAll('.gallery-item').forEach(el => {
       el.addEventListener('click', () => open(parseInt(el.dataset.idx, 10)));
     });
-    lbPrev.addEventListener('click', () => show(cur - 1));
-    lbNext.addEventListener('click', () => show(cur + 1));
+    lbPrev.addEventListener('click', (e) => { e.stopPropagation(); show(cur - 1); });
+    lbNext.addEventListener('click', (e) => { e.stopPropagation(); show(cur + 1); });
     lbClose.addEventListener('click', close);
+
+    // 点击图片两侧翻页:左 1/3 → prev,右 1/3 → next,中间 → 关闭
+    lbImg.addEventListener('click', (e) => {
+      if (items.length <= 1) return;
+      const rect = lbImg.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      if (x < rect.width * 0.35) show(cur - 1);
+      else if (x > rect.width * 0.65) show(cur + 1);
+    });
+    // 点击黑色背景区(非图片)关闭
     lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+
     window.addEventListener('keydown', (e) => {
       if (!lb.classList.contains('open')) return;
       if (e.key === 'Escape') close();
@@ -3076,13 +3846,25 @@
       container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">电台暂未开播,稍后再来。</p>`;
       return;
     }
-    container.innerHTML = items.map(m => {
+    container.innerHTML = items.map((m, idx) => {
       const cover = m.cover
         ? `<img src="${escapeHtml(m.cover)}" alt="${escapeHtml(m.title)}" loading="lazy" />`
         : `<span>♪</span>`;
       const hasMp3 = m.src && !m.src.startsWith('#TODO');
-      const audio = hasMp3
-        ? `<audio class="music-player" controls preload="none" src="${escapeHtml(m.src)}"></audio>`
+      const player = hasMp3
+        ? `
+          <div class="mp-controls">
+            <button type="button" class="mp-play" data-mp-idx="${idx}" aria-label="播放">
+              <svg class="mp-icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+              <svg class="mp-icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16"/><rect x="13.5" y="4" width="4.5" height="16"/></svg>
+            </button>
+            <div class="mp-bar" data-mp-bar-idx="${idx}">
+              <div class="mp-fill"><div class="mp-handle"></div></div>
+            </div>
+            <span class="mp-time"><span class="mp-cur">0:00</span> / <span class="mp-tot">--:--</span></span>
+          </div>
+          <audio data-mp-audio-idx="${idx}" preload="metadata" src="${escapeHtml(m.src)}"></audio>
+        `
         : `<div class="music-todo">MP3 待上传 — 把文件放到 ./assets/music/ 后,在 data.js 里替换 src 字段</div>`;
       return `
         <div class="music-item">
@@ -3094,11 +3876,69 @@
               ${m.duration ? `<span class="music-duration">${escapeHtml(m.duration)}</span>` : ''}
             </div>
             ${m.note ? `<div class="music-note">${escapeHtml(m.note)}</div>` : ''}
-            ${audio}
+            ${player}
           </div>
         </div>
       `;
     }).join('');
+
+    // ── 播放器交互 ──
+    const audios = Array.from(container.querySelectorAll('audio[data-mp-audio-idx]'));
+    function fmt(t) {
+      if (!isFinite(t) || t < 0) return '0:00';
+      const m = Math.floor(t / 60), s = Math.floor(t % 60);
+      return `${m}:${s.toString().padStart(2,'0')}`;
+    }
+    function pauseAllExcept(idx) {
+      audios.forEach((a, i) => {
+        if (i !== idx && !a.paused) a.pause();
+      });
+    }
+
+    audios.forEach((audio, idx) => {
+      const item = container.querySelectorAll('.music-item')[idx];
+      const btn  = item.querySelector('.mp-play');
+      const bar  = item.querySelector('.mp-bar');
+      const fill = item.querySelector('.mp-fill');
+      const cur  = item.querySelector('.mp-cur');
+      const tot  = item.querySelector('.mp-tot');
+
+      btn.addEventListener('click', () => {
+        if (audio.paused) {
+          pauseAllExcept(idx);
+          audio.play().catch(() => {});
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener('play',  () => item.classList.add('mp-playing'));
+      audio.addEventListener('pause', () => item.classList.remove('mp-playing'));
+      audio.addEventListener('ended', () => {
+        item.classList.remove('mp-playing');
+        audio.currentTime = 0;
+        if (fill) fill.style.width = '0%';
+        if (cur)  cur.textContent = '0:00';
+      });
+      audio.addEventListener('loadedmetadata', () => {
+        if (tot) tot.textContent = fmt(audio.duration);
+      });
+      audio.addEventListener('timeupdate', () => {
+        if (!audio.duration) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        if (fill) fill.style.width = pct + '%';
+        if (cur)  cur.textContent = fmt(audio.currentTime);
+      });
+
+      // 点击进度条跳转
+      bar.addEventListener('click', (e) => {
+        if (!audio.duration) return;
+        const rect = bar.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const pct = Math.max(0, Math.min(1, x / rect.width));
+        audio.currentTime = pct * audio.duration;
+      });
+    });
   }
 
   /* =========================================================
@@ -3175,11 +4015,15 @@
     if (!container || !window.SITE_DATA) return;
     const items = SITE_DATA.resources || [];
     const TYPE_META = {
-      book:   { icon: '📖', name: 'BOOK' },
-      site:   { icon: '🌐', name: 'SITE' },
-      paper:  { icon: '📄', name: 'PAPER' },
-      file:   { icon: '📁', name: 'FILE' },
-      course: { icon: '▶',  name: 'COURSE' },
+      book:    { icon: '📖', name: 'BOOK' },
+      site:    { icon: '🌐', name: 'SITE' },
+      app:     { icon: '📱', name: 'APP' },
+      tool:    { icon: '🛠',  name: 'TOOL' },
+      paper:   { icon: '📄', name: 'PAPER' },
+      dataset: { icon: '🗂',  name: 'DATA' },
+      course:  { icon: '▶',  name: 'COURSE' },
+      podcast: { icon: '🎙',  name: 'PODCAST' },
+      file:    { icon: '📁', name: 'FILE' },
     };
     if (items.length === 0) {
       container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">资源还在整理中。</p>`;
@@ -3448,16 +4292,20 @@
 
   function parseHash() {
     const raw = location.hash.replace(/^#/, '');
-    if (!raw) return { scene: 1, module: null };
-    const [s, m] = raw.split('/');
+    if (!raw) return { scene: 1, module: null, article: null };
+    const parts = raw.split('/');
+    const [s, m, a] = parts;
     const n = parseInt(s, 10);
     if (!n || n < 1 || n > 2) {
       // 兼容旧 #3/xxx 链接 → 等价于 #2/xxx
-      if (s === '3' && m && MODULE_TITLES[m]) return { scene: 2, module: m };
-      return { scene: 1, module: null };
+      if (s === '3' && m && MODULE_TITLES[m]) return { scene: 2, module: m, article: a || null };
+      return { scene: 1, module: null, article: null };
     }
-    if (n === 2 && m && MODULE_TITLES[m]) return { scene: 2, module: m };
-    return { scene: n, module: null };
+    if (n === 2 && m && MODULE_TITLES[m]) {
+      // 博客文章深链:#2/blog/{id}
+      return { scene: 2, module: m, article: (m === 'blog' && a) ? a : null };
+    }
+    return { scene: n, module: null, article: null };
   }
 
   // Scene 2 内联展示某个 module:渲染对应容器 + 平滑滚动过去
@@ -3481,7 +4329,7 @@
     }
   }
 
-  function applyScene(scene, module) {
+  function applyScene(scene, module, article) {
     const deck = document.getElementById('deck');
     if (deck) deck.dataset.currentScene = String(scene);
 
@@ -3497,8 +4345,6 @@
     });
 
     // 箭头可用性 + label 文案
-    // Scene 1: prev 变成 "INTRO"(回看开场动画),点击 reload+?splash=1
-    // Scene 2: prev 是 "PREV"(回 Scene 1)
     const prev = document.querySelector('.deck-arrow-prev');
     const next = document.querySelector('.deck-arrow-next');
     const prevLabel = prev && prev.querySelector('.deck-arrow-label');
@@ -3519,20 +4365,27 @@
     // Scene 2 启动 / 停止
     if (scene === 2) {
       if (typeof startConstellation === 'function') startConstellation();
-      // 如有 module,渲染并滚动到它(初次加载时延迟到 scene 切完成)
       if (module) {
         setTimeout(() => showModuleInline(module), 60);
+        // 博客 + 有 article → 打开文章阅读态
+        if (module === 'blog' && article) {
+          setTimeout(() => openArticle(article), 120);
+        } else if (_currentArticleId) {
+          // 切回 blog 列表态:关掉打开的 article(不更新 history)
+          closeArticle({ skipHistory: true });
+        }
       } else {
-        // 没指定 module:重置为 empty 状态
         const empty = document.getElementById('s2-detail-empty');
         if (empty) empty.style.display = '';
         document.querySelectorAll('.s2-module').forEach(el => el.hidden = true);
         currentModule = null;
+        if (_currentArticleId) closeArticle({ skipHistory: true });
         const scene2 = document.querySelector('.scene-2');
         if (scene2) scene2.scrollTop = 0;
       }
     } else {
       if (typeof stopConstellation === 'function') stopConstellation();
+      if (_currentArticleId) closeArticle({ skipHistory: true });
     }
 
     currentScene = scene;
@@ -3540,32 +4393,41 @@
 
   function goToScene(scene, module, opts) {
     opts = opts || {};
-    const targetHash = scene === 2 && module ? `#2/${module}` : (scene === 1 ? '' : `#${scene}`);
+    const article = opts.article || null;
+    let targetHash;
+    if (scene === 1) targetHash = '';
+    else if (scene === 2 && module && module === 'blog' && article) targetHash = `#2/blog/${article}`;
+    else if (scene === 2 && module) targetHash = `#2/${module}`;
+    else targetHash = `#${scene}`;
+
     if (!opts.skipHistory) {
       if (location.hash !== targetHash) {
-        history.pushState({ scene, module }, '', targetHash || (location.pathname + location.search));
+        history.pushState({ scene, module, article }, '', targetHash || (location.pathname + location.search));
       }
     }
-    applyScene(scene, module);
+    applyScene(scene, module, article);
   }
 
   function initDeckRouter() {
     if (routerInited) return;
     routerInited = true;
 
+    // 绑定博客阅读态控件 (返回按钮 + Esc)
+    bindBlogReader();
+
     // 初始 scene
     const init = parseHash();
-    applyScene(init.scene, init.module);
+    applyScene(init.scene, init.module, init.article);
 
     // hashchange 监听
     window.addEventListener('hashchange', () => {
-      const { scene, module } = parseHash();
-      applyScene(scene, module);
+      const { scene, module, article } = parseHash();
+      applyScene(scene, module, article);
     });
     // popstate (浏览器后退键)
     window.addEventListener('popstate', () => {
-      const { scene, module } = parseHash();
-      applyScene(scene, module);
+      const { scene, module, article } = parseHash();
+      applyScene(scene, module, article);
     });
 
     // 箭头

@@ -28,6 +28,10 @@ window.SITE_DATA = {
       title: '阅读与历史',
       desc: '尤其偏爱近代史与思想史。读书是构建认知坐标系的方式 —— 让现在发生的事有处可放。',
       tags: ['历史', '哲学', '非虚构'],
+      // 可选:0-3 个延伸入口(无则不显示)
+      related: [
+        { label: '推荐入门:人类简史', url: 'https://book.douban.com/subject/25985021/' },
+      ],
     },
     {
       icon: '🎸',
@@ -54,6 +58,7 @@ window.SITE_DATA = {
     {
       title: '人类简史',
       author: '尤瓦尔·赫拉利',
+      status: 'finished',                            // finished / reading / wishlist
       finished: '2024-08',
       cover: '',
       summary: '把人类放回猿类与基因的尺度上重新讲一遍,你会发现"理所当然"几乎都站不住。',
@@ -64,6 +69,7 @@ window.SITE_DATA = {
     {
       title: '深度学习',
       author: 'Ian Goodfellow',
+      status: 'finished',
       finished: '2024-12',
       cover: '',
       summary: '不是入门书,是回头查的参考书。每过一段时间翻一次,对同一章会有不同感受。',
@@ -74,6 +80,7 @@ window.SITE_DATA = {
     {
       title: '思考,快与慢',
       author: '丹尼尔·卡尼曼',
+      status: 'finished',
       finished: '2025-03',
       cover: '',
       summary: '系统一 vs 系统二的二分法粗糙但好用。读完会更愿意承认"我可能只是直觉,不是判断"。',
@@ -81,6 +88,23 @@ window.SITE_DATA = {
       link: 'https://book.douban.com/subject/10785583/',
       tags: ['认知科学', '心理学'],
     },
+    // 示例:在读条目(看着加,不强制)
+    // {
+    //   title: '在读中的书',
+    //   author: '作者',
+    //   status: 'reading',
+    //   started: '2025-09',
+    //   summary: '边读边记的进度感想。',
+    //   tags: ['哲学'],
+    // },
+    // 示例:想读书单
+    // {
+    //   title: '想读的书',
+    //   author: '作者',
+    //   status: 'wishlist',
+    //   summary: '为什么想读它。',
+    //   tags: ['计划'],
+    // },
   ],
 
   /* ============================ 私人电台 (音乐) ============================ *
@@ -148,6 +172,22 @@ window.SITE_DATA = {
       tags: ['Transformer', '必读'],
     },
     {
+      type: 'app',
+      title: 'Obsidian',
+      author: '本地知识库 / 笔记 App',
+      desc: '我的私人记录主战场。双向链接 + 本地 Markdown,数据完全自有。',
+      url: 'https://obsidian.md/',
+      tags: ['笔记', 'PKM'],
+    },
+    {
+      type: 'tool',
+      title: 'Claude Code',
+      author: 'Anthropic 终端 AI 编程工具',
+      desc: '现在写这个主页的就是它。能持续对话 + 改代码 + 跑命令,工作流深度集成。',
+      url: 'https://claude.com/claude-code',
+      tags: ['AI', '编程', 'CLI'],
+    },
+    {
       type: 'file',
       title: '示例:我整理的水文 LLM 调研笔记 (PDF)',
       author: '',
@@ -204,15 +244,29 @@ window.SITE_DATA = {
     },
   ],
 
-  /* ============================ 旅行 · 摄影 ============================ */
+  /* ============================ 旅行 · 摄影 ============================ *
+   * 加 album 字段会按相册分组(同名 album 聚一起);无 album 字段 = 时间线模式
+   * 图片放到 ./assets/gallery/ 目录,src 用相对路径
+   * 图片比例不限 — 用 CSS columns 瀑布流自适应高度
+   */
   gallery: [
     // 没有真实图片时,留空数组也会正常显示"暂未上传"的提示
-    // 加图片示例:
+    //
+    // 时间线模式示例(无 album):
     // {
     //   src: './assets/gallery/dalian-sea.jpg',
     //   caption: '海风把所有焦虑都吹回了海里',
     //   location: '大连 · 星海湾',
     //   date: '2024-09',
+    // },
+    //
+    // 相册分组示例(加 album):
+    // {
+    //   src: './assets/gallery/2024-graduation-01.jpg',
+    //   caption: '答辩通过的那个下午',
+    //   location: '大连理工 · 主楼',
+    //   date: '2024-06',
+    //   album: '2024 毕业季 · 大连',
     // },
   ],
 
@@ -268,6 +322,6 @@ window.SITE_DATA = {
       { type: 'location',label: '所在地', value: '大连 · 中国',           href: '' },
       { type: 'resume',  label: '简历',   value: '下载 PDF',              href: 'resume.pdf' },
     ],
-    footer: '由我自己亲手 + Claude 共同维护。最后更新: 2026-05',
+    footer: '',
   },
 };

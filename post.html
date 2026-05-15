@@ -54,6 +54,10 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--bg3);
       padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
     .post-back {
       color: var(--teal);
@@ -63,6 +67,14 @@
       transition: opacity 0.2s ease;
     }
     .post-back:hover { opacity: 0.7; }
+    .post-open-inline {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      transition: color 0.2s ease;
+    }
+    .post-open-inline:hover { color: var(--teal); }
 
     /* 文章容器 */
     .post-wrap {
@@ -249,6 +261,7 @@
 
 <nav class="post-topbar">
   <a href="./index.html#2/blog" class="post-back">← 返回主页</a>
+  <a href="#" class="post-open-inline" id="post-open-inline" title="在主页内联模式打开这篇文章">在主页打开 →</a>
 </nav>
 
 <div id="post-root"></div>
@@ -385,6 +398,10 @@
     const next = posts[idx - 1];
 
     document.title = `${post.title} | 庄赖宏`;
+
+    // 让"在主页打开"链接指向当前文章的内联 URL
+    const openInline = document.getElementById('post-open-inline');
+    if (openInline) openInline.href = `./index.html#2/blog/${encodeURIComponent(id)}`;
 
     root.innerHTML = `
       <div class="post-wrap">
