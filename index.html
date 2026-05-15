@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
   <!-- 站点内容数据 (改这个文件就能更新主页内容,不用动 HTML) -->
   <script src="./data.js"></script>
+  <script src="./assets/data/catalog.js"></script>
   <style>
     :root {
       --bg:        #0a192f;
@@ -1508,6 +1509,166 @@
       font-size: 11px;
       letter-spacing: 0.5px;
     }
+
+    /* ─── 歌词面板 ─── */
+    .mu-lyrics {
+      margin-top: 14px;
+      max-height: 180px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      padding: 0 4px;
+    }
+    .mu-lyrics:empty { display: none; }
+    .lrc-line {
+      padding: 5px 0;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      text-align: center;
+      line-height: 1.6;
+      transition: color 0.3s, font-size 0.3s;
+    }
+    .lrc-line.lrc-active {
+      color: var(--teal);
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    /* ─── 目录公共样式 ─── */
+    .catalog-section {
+      margin-top: 36px;
+      border-top: 1px solid var(--bg3);
+      padding-top: 20px;
+    }
+    .catalog-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .catalog-head-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .catalog-head-title span { color: var(--teal); }
+    .catalog-search {
+      flex: 1;
+      min-width: 160px;
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: 4px;
+      padding: 6px 10px;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      outline: none;
+    }
+    .catalog-search:focus { border-color: var(--teal); }
+
+    /* ─── 音乐目录 ─── */
+    .catalog-music-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    .catalog-artist-row { border-radius: 4px; overflow: hidden; }
+    .catalog-artist-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: var(--bg2);
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      transition: background 0.15s;
+    }
+    .catalog-artist-btn:hover { background: var(--bg3); }
+    .catalog-artist-name { flex: 1; font-weight: 500; }
+    .catalog-artist-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+    .catalog-artist-arrow {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      transition: transform 0.2s;
+    }
+    .catalog-artist-row.open .catalog-artist-arrow { transform: rotate(90deg); }
+    .catalog-songs {
+      display: none;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 8px 12px 12px;
+      background: rgba(2,12,27,0.4);
+    }
+    .catalog-artist-row.open .catalog-songs { display: flex; }
+    .catalog-song-tag {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      background: var(--bg3);
+      border-radius: 3px;
+      padding: 2px 8px;
+    }
+
+    /* ─── 书单目录 ─── */
+    .catalog-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .catalog-tab {
+      padding: 4px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--bg3);
+      background: transparent;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .catalog-tab.active, .catalog-tab:hover {
+      background: var(--teal-dim);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .catalog-book-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+    }
+    .catalog-book-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .catalog-book-table th {
+      text-align: left;
+      color: var(--text-dim);
+      font-weight: 500;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--bg3);
+    }
+    .catalog-book-table td {
+      padding: 7px 10px;
+      color: var(--text);
+      border-bottom: 1px solid rgba(35,53,84,0.5);
+    }
+    .catalog-book-table tr:hover td { background: var(--bg2); }
+    .catalog-book-table td:nth-child(2) { color: var(--text-dim); font-size: 0.8rem; }
 
     /* ─── 私人电台:左侧曲目 + 右侧大播放器 ─── */
     .mu-layout {
@@ -3571,6 +3732,13 @@
           <header class="s2-module-head"><span class="s2-module-icon">◈</span>读书见闻</header>
           <p class="sec-intro">最近读过的、还在反刍的、想推荐给你的。</p>
           <div class="reading-list" id="reading-list"></div>
+          <div class="catalog-section" id="book-catalog">
+            <div class="catalog-head">
+              <span class="catalog-head-title">完整书单</span>
+              <div class="catalog-tabs" id="book-catalog-tabs"></div>
+            </div>
+            <div class="catalog-book-table" id="catalog-book-table"></div>
+          </div>
         </div>
         <div class="s2-module" data-module="blog" hidden>
           <header class="s2-module-head"><span class="s2-module-icon">◉</span>博客 · 技术随笔</header>
@@ -3591,6 +3759,13 @@
           <header class="s2-module-head"><span class="s2-module-icon">♪</span>私人电台</header>
           <p class="sec-intro">深夜耳机里反复播放的、想分享给路过的你。</p>
           <div class="music-list" id="music-list"></div>
+          <div class="catalog-section" id="music-catalog">
+            <div class="catalog-head">
+              <span class="catalog-head-title">完整曲库 <span id="music-catalog-count"></span></span>
+              <input class="catalog-search" id="music-catalog-search" type="text" placeholder="搜索歌手 / 歌曲…" />
+            </div>
+            <div class="catalog-music-list" id="catalog-music-list"></div>
+          </div>
         </div>
       </div>
 
@@ -4597,6 +4772,55 @@
     return `${m}:${s.toString().padStart(2,'0')}`;
   }
 
+  /* ── LRC 解析器 ── */
+  let _lrcLines = [];  // [{time: seconds, text: string}]
+  let _lrcActiveIdx = -1;
+
+  function parseLrc(text) {
+    const lines = [];
+    text.split('\n').forEach(line => {
+      const m = line.match(/\[(\d{2}):(\d{2})[\.\:](\d{2,3})\](.*)/);
+      if (m) {
+        const t = parseInt(m[1]) * 60 + parseInt(m[2]) + parseInt(m[3]) / (m[3].length === 3 ? 1000 : 100);
+        const txt = m[4].trim();
+        if (txt) lines.push({ time: t, text: txt });
+      }
+    });
+    return lines.sort((a, b) => a.time - b.time);
+  }
+
+  function loadLrc(url) {
+    _lrcLines = [];
+    _lrcActiveIdx = -1;
+    const el = document.getElementById('mu-lyrics');
+    if (!el) return;
+    if (!url) { el.innerHTML = ''; return; }
+    fetch(url).then(r => r.text()).then(text => {
+      _lrcLines = parseLrc(text);
+      el.innerHTML = _lrcLines.map((l, i) =>
+        `<div class="lrc-line" data-lrc="${i}">${escapeHtml(l.text)}</div>`
+      ).join('');
+    }).catch(() => { el.innerHTML = ''; });
+  }
+
+  function syncLrc(currentTime) {
+    if (!_lrcLines.length) return;
+    const el = document.getElementById('mu-lyrics');
+    if (!el) return;
+    let idx = _lrcLines.length - 1;
+    for (let i = 0; i < _lrcLines.length; i++) {
+      if (_lrcLines[i].time > currentTime) { idx = i - 1; break; }
+    }
+    if (idx < 0) idx = 0;
+    if (idx === _lrcActiveIdx) return;
+    _lrcActiveIdx = idx;
+    el.querySelectorAll('.lrc-line').forEach((l, i) => {
+      l.classList.toggle('lrc-active', i === idx);
+    });
+    const active = el.querySelector('.lrc-line.lrc-active');
+    if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
   function renderMusicMain(idx) {
     const main = document.getElementById('mu-main');
     if (!main || !window.SITE_DATA) return;
@@ -4627,6 +4851,7 @@
             </div>
             <span class="mu-time-large"><span id="mu-cur-large">0:00</span> / <span id="mu-tot-large">--:--</span></span>
           </div>
+          <div class="mu-lyrics" id="mu-lyrics"></div>
         ` : `<div class="music-todo">MP3 待上传 — 把文件放到 ./assets/music/ 后,在 data.js 里替换 src 字段</div>`}
       </div>
     `;
@@ -4648,7 +4873,147 @@
         _sharedAudio.currentTime = pct * _sharedAudio.duration;
       });
     }
+    // 加载歌词
+    loadLrc(m.lrc || '');
   }
+
+  /* ── 音乐目录渲染 ── */
+  function renderMusicCatalog() {
+    const catalog = window.MUSIC_CATALOG;
+    const countEl = document.getElementById('music-catalog-count');
+    const listEl  = document.getElementById('catalog-music-list');
+    const searchEl = document.getElementById('music-catalog-search');
+    if (!catalog || !listEl) return;
+    if (listEl.dataset.rendered) return;
+
+    const total = catalog.reduce((s, g) => s + g.songs.length, 0);
+    if (countEl) countEl.textContent = `(${total} 首)`;
+
+    function render(keyword) {
+      keyword = (keyword || '').trim().toLowerCase();
+      const filtered = keyword
+        ? catalog.filter(g =>
+            g.artist.toLowerCase().includes(keyword) ||
+            g.songs.some(s => s.toLowerCase().includes(keyword))
+          ).map(g => ({
+            artist: g.artist,
+            songs: keyword && !g.artist.toLowerCase().includes(keyword)
+              ? g.songs.filter(s => s.toLowerCase().includes(keyword))
+              : g.songs
+          }))
+        : catalog;
+
+      listEl.innerHTML = filtered.map((g, i) => `
+        <div class="catalog-artist-row" id="car-${i}">
+          <button class="catalog-artist-btn" onclick="toggleArtist('car-${i}')">
+            <span class="catalog-artist-name">${escapeHtml(g.artist)}</span>
+            <span class="catalog-artist-count">${g.songs.length} 首</span>
+            <span class="catalog-artist-arrow">▶</span>
+          </button>
+          <div class="catalog-songs">
+            ${g.songs.map(s => `<span class="catalog-song-tag">${escapeHtml(s)}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      if (keyword) listEl.querySelectorAll('.catalog-artist-row').forEach(r => r.classList.add('open'));
+    }
+
+    render('');
+    listEl.dataset.rendered = '1';
+    if (searchEl) {
+      searchEl.addEventListener('input', () => render(searchEl.value));
+    }
+  }
+
+  window.toggleArtist = function(id) {
+    const row = document.getElementById(id);
+    if (row) row.classList.toggle('open');
+  };
+
+  /* ── 书单目录渲染 ── */
+  const BOOK_CATALOG = [
+    { cat: '中国现当代文学', books: [
+      ['围城','钱钟书'],['活着','余华'],['兄弟','余华'],['平凡的世界','路遥'],['骆驼祥子','老舍'],
+      ['文化苦旅','余秋雨'],['金锁记','张爱玲'],['沉默的大多数','王小波'],['黄金时代','王小波'],
+      ['额尔古纳河右岸','迟子建'],['尘埃落定','阿来'],['草房子','曹文轩'],['目送','龙应台'],
+      ['送你一颗子弹','刘瑜'],['城门开','北岛'],['巨流河','齐邦媛'],['明朝那些事儿','当年明月'],
+      ['我们仨','杨绛'],['乡土中国','费孝通'],['论语','—'],['鲁迅文集','鲁迅'],
+    ]},
+    { cat: '外国经典文学', books: [
+      ['1984','乔治·奥威尔'],['动物庄园','乔治·奥威尔'],['追风筝的人','卡勒德·胡赛尼'],
+      ['灿烂千阳','卡勒德·胡赛尼'],['百年孤独','马尔克斯'],['霍乱时期的爱情','马尔克斯'],
+      ['安娜卡列尼娜','托尔斯泰'],['简爱','夏洛蒂·勃朗特'],['呼啸山庄','艾米莉·勃朗特'],
+      ['月亮与六便士','毛姆'],['麦田里的守望者','塞林格'],['老人与海','海明威'],
+      ['局外人','加缪'],['罪与罚','陀思妥耶夫斯基'],['生命中不能承受之轻','昆德拉'],
+      ['傲慢与偏见','简·奥斯汀'],['荆棘鸟','科林·麦卡洛'],['日瓦戈医生','帕斯捷尔纳克'],
+      ['雪国','川端康成'],['海边的卡夫卡','村上春树'],['挪威的森林','村上春树'],
+      ['白夜行','东野圭吾'],['嫌疑人X的献身','东野圭吾'],['包法利夫人','福楼拜'],
+      ['红与黑','司汤达'],['悲惨世界','雨果'],['基督山伯爵','大仲马'],
+      ['杀死一只知更鸟','哈珀·李'],['草叶集','惠特曼'],['新月集+飞鸟集','泰戈尔'],
+    ]},
+    { cat: '悬疑 / 推理', books: [
+      ['福尔摩斯探案全集','柯南·道尔'],['达芬奇密码','丹·布朗'],['白夜行','东野圭吾'],
+      ['嫌疑人X的献身','东野圭吾'],['天才在左疯子在右','高铭'],
+    ]},
+    { cat: '科幻 / 奇幻', books: [
+      ['三体','刘慈欣'],['基地','阿西莫夫'],['银河系漫游指南','道格拉斯·亚当斯'],
+      ['时间简史','霍金'],['魔戒','托尔金'],['哈利·波特','J.K.罗琳'],
+      ['银河英雄传说','田中芳树'],
+    ]},
+    { cat: '武侠 / 玄幻', books: [
+      ['金庸全集','金庸'],['九州缥缈录','江南'],['边荒传说','黄易'],['覆雨翻云','黄易'],
+      ['英雄志','孙晓'],['德川家康','山冈庄八'],
+    ]},
+    { cat: '网络小说', books: [
+      ['诡秘之主','爱潜水的乌贼'],['凡人修仙传','忘语'],['全职高手','蝴蝶蓝'],
+      ['盗墓笔记','南派三叔'],['鬼吹灯','天下霸唱'],['无限恐怖','流浪的蛤蟆'],
+      ['废土','黑天魔神'],['深空彼岸','辰东'],['黑色纪元','黑天魔神'],['神墓','辰东'],
+      ['藏地密码','何马'],['异常生物见闻录','—'],
+    ]},
+    { cat: '旅行 / 散文', books: [
+      ['撒哈拉的故事','三毛'],['哭泣的骆驼','三毛'],['背包十年','小鹏'],
+      ['亲爱的安德烈','龙应台'],['不去会死！','—'],['走吧，张小砚','张小砚'],
+    ]},
+    { cat: '社科 / 历史', books: [
+      ['乡土中国','费孝通'],['民主的细节','刘瑜'],['追寻现代中国','史景迁'],
+      ['中国大历史','黄仁宇'],['北洋裂变','张鸣'],['贫穷的本质','阿比吉特·班纳吉'],
+      ['第二性','西蒙·波娃'],['国富论','亚当·斯密'],['资本论','马克思'],
+      ['看见','柴静'],['失控','凯文·凯利'],['大数据时代','舍恩伯格'],
+    ]},
+    { cat: '心理 / 哲学', books: [
+      ['苏菲的世界','乔斯坦·贾德'],['自卑与超越','阿德勒'],['思考，快与慢','卡尼曼'],
+      ['影响力','罗伯特·西奥迪尼'],['乌合之众','勒庞'],['少有人走的路','斯科特·派克'],
+      ['自控力','凯利·麦格尼格尔'],['人生中不可不想的事','克里希那穆提'],
+    ]},
+    { cat: '商业 / 管理', books: [
+      ['从0到1','彼得·蒂尔'],['聪明的投资者','本杰明·格雷厄姆'],['引爆点','马尔科姆·格拉德威尔'],
+      ['金字塔原理','芭芭拉·明托'],['高效能人士的七个习惯','史蒂芬·柯维'],
+      ['把时间当作朋友','李笑来'],['活法','稻盛和夫'],['乔布斯传','沃尔特·艾萨克森'],
+      ['如何阅读一本书','莫提默·艾德勒'],['你当像鸟飞往你的山','塔拉·韦斯托弗'],
+    ]},
+  ];
+
+  let _bookCatFilter = 0;
+  function renderBookCatalog() {
+    const tabsEl  = document.getElementById('book-catalog-tabs');
+    const tableEl = document.getElementById('catalog-book-table');
+    if (!tabsEl || !tableEl) return;
+
+    tabsEl.innerHTML = BOOK_CATALOG.map((c, i) =>
+      `<button class="catalog-tab ${i===_bookCatFilter?'active':''}" onclick="switchBookCat(${i})">${escapeHtml(c.cat)}</button>`
+    ).join('');
+
+    const cat = BOOK_CATALOG[_bookCatFilter];
+    tableEl.innerHTML = `<table>
+      <thead><tr><th>#</th><th>书名</th><th>作者</th></tr></thead>
+      <tbody>${cat.books.map((b,i) =>
+        `<tr><td>${i+1}</td><td>${escapeHtml(b[0])}</td><td>${escapeHtml(b[1])}</td></tr>`
+      ).join('')}</tbody>
+    </table>`;
+  }
+
+  window.switchBookCat = function(i) { _bookCatFilter = i; renderBookCatalog(); };
 
   function switchTrack(idx, opts) {
     opts = opts || {};
@@ -4698,6 +5063,7 @@
       const pct = (audio.currentTime / audio.duration) * 100;
       if (fill) fill.style.width = pct + '%';
       if (cur)  cur.textContent = fmtTime(audio.currentTime);
+      syncLrc(audio.currentTime);
     });
   }
 
@@ -5084,6 +5450,8 @@
       el.hidden = el.dataset.module !== module;
     });
     currentModule = module;
+    if (module === 'music')   renderMusicCatalog();
+    if (module === 'reading') renderBookCatalog();
     // 平滑滚动到该 module(在 Scene 2 容器内滚动)
     if (!opts.skipScroll) {
       const target = document.querySelector(`.s2-module[data-module="${module}"]`);
