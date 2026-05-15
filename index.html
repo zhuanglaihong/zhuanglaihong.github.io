@@ -1231,6 +1231,49 @@
     }
     .lb-cap-loc { color: var(--teal); font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; }
 
+    /* Lightbox 底部缩略图条 */
+    .lb-thumbs {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      max-width: 90vw;
+      overflow-x: auto;
+      padding: 6px 8px;
+      background: rgba(2,12,27,0.7);
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(100,255,218,0.4) transparent;
+    }
+    .lb-thumbs::-webkit-scrollbar { height: 6px; }
+    .lb-thumbs::-webkit-scrollbar-thumb { background: rgba(100,255,218,0.3); border-radius: 3px; }
+    #lightbox.single .lb-thumbs { display: none; }
+    .lb-thumb {
+      flex-shrink: 0;
+      width: 60px;
+      height: 44px;
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0.45;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lb-thumb:hover { opacity: 0.85; }
+    .lb-thumb.active {
+      opacity: 1;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 8px rgba(100,255,218,0.4);
+    }
+    /* 有缩略图时,caption 上移避免被遮 */
+    #lightbox:not(.single) .lb-cap {
+      bottom: 76px;
+    }
+
     /* ============================================================
        CONTACT
        ============================================================ */
@@ -1464,6 +1507,245 @@
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.5px;
+    }
+
+    /* ─── 私人电台:左侧曲目 + 右侧大播放器 ─── */
+    .mu-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+      background: rgba(2,12,27,0.35);
+      border: 1px solid var(--bg3);
+      border-radius: 6px;
+      overflow: hidden;
+      min-height: 480px;
+    }
+    .mu-sidebar {
+      border-right: 1px solid var(--bg3);
+      background: rgba(2,12,27,0.4);
+      padding: 18px 0;
+      overflow-y: auto;
+      max-height: 600px;
+    }
+    .mu-sidebar-head {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 0 18px 12px;
+      border-bottom: 1px dashed var(--bg3);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .mu-tracklist {
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+    .mu-track {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 16px;
+      background: transparent;
+      border: none;
+      border-left: 2px solid transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s var(--ease);
+      font-family: var(--font-sans);
+    }
+    .mu-track:hover {
+      background: rgba(255,123,114,0.05);
+      border-left-color: var(--text-dim);
+    }
+    .mu-track.active {
+      background: rgba(255,123,114,0.12);
+      border-left-color: var(--accent-danger);
+    }
+    .mu-track-num {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .mu-track.active .mu-track-num { color: var(--accent-danger); }
+    .mu-track-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .mu-track-title {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mu-track.active .mu-track-title { color: var(--accent-danger); font-weight: 600; }
+    .mu-track-artist {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .mu-track-dur {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    /* 右侧主区 */
+    .mu-main {
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .mu-cover-large {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #2a1c20, #4a2a30);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,123,114,0.2);
+      flex-shrink: 0;
+      transition: transform 0.4s ease;
+    }
+    .mu-cover-large img { width: 100%; height: 100%; object-fit: cover; }
+    .mu-cover-glyph {
+      font-size: 64px;
+      color: var(--accent-danger);
+      opacity: 0.7;
+    }
+    .mu-main.mp-playing .mu-cover-large {
+      transform: scale(1.02);
+      box-shadow: 0 18px 48px rgba(255,123,114,0.25), 0 0 0 1px var(--accent-danger);
+    }
+    .mu-info {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mu-track-num-large {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+    .mu-title-large {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+    .mu-artist-large {
+      color: var(--accent-danger);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+    }
+    .mu-note-large {
+      color: var(--text-dim);
+      font-style: italic;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      margin: 8px 0 4px;
+    }
+
+    /* 大播放器控件 */
+    .mu-controls-large {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 12px;
+      width: 100%;
+    }
+    .mu-play-large {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-danger), #d85a52);
+      border: none;
+      color: #1a0a0c;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s var(--ease);
+      box-shadow: 0 6px 18px rgba(255,123,114,0.4);
+    }
+    .mu-play-large:hover {
+      transform: scale(1.06);
+      box-shadow: 0 8px 22px rgba(255,123,114,0.55);
+    }
+    .mu-play-large:active { transform: scale(0.96); }
+    .mu-play-large .mu-icon-pause { display: none; }
+    .mu-play-large.mp-playing .mu-icon-play  { display: none; }
+    .mu-play-large.mp-playing .mu-icon-pause { display: block; }
+    .mu-bar-large {
+      flex: 1;
+      position: relative;
+      height: 5px;
+      background: rgba(255,123,114,0.15);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: height 0.15s ease;
+    }
+    .mu-bar-large:hover { height: 7px; }
+    .mu-fill-large {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-danger), #ff9d96);
+      border-radius: 3px;
+      transition: width 0.1s linear;
+    }
+    .mu-handle-large {
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent-danger);
+      transform: translateY(-50%) scale(0);
+      transition: transform 0.15s ease;
+      box-shadow: 0 0 10px rgba(255,123,114,0.7);
+      pointer-events: none;
+    }
+    .mu-bar-large:hover .mu-handle-large,
+    .mu-main.mp-playing .mu-handle-large {
+      transform: translateY(-50%) scale(1);
+    }
+    .mu-time-large {
+      flex-shrink: 0;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      min-width: 80px;
+      text-align: right;
+    }
+    #mu-cur-large { color: var(--accent-danger); }
+
+    @media (max-width: 880px) {
+      .mu-layout { grid-template-columns: 1fr; }
+      .mu-sidebar { max-height: 240px; border-right: none; border-bottom: 1px solid var(--bg3); }
+      .mu-cover-large { width: 160px; height: 160px; }
+      .mu-title-large { font-size: 1.2rem; }
     }
 
     /* ============================================================
@@ -2627,6 +2909,269 @@
       .br-nav { grid-template-columns: 1fr; padding: 24px 22px 60px; }
     }
 
+    /* ============================================================
+       READING READER (读书详情态)
+       ============================================================ */
+    .reading-reader {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #0d1d36 0%, #0a192f 100%);
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      animation: brSlideIn 0.45s var(--ease);
+    }
+    .reading-reader[hidden] { display: none; }
+    .rr-toolbar {
+      flex-shrink: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 32px;
+      background: rgba(10,25,47,0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--bg3);
+    }
+    .rr-back {
+      flex-shrink: 0;
+      background: rgba(130,170,255,0.08);
+      border: 1px solid rgba(130,170,255,0.35);
+      color: var(--accent-info);
+      padding: 7px 14px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .rr-back:hover { background: rgba(130,170,255,0.16); }
+    .rr-title {
+      flex: 1;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.98rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .rr-body {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .rr-toc {
+      flex-shrink: 0;
+      width: 280px;
+      overflow-y: auto;
+      padding: 22px 14px 32px;
+      border-right: 1px solid var(--bg3);
+      background: rgba(2,12,27,0.35);
+    }
+    .rr-toc-head {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 0 12px 14px;
+      border-bottom: 1px dashed var(--bg3);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .rr-toc-list { list-style: none; padding: 0; margin: 0; }
+    .rr-toc-item {
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      border-left: 2px solid transparent;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      transition: all 0.15s var(--ease);
+      border-radius: 0 3px 3px 0;
+    }
+    .rr-toc-item:hover {
+      background: rgba(130,170,255,0.05);
+      border-left-color: var(--text-dim);
+    }
+    .rr-toc-item.active {
+      background: rgba(130,170,255,0.1);
+      border-left-color: var(--accent-info);
+    }
+    .rr-toc-status {
+      flex-shrink: 0;
+      width: 6px; height: 6px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+    .rr-toc-status.s-finished { background: var(--accent-success); }
+    .rr-toc-status.s-reading  { background: var(--accent-warning); }
+    .rr-toc-status.s-wishlist { background: var(--accent-info); }
+    .rr-toc-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .rr-toc-title {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .rr-toc-item.active .rr-toc-title { color: var(--accent-info); font-weight: 600; }
+    .rr-toc-author {
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+    .rr-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 48px 80px;
+    }
+    .rr-card {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .rr-cover {
+      width: 220px;
+      height: 325px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--bg3), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .rr-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .rr-cover-empty {
+      padding: 14px;
+      color: rgba(204,214,246,0.4);
+      font-size: 18px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .rr-info {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .rr-info-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .rr-info-status.s-finished {
+      color: var(--accent-success);
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.35);
+    }
+    .rr-info-status.s-reading {
+      color: var(--accent-warning);
+      background: rgba(255,209,102,0.1);
+      border: 1px solid rgba(255,209,102,0.35);
+    }
+    .rr-info-status.s-wishlist {
+      color: var(--accent-info);
+      background: rgba(130,170,255,0.1);
+      border: 1px solid rgba(130,170,255,0.35);
+    }
+    .rr-info-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+      letter-spacing: 0.2px;
+    }
+    .rr-info-author {
+      color: var(--accent-info);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+    .rr-info-rating {
+      color: var(--accent-info);
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      margin-top: 4px;
+    }
+    .rr-info-rating .star-empty { color: var(--bg3); }
+    .rr-info-summary {
+      color: #b8c4d8;
+      font-size: 1.02rem;
+      line-height: 1.85;
+      margin-top: 8px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--bg3);
+    }
+    .rr-info-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .rr-info-meta .reading-badge { /* 复用 .reading-badge 样式 */ }
+    .rr-info-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      color: var(--accent-info);
+      background: rgba(130,170,255,0.05);
+      border: 1px solid rgba(130,170,255,0.3);
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+      align-self: flex-start;
+      margin-top: 6px;
+    }
+    .rr-info-link:hover {
+      background: rgba(130,170,255,0.15);
+      border-color: var(--accent-info);
+    }
+
+    /* 切换博客返回时的 active 类需扩展到 reading reader */
+    .deck.rr-active .deck-home-btn,
+    .deck.rr-active .deck-arrow,
+    .deck.rr-active .deck-dots { display: none; }
+
+    @media (max-width: 900px) {
+      .rr-toc { display: none; }
+    }
+    @media (max-width: 720px) {
+      .rr-toolbar { padding: 14px 18px; }
+      .rr-main { padding: 28px 22px 60px; }
+      .rr-card { grid-template-columns: 1fr; gap: 24px; justify-items: center; text-align: center; }
+      .rr-info { text-align: left; }
+      .rr-info-status { align-self: center; }
+    }
+
+    /* reading-item 加 cursor:pointer 暗示可点击进详情 */
+    .reading-item { cursor: pointer; }
+
     /* ─── 全局导航控件 (vue 风格:两侧中部大箭头) ─── */
     .deck-arrow {
       position: fixed;
@@ -3075,6 +3620,21 @@
         </main>
       </div>
     </div>
+
+    <!-- 读书详情态(全屏覆盖 Scene 2,初始隐藏) -->
+    <div class="reading-reader" id="reading-reader" hidden aria-hidden="true">
+      <header class="rr-toolbar">
+        <button type="button" class="rr-back" id="rr-back">← 返回书单</button>
+        <span class="rr-title" id="rr-title"></span>
+      </header>
+      <div class="rr-body">
+        <aside class="rr-toc">
+          <div class="rr-toc-head">书单</div>
+          <ul class="rr-toc-list" id="rr-toc-list"></ul>
+        </aside>
+        <main class="rr-main" id="rr-main"></main>
+      </div>
+    </div>
   </section>
 
   <!-- 底部 page dots (2 个 — Scene 1 / Scene 2) -->
@@ -3108,6 +3668,7 @@
   <button class="lb-next" type="button" aria-label="下一张">&rsaquo;</button>
   <div class="lb-stage"><img class="lb-img" alt="" /></div>
   <div class="lb-cap"></div>
+  <div class="lb-thumbs" id="lb-thumbs"></div>
 </div>
 
 <!-- ==================== Demo 模态框 ==================== -->
@@ -3551,8 +4112,10 @@
       } else if (status === 'reading' && r.started) {
         timeBadge = `<span class="reading-badge badge-date">${escapeHtml(r.started)} 起</span>`;
       }
+      // 找到该 item 在原数组的真实索引(因筛选过后顺序可能变,需要原 idx)
+      const realIdx = allItems.indexOf(r);
       return `
-        <div class="reading-item" data-status="${escapeHtml(status)}">
+        <div class="reading-item" data-status="${escapeHtml(status)}" data-book-idx="${realIdx}" role="button" tabindex="0">
           ${statusBadge}
           <div class="reading-cover">${cover}</div>
           <div class="reading-body">
@@ -3569,6 +4132,16 @@
         </div>
       `;
     }).join('');
+
+    // 列表项点击进详情态
+    container.querySelectorAll('.reading-item').forEach(el => {
+      el.addEventListener('click', (e) => {
+        // 如果点击的是内部 link badge(原文 ↗),不进详情
+        if (e.target.closest('a')) return;
+        const idx = parseInt(el.dataset.bookIdx, 10);
+        if (!isNaN(idx)) goToScene(2, 'reading', { book: idx });
+      });
+    });
   }
 
   /* =========================================================
@@ -3712,6 +4285,110 @@
     if (active) active.scrollIntoView({ block: 'nearest' });
   }
 
+  /* =========================================================
+     读书详情态: 左侧书单 + 右侧大详情(类似 blog reader)
+     ========================================================= */
+  let _currentBookIdx = null;
+
+  function openBook(idx) {
+    const reader = document.getElementById('reading-reader');
+    if (!reader || !window.SITE_DATA) return;
+    const items = SITE_DATA.reading || [];
+    const r = items[idx];
+    if (!r) return;
+
+    const status = r.status || 'finished';
+    const STATUS_LABEL = { finished: '已读', reading: '在读', wishlist: '想读' };
+
+    document.getElementById('rr-title').textContent = r.title || '';
+
+    // 右侧大详情
+    const cover = r.cover
+      ? `<img src="${escapeHtml(r.cover)}" alt="${escapeHtml(r.title)}" loading="lazy" />`
+      : `<span class="rr-cover-empty">${escapeHtml(r.title || '')}</span>`;
+    const stars = status === 'finished'
+      ? Array.from({length: 5}, (_, i) => `<span class="${i < (r.rating||0) ? '' : 'star-empty'}">★</span>`).join('')
+      : '';
+    let timeBadge = '';
+    if (status === 'finished' && r.finished) timeBadge = `<span class="reading-badge badge-date">${escapeHtml(r.finished)} 读完</span>`;
+    else if (status === 'reading' && r.started) timeBadge = `<span class="reading-badge badge-date">${escapeHtml(r.started)} 起</span>`;
+
+    document.getElementById('rr-main').innerHTML = `
+      <div class="rr-card">
+        <div class="rr-cover">${cover}</div>
+        <div class="rr-info">
+          <span class="rr-info-status s-${escapeHtml(status)}">${STATUS_LABEL[status] || status}</span>
+          <h2 class="rr-info-title">${escapeHtml(r.title)}</h2>
+          <div class="rr-info-author">${escapeHtml(r.author || '')}</div>
+          ${stars ? `<div class="rr-info-rating">${stars}</div>` : ''}
+          ${r.summary ? `<p class="rr-info-summary">${escapeHtml(r.summary)}</p>` : ''}
+          <div class="rr-info-meta">
+            ${(r.tags || []).map(t => `<span class="reading-badge badge-tag">${escapeHtml(t)}</span>`).join('')}
+            ${timeBadge}
+          </div>
+          ${r.link ? `<a href="${escapeHtml(r.link)}" target="_blank" rel="noopener" class="rr-info-link">查看原文 / 豆瓣 ↗</a>` : ''}
+        </div>
+      </div>
+    `;
+
+    reader.hidden = false;
+    reader.setAttribute('aria-hidden', 'false');
+    reader.scrollTop = 0;
+    _currentBookIdx = idx;
+    const deck = document.getElementById('deck');
+    if (deck) deck.classList.add('rr-active');
+    renderReadingToc(idx);
+  }
+
+  function closeBook(opts) {
+    opts = opts || {};
+    const reader = document.getElementById('reading-reader');
+    if (!reader) return;
+    reader.hidden = true;
+    reader.setAttribute('aria-hidden', 'true');
+    _currentBookIdx = null;
+    const deck = document.getElementById('deck');
+    if (deck) deck.classList.remove('rr-active');
+    if (!opts.skipHistory) goToScene(2, 'reading');
+  }
+
+  function renderReadingToc(currentIdx) {
+    const tocList = document.getElementById('rr-toc-list');
+    if (!tocList || !window.SITE_DATA) return;
+    const items = SITE_DATA.reading || [];
+    if (items.length === 0) { tocList.innerHTML = ''; return; }
+    tocList.innerHTML = items.map((r, i) => {
+      const status = r.status || 'finished';
+      return `
+        <li>
+          <button type="button" class="rr-toc-item ${i === currentIdx ? 'active' : ''}" data-toc-idx="${i}">
+            <span class="rr-toc-status s-${escapeHtml(status)}"></span>
+            <span class="rr-toc-text">
+              <span class="rr-toc-title">${escapeHtml(r.title)}</span>
+              <span class="rr-toc-author">${escapeHtml(r.author || '')}</span>
+            </span>
+          </button>
+        </li>
+      `;
+    }).join('');
+    tocList.querySelectorAll('.rr-toc-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = parseInt(btn.dataset.tocIdx, 10);
+        if (!isNaN(i) && i !== _currentBookIdx) goToScene(2, 'reading', { book: i });
+      });
+    });
+    const active = tocList.querySelector('.rr-toc-item.active');
+    if (active) active.scrollIntoView({ block: 'nearest' });
+  }
+
+  function bindReadingReader() {
+    const back = document.getElementById('rr-back');
+    if (back && !back.dataset.bound) {
+      back.dataset.bound = '1';
+      back.addEventListener('click', () => closeBook());
+    }
+  }
+
   // 绑定返回按钮(单次绑定,DOM 中的 br-back 在 initDeckRouter 之后就绪)
   function bindBlogReader() {
     const back = document.getElementById('br-back');
@@ -3726,7 +4403,8 @@
       const lb = document.getElementById('lightbox');
       if (dm && dm.classList.contains('open')) return;
       if (lb && lb.classList.contains('open')) return;
-      if (_currentArticleId) closeArticle();
+      if (_currentArticleId) { closeArticle(); return; }
+      if (_currentBookIdx !== null) { closeBook(); return; }
     });
   }
 
@@ -3789,7 +4467,35 @@
     const lbPrev = lb.querySelector('.lb-prev');
     const lbNext = lb.querySelector('.lb-next');
     const lbClose= lb.querySelector('.lb-close');
+    const lbThumbs = lb.querySelector('#lb-thumbs');
+
+    // 渲染缩略图条(只在 gallery 多张时)
+    if (lbThumbs && items.length > 1) {
+      lbThumbs.innerHTML = items.map((g, i) => `
+        <div class="lb-thumb" data-thumb-idx="${i}">
+          <img src="${escapeHtml(g.src)}" alt="" loading="lazy" />
+        </div>
+      `).join('');
+      lbThumbs.querySelectorAll('.lb-thumb').forEach(t => {
+        t.addEventListener('click', (e) => {
+          e.stopPropagation();
+          show(parseInt(t.dataset.thumbIdx, 10));
+        });
+      });
+    } else if (lbThumbs) {
+      lbThumbs.innerHTML = '';
+    }
+
     let cur = 0;
+    function updateThumbActive() {
+      if (!lbThumbs) return;
+      lbThumbs.querySelectorAll('.lb-thumb').forEach((t, i) => {
+        t.classList.toggle('active', i === cur);
+      });
+      // 当前缩略图滚动到可视区
+      const active = lbThumbs.querySelector('.lb-thumb.active');
+      if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
     function show(i) {
       cur = (i + items.length) % items.length;
       const g = items[cur];
@@ -3798,6 +4504,7 @@
       lbCap.innerHTML =
         (g.location ? `<span class="lb-cap-loc">${escapeHtml(g.location)} · ${escapeHtml(g.date || '')}</span><br>` : '') +
         escapeHtml(g.caption || '');
+      updateThumbActive();
     }
     function open(i) {
       show(i);
@@ -3838,6 +4545,9 @@
   /* =========================================================
      渲染: 私人电台 (音乐)
      ========================================================= */
+  let _currentTrackIdx = 0;
+  let _sharedAudio = null;     // 全局共享一个 audio,切歌只换 src
+
   function renderMusic() {
     const container = document.getElementById('music-list');
     if (!container || !window.SITE_DATA) return;
@@ -3846,99 +4556,156 @@
       container.innerHTML = `<p style="color:var(--text-dim); padding: 20px 0;">电台暂未开播,稍后再来。</p>`;
       return;
     }
-    container.innerHTML = items.map((m, idx) => {
-      const cover = m.cover
-        ? `<img src="${escapeHtml(m.cover)}" alt="${escapeHtml(m.title)}" loading="lazy" />`
-        : `<span>♪</span>`;
-      const hasMp3 = m.src && !m.src.startsWith('#TODO');
-      const player = hasMp3
-        ? `
-          <div class="mp-controls">
-            <button type="button" class="mp-play" data-mp-idx="${idx}" aria-label="播放">
-              <svg class="mp-icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
-              <svg class="mp-icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16"/><rect x="13.5" y="4" width="4.5" height="16"/></svg>
-            </button>
-            <div class="mp-bar" data-mp-bar-idx="${idx}">
-              <div class="mp-fill"><div class="mp-handle"></div></div>
-            </div>
-            <span class="mp-time"><span class="mp-cur">0:00</span> / <span class="mp-tot">--:--</span></span>
-          </div>
-          <audio data-mp-audio-idx="${idx}" preload="metadata" src="${escapeHtml(m.src)}"></audio>
-        `
-        : `<div class="music-todo">MP3 待上传 — 把文件放到 ./assets/music/ 后,在 data.js 里替换 src 字段</div>`;
-      return `
-        <div class="music-item">
-          <div class="music-cover">${cover}</div>
-          <div class="music-body">
-            <div class="music-meta-line">
-              <span class="music-title">${escapeHtml(m.title)}</span>
-              <span class="music-artist">${escapeHtml(m.artist || '')}</span>
-              ${m.duration ? `<span class="music-duration">${escapeHtml(m.duration)}</span>` : ''}
-            </div>
-            ${m.note ? `<div class="music-note">${escapeHtml(m.note)}</div>` : ''}
-            ${player}
-          </div>
-        </div>
-      `;
-    }).join('');
 
-    // ── 播放器交互 ──
-    const audios = Array.from(container.querySelectorAll('audio[data-mp-audio-idx]'));
-    function fmt(t) {
-      if (!isFinite(t) || t < 0) return '0:00';
-      const m = Math.floor(t / 60), s = Math.floor(t % 60);
-      return `${m}:${s.toString().padStart(2,'0')}`;
-    }
-    function pauseAllExcept(idx) {
-      audios.forEach((a, i) => {
-        if (i !== idx && !a.paused) a.pause();
-      });
-    }
+    // 「左侧曲目目录 + 右侧大播放器」布局
+    container.innerHTML = `
+      <div class="mu-layout">
+        <aside class="mu-sidebar">
+          <div class="mu-sidebar-head">曲目</div>
+          <ul class="mu-tracklist" id="mu-tracklist">
+            ${items.map((m, i) => `
+              <li>
+                <button type="button" class="mu-track ${i === _currentTrackIdx ? 'active' : ''}" data-track-idx="${i}">
+                  <span class="mu-track-num">${String(i + 1).padStart(2, '0')}</span>
+                  <span class="mu-track-meta">
+                    <span class="mu-track-title">${escapeHtml(m.title)}</span>
+                    <span class="mu-track-artist">${escapeHtml(m.artist || '')}</span>
+                  </span>
+                  <span class="mu-track-dur">${escapeHtml(m.duration || '')}</span>
+                </button>
+              </li>
+            `).join('')}
+          </ul>
+        </aside>
+        <main class="mu-main" id="mu-main"></main>
+      </div>
+      <audio id="mu-audio" preload="metadata"></audio>
+    `;
 
-    audios.forEach((audio, idx) => {
-      const item = container.querySelectorAll('.music-item')[idx];
-      const btn  = item.querySelector('.mp-play');
-      const bar  = item.querySelector('.mp-bar');
-      const fill = item.querySelector('.mp-fill');
-      const cur  = item.querySelector('.mp-cur');
-      const tot  = item.querySelector('.mp-tot');
+    _sharedAudio = container.querySelector('#mu-audio');
+    bindSharedAudio();
+    renderMusicMain(_currentTrackIdx);
 
-      btn.addEventListener('click', () => {
-        if (audio.paused) {
-          pauseAllExcept(idx);
-          audio.play().catch(() => {});
-        } else {
-          audio.pause();
-        }
-      });
-
-      audio.addEventListener('play',  () => item.classList.add('mp-playing'));
-      audio.addEventListener('pause', () => item.classList.remove('mp-playing'));
-      audio.addEventListener('ended', () => {
-        item.classList.remove('mp-playing');
-        audio.currentTime = 0;
-        if (fill) fill.style.width = '0%';
-        if (cur)  cur.textContent = '0:00';
-      });
-      audio.addEventListener('loadedmetadata', () => {
-        if (tot) tot.textContent = fmt(audio.duration);
-      });
-      audio.addEventListener('timeupdate', () => {
-        if (!audio.duration) return;
-        const pct = (audio.currentTime / audio.duration) * 100;
-        if (fill) fill.style.width = pct + '%';
-        if (cur)  cur.textContent = fmt(audio.currentTime);
-      });
-
-      // 点击进度条跳转
-      bar.addEventListener('click', (e) => {
-        if (!audio.duration) return;
-        const rect = bar.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const pct = Math.max(0, Math.min(1, x / rect.width));
-        audio.currentTime = pct * audio.duration;
-      });
+    container.querySelectorAll('.mu-track').forEach(btn => {
+      btn.addEventListener('click', () => switchTrack(parseInt(btn.dataset.trackIdx, 10), { autoplay: true }));
     });
+  }
+
+  function fmtTime(t) {
+    if (!isFinite(t) || t < 0) return '0:00';
+    const m = Math.floor(t / 60), s = Math.floor(t % 60);
+    return `${m}:${s.toString().padStart(2,'0')}`;
+  }
+
+  function renderMusicMain(idx) {
+    const main = document.getElementById('mu-main');
+    if (!main || !window.SITE_DATA) return;
+    const items = SITE_DATA.music || [];
+    const m = items[idx];
+    if (!m) { main.innerHTML = ''; return; }
+
+    const cover = m.cover
+      ? `<img src="${escapeHtml(m.cover)}" alt="${escapeHtml(m.title)}" loading="lazy" />`
+      : `<span class="mu-cover-glyph">♪</span>`;
+    const hasMp3 = m.src && !m.src.startsWith('#TODO');
+
+    main.innerHTML = `
+      <div class="mu-cover-large">${cover}</div>
+      <div class="mu-info">
+        <div class="mu-track-num-large">${String(idx + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}</div>
+        <h3 class="mu-title-large">${escapeHtml(m.title)}</h3>
+        <div class="mu-artist-large">${escapeHtml(m.artist || '')}</div>
+        ${m.note ? `<p class="mu-note-large">${escapeHtml(m.note)}</p>` : ''}
+        ${hasMp3 ? `
+          <div class="mu-controls-large">
+            <button type="button" class="mu-play-large" id="mu-play-large" aria-label="播放/暂停">
+              <svg class="mu-icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+              <svg class="mu-icon-pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4.5" height="16"/><rect x="13.5" y="4" width="4.5" height="16"/></svg>
+            </button>
+            <div class="mu-bar-large" id="mu-bar-large">
+              <div class="mu-fill-large" id="mu-fill-large"><div class="mu-handle-large"></div></div>
+            </div>
+            <span class="mu-time-large"><span id="mu-cur-large">0:00</span> / <span id="mu-tot-large">--:--</span></span>
+          </div>
+        ` : `<div class="music-todo">MP3 待上传 — 把文件放到 ./assets/music/ 后,在 data.js 里替换 src 字段</div>`}
+      </div>
+    `;
+
+    // 播放控制
+    const playBtn = main.querySelector('#mu-play-large');
+    const bar     = main.querySelector('#mu-bar-large');
+    if (hasMp3 && playBtn && _sharedAudio) {
+      playBtn.addEventListener('click', () => {
+        if (_sharedAudio.paused) _sharedAudio.play().catch(() => {});
+        else _sharedAudio.pause();
+      });
+    }
+    if (bar && _sharedAudio) {
+      bar.addEventListener('click', (e) => {
+        if (!_sharedAudio.duration) return;
+        const rect = bar.getBoundingClientRect();
+        const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        _sharedAudio.currentTime = pct * _sharedAudio.duration;
+      });
+    }
+  }
+
+  function switchTrack(idx, opts) {
+    opts = opts || {};
+    if (!window.SITE_DATA) return;
+    const items = SITE_DATA.music || [];
+    if (!items[idx]) return;
+    _currentTrackIdx = idx;
+    // 更新左侧列表高亮
+    document.querySelectorAll('#mu-tracklist .mu-track').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+    // 重渲染右侧
+    renderMusicMain(idx);
+    // 切 audio src
+    const m = items[idx];
+    const hasMp3 = m.src && !m.src.startsWith('#TODO');
+    if (_sharedAudio && hasMp3) {
+      _sharedAudio.src = m.src;
+      if (opts.autoplay) {
+        _sharedAudio.play().catch(() => {});
+      }
+    }
+  }
+
+  function bindSharedAudio() {
+    const audio = _sharedAudio;
+    if (!audio || audio.dataset.bound) return;
+    audio.dataset.bound = '1';
+    audio.addEventListener('play',  () => updatePlayingClass(true));
+    audio.addEventListener('pause', () => updatePlayingClass(false));
+    audio.addEventListener('ended', () => {
+      updatePlayingClass(false);
+      audio.currentTime = 0;
+      const fill = document.getElementById('mu-fill-large');
+      const cur  = document.getElementById('mu-cur-large');
+      if (fill) fill.style.width = '0%';
+      if (cur)  cur.textContent = '0:00';
+    });
+    audio.addEventListener('loadedmetadata', () => {
+      const tot = document.getElementById('mu-tot-large');
+      if (tot) tot.textContent = fmtTime(audio.duration);
+    });
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.duration) return;
+      const fill = document.getElementById('mu-fill-large');
+      const cur  = document.getElementById('mu-cur-large');
+      const pct = (audio.currentTime / audio.duration) * 100;
+      if (fill) fill.style.width = pct + '%';
+      if (cur)  cur.textContent = fmtTime(audio.currentTime);
+    });
+  }
+
+  function updatePlayingClass(playing) {
+    const btn = document.getElementById('mu-play-large');
+    if (btn) btn.classList.toggle('mp-playing', playing);
+    const main = document.getElementById('mu-main');
+    if (main) main.classList.toggle('mp-playing', playing);
   }
 
   /* =========================================================
@@ -4292,20 +5059,19 @@
 
   function parseHash() {
     const raw = location.hash.replace(/^#/, '');
-    if (!raw) return { scene: 1, module: null, article: null };
+    if (!raw) return { scene: 1, module: null, detail: null };
     const parts = raw.split('/');
-    const [s, m, a] = parts;
+    const [s, m, d] = parts;
     const n = parseInt(s, 10);
     if (!n || n < 1 || n > 2) {
-      // 兼容旧 #3/xxx 链接 → 等价于 #2/xxx
-      if (s === '3' && m && MODULE_TITLES[m]) return { scene: 2, module: m, article: a || null };
-      return { scene: 1, module: null, article: null };
+      if (s === '3' && m && MODULE_TITLES[m]) return { scene: 2, module: m, detail: d || null };
+      return { scene: 1, module: null, detail: null };
     }
     if (n === 2 && m && MODULE_TITLES[m]) {
-      // 博客文章深链:#2/blog/{id}
-      return { scene: 2, module: m, article: (m === 'blog' && a) ? a : null };
+      // 二级深链:#2/blog/{id} 或 #2/reading/{idx}
+      return { scene: 2, module: m, detail: ((m === 'blog' || m === 'reading') && d) ? d : null };
     }
-    return { scene: n, module: null, article: null };
+    return { scene: n, module: null, detail: null };
   }
 
   // Scene 2 内联展示某个 module:渲染对应容器 + 平滑滚动过去
@@ -4329,7 +5095,7 @@
     }
   }
 
-  function applyScene(scene, module, article) {
+  function applyScene(scene, module, detail) {
     const deck = document.getElementById('deck');
     if (deck) deck.dataset.currentScene = String(scene);
 
@@ -4367,12 +5133,18 @@
       if (typeof startConstellation === 'function') startConstellation();
       if (module) {
         setTimeout(() => showModuleInline(module), 60);
-        // 博客 + 有 article → 打开文章阅读态
-        if (module === 'blog' && article) {
-          setTimeout(() => openArticle(article), 120);
+        // 博客 + 有 detail(article id) → 打开文章阅读态
+        if (module === 'blog' && detail) {
+          setTimeout(() => openArticle(detail), 120);
         } else if (_currentArticleId) {
-          // 切回 blog 列表态:关掉打开的 article(不更新 history)
           closeArticle({ skipHistory: true });
+        }
+        // 读书 + 有 detail(book idx) → 打开书详情态
+        if (module === 'reading' && detail !== null && detail !== undefined) {
+          const bookIdx = parseInt(detail, 10);
+          if (!isNaN(bookIdx)) setTimeout(() => openBook(bookIdx), 120);
+        } else if (_currentBookIdx !== null) {
+          closeBook({ skipHistory: true });
         }
       } else {
         const empty = document.getElementById('s2-detail-empty');
@@ -4380,12 +5152,14 @@
         document.querySelectorAll('.s2-module').forEach(el => el.hidden = true);
         currentModule = null;
         if (_currentArticleId) closeArticle({ skipHistory: true });
+        if (_currentBookIdx !== null) closeBook({ skipHistory: true });
         const scene2 = document.querySelector('.scene-2');
         if (scene2) scene2.scrollTop = 0;
       }
     } else {
       if (typeof stopConstellation === 'function') stopConstellation();
       if (_currentArticleId) closeArticle({ skipHistory: true });
+      if (_currentBookIdx !== null) closeBook({ skipHistory: true });
     }
 
     currentScene = scene;
@@ -4393,41 +5167,47 @@
 
   function goToScene(scene, module, opts) {
     opts = opts || {};
-    const article = opts.article || null;
+    // 兼容老接口:opts.article (blog) / opts.book (reading) → 统一为 opts.detail
+    const detail = opts.detail != null ? opts.detail
+                : opts.article != null ? opts.article
+                : opts.book != null ? opts.book
+                : null;
     let targetHash;
     if (scene === 1) targetHash = '';
-    else if (scene === 2 && module && module === 'blog' && article) targetHash = `#2/blog/${article}`;
+    else if (scene === 2 && module === 'blog' && detail) targetHash = `#2/blog/${detail}`;
+    else if (scene === 2 && module === 'reading' && detail != null) targetHash = `#2/reading/${detail}`;
     else if (scene === 2 && module) targetHash = `#2/${module}`;
     else targetHash = `#${scene}`;
 
     if (!opts.skipHistory) {
       if (location.hash !== targetHash) {
-        history.pushState({ scene, module, article }, '', targetHash || (location.pathname + location.search));
+        history.pushState({ scene, module, detail }, '', targetHash || (location.pathname + location.search));
       }
     }
-    applyScene(scene, module, article);
+    applyScene(scene, module, detail);
   }
 
   function initDeckRouter() {
     if (routerInited) return;
     routerInited = true;
 
-    // 绑定博客阅读态控件 (返回按钮 + Esc)
+    // 绑定博客 / 读书阅读态控件 (返回按钮 + Esc)
     bindBlogReader();
+    bindReadingReader();
 
     // 初始 scene
     const init = parseHash();
-    applyScene(init.scene, init.module, init.article);
+    applyScene(init.scene, init.module, init.detail);
 
     // hashchange 监听
     window.addEventListener('hashchange', () => {
-      const { scene, module, article } = parseHash();
-      applyScene(scene, module, article);
+      const { scene, module, detail } = parseHash();
+      applyScene(scene, module, detail);
     });
     // popstate (浏览器后退键)
     window.addEventListener('popstate', () => {
-      const { scene, module, article } = parseHash();
-      applyScene(scene, module, article);
+      const { scene, module, detail } = parseHash();
+      applyScene(scene, module, detail);
     });
 
     // 箭头
