@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>庄赖宏 | AI & LLM</title>
+  <meta name="description" content="庄赖宏的个人主页：AI 应用开发、生成式模型微调、智能体工作流。" />
+  <meta name="theme-color" content="#f6f7fb" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
   <!-- 站点内容数据 (改这个文件就能更新主页内容,不用动 HTML) -->
@@ -1539,6 +1541,27 @@
       border-top: 2px solid var(--teal);
       padding-top: 24px;
     }
+    .catalog-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(44, 196, 182, 0.28);
+      border-radius: 8px;
+      background: rgba(44, 196, 182, 0.06);
+      color: var(--teal);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .catalog-summary::-webkit-details-marker { display: none; }
+    .catalog-summary::after { content: '＋'; font-size: 18px; line-height: 1; }
+    .catalog-disclosure[open] .catalog-summary { margin-bottom: 22px; }
+    .catalog-disclosure[open] .catalog-summary::after { content: '－'; }
+    .catalog-summary:hover { border-color: var(--teal); }
     .catalog-head {
       display: flex;
       align-items: center;
@@ -3466,7 +3489,637 @@
       .deck-home-btn { top: 14px; left: 14px; padding: 8px 14px 8px 10px; font-size: 11px; }
       .dhb-text { display: none; }
     }
-  </style>
+    /* Resume-first landing page; the original personal space remains Scene 2. */
+    .scene-1 {
+      --home-bg: #081522; --home-card: rgba(12,31,48,.82); --home-ink: #e4f2f2;
+      --home-muted: #8ea3b5; --home-line: rgba(100,255,218,.18); --home-blue: #64ffda;
+      color: var(--home-ink);
+      background:
+        linear-gradient(rgba(100,255,218,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,255,218,.025) 1px, transparent 1px),
+        radial-gradient(circle at 82% 9%, rgba(65,132,255,.16), transparent 30%),
+        radial-gradient(circle at 8% 35%, rgba(100,255,218,.10), transparent 28%), var(--home-bg);
+      background-size: 58px 58px, 58px 58px, auto, auto, auto;
+      scroll-behavior: smooth;
+    }
+    .scene-1 .scene-inner.home-inner { max-width: none; padding: 0; min-height: 100%; display: block; }
+    .home-nav {
+      position: sticky; top: 0; z-index: 40; height: 68px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 max(24px, calc((100vw - 1120px) / 2)); border-bottom: 1px solid var(--home-line);
+      background: rgba(8,21,34,.82); backdrop-filter: blur(18px);
+    }
+    .home-brand { color: var(--home-ink); font: 700 15px/1 var(--font-mono); letter-spacing: .16em; }
+    .home-nav-links { display: flex; align-items: center; gap: 25px; }
+    .home-nav-links a, .home-nav-links button {
+      padding: 8px 0; border: 0; background: none; color: var(--home-muted); font: 500 13px/1 var(--font-sans); cursor: pointer; transition: color .2s ease;
+    }
+    .home-nav-links a:hover, .home-nav-links button:hover { color: var(--home-blue); }
+    .home-nav-links .home-nav-space { padding: 9px 14px; border: 1px solid var(--home-line); border-radius: 3px; background: rgba(100,255,218,.06); color: var(--home-blue); }
+    .home-shell { width: min(1120px, calc(100% - 48px)); margin: 0 auto; }
+    .home-hero {
+      min-height: calc(100vh - 68px); display: grid; grid-template-columns: minmax(0,1fr) 340px; align-items: center;
+      gap: clamp(48px,8vw,110px); padding: 72px 0 84px;
+    }
+    .home-kicker { margin-bottom: 15px; color: var(--home-muted); font-size: clamp(16px,1.8vw,20px); }
+    .home-title { margin: 0 0 18px; color: var(--home-ink); font-size: clamp(54px,7vw,82px); font-weight: 760; line-height: .98; letter-spacing: -.055em; }
+    .s1-role.home-role { margin: 0 0 20px; color: var(--home-blue); font: 650 clamp(20px,2.4vw,29px)/1.35 var(--font-sans); letter-spacing: -.02em; text-transform: none; }
+    .home-summary { max-width: 650px; color: var(--home-muted); font-size: 17px; line-height: 1.85; }
+    .home-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .home-button {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px; border: 1px solid var(--home-line);
+      border-radius: 3px; background: rgba(12,31,48,.72); color: var(--home-ink); font-size: 14px; font-weight: 650; cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    button.home-button { font-family: var(--font-sans); }
+    .home-button:hover { transform: translateY(-2px); border-color: var(--home-blue); box-shadow: 0 10px 30px rgba(100,255,218,.10); }
+    .home-button.primary { border-color: var(--home-blue); background: var(--home-blue); color: #081522; }
+    .home-portrait {
+      position: relative; width: 100%; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border: 1px solid rgba(100,255,218,.42); border-radius: 4px; background: #10273a;
+      box-shadow: 16px 16px 0 rgba(100,255,218,.055), 0 28px 80px rgba(0,0,0,.34);
+    }
+    .home-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: saturate(.82) contrast(1.04); }
+    .home-portrait::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent 58%, rgba(8,21,34,.72)), repeating-linear-gradient(0deg, transparent 0 4px, rgba(100,255,218,.025) 4px 5px); pointer-events: none; }
+    .home-portrait::after { content: ''; position: absolute; inset: 12px; z-index: 2; border: 1px solid rgba(100,255,218,.24); clip-path: polygon(0 0,28px 0,28px 1px,1px 1px,1px 28px,0 28px,0 0,100% 0,100% 28px,99% 28px,99% 1px,calc(100% - 28px) 1px,calc(100% - 28px) 0,100% 0,100% 100%,calc(100% - 28px) 100%,calc(100% - 28px) 99%,99% 99%,99% calc(100% - 28px),100% calc(100% - 28px),100% 100%,0 100%,0 calc(100% - 28px),1px calc(100% - 28px),1px 99%,28px 99%,28px 100%,0 100%); }
+    .portrait-note { position: absolute; right: 20px; bottom: 18px; z-index: 3; color: var(--home-blue); font: 500 11px/1.4 var(--font-mono); letter-spacing: .08em; }
+    .home-section { padding: 104px 0; scroll-margin-top: 68px; }
+    .home-section + .home-section { border-top: 1px solid var(--home-line); }
+    .home-section-head { display: grid; grid-template-columns: 180px 1fr; gap: 32px; margin-bottom: 42px; }
+    .home-section-index { color: var(--home-blue); font: 600 12px/1.4 var(--font-mono); letter-spacing: .12em; }
+    .home-section-title { color: var(--home-ink); font-size: clamp(30px,4vw,44px); line-height: 1.08; letter-spacing: -.035em; }
+    .home-section-sub { max-width: 680px; margin-top: 12px; color: var(--home-muted); font-size: 15px; line-height: 1.75; }
+    .home-about-grid { display: grid; grid-template-columns: 180px 1fr; gap: 32px; }
+    .home-about-label { color: var(--home-muted); font: 600 12px/1.5 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+    .home-about-copy { max-width: 780px; color: var(--home-muted); font-size: 17px; line-height: 1.9; }
+    .home-about-copy strong { color: var(--home-ink); font-weight: 650; }
+    .home-skills { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
+    .home-tag { display: inline-flex; padding: 7px 11px; border: 1px solid var(--home-line); border-radius: 3px; background: rgba(100,255,218,.045); color: #9dc7c1; font: 500 12px/1 var(--font-mono); }
+    .home-projects { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+    .home-project-card {
+      display: flex; min-height: 370px; flex-direction: column; padding: 30px; border: 1px solid var(--home-line); border-radius: 20px;
+      background: linear-gradient(145deg,rgba(17,42,63,.94),rgba(9,25,39,.88)); box-shadow: 0 12px 44px rgba(0,0,0,.16); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .home-project-card:hover { transform: translateY(-5px); border-color: rgba(100,255,218,.52); box-shadow: 0 22px 58px rgba(0,0,0,.28); }
+    .home-project-card-wide { grid-column: 1 / -1; min-height: 0; }
+    .home-project-num { margin-bottom: 38px; color: var(--home-blue); font: 600 12px/1 var(--font-mono); }
+    .home-project-card h3 { max-width: 430px; margin-bottom: 14px; color: var(--home-ink); font-size: 24px; line-height: 1.35; letter-spacing: -.02em; }
+    .home-project-card p { color: var(--home-muted); font-size: 14px; line-height: 1.78; }
+    .home-project-points { display: grid; gap: 10px; margin-top: 18px; }
+    .home-project-points li { position: relative; padding-left: 16px; color: var(--home-muted); font-size: 13px; line-height: 1.7; }
+    .home-project-points li::before { content: '▸'; position: absolute; left: 0; color: var(--home-blue); }
+    .home-project-points strong { color: var(--home-ink); font-weight: 650; }
+    .home-project-card .home-skills { margin-top: 22px; }
+    .home-project-links { display: flex; gap: 16px; margin-top: auto; padding-top: 24px; }
+    .home-text-link { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: 0; background: none; color: var(--home-blue); font: 650 13px/1.2 var(--font-sans); cursor: pointer; }
+    .home-list { display: grid; gap: 14px; }
+    .home-list-item { display: grid; grid-template-columns: 180px 1fr; gap: 32px; padding: 26px 0; border-top: 1px solid var(--home-line); }
+    .home-list-item:first-child { border-top: 0; padding-top: 0; }
+    .home-list-meta { color: var(--home-muted); font: 500 12px/1.7 var(--font-mono); }
+    .home-list-body h3 { margin-bottom: 7px; color: var(--home-ink); font-size: 19px; line-height: 1.45; }
+    .home-list-body h3 a:hover { color: var(--home-blue); }
+    .home-list-body .eyebrow { margin-bottom: 9px; color: var(--home-blue); font-size: 13px; font-weight: 650; }
+    .home-list-body p { max-width: 760px; color: var(--home-muted); font-size: 14px; line-height: 1.75; }
+    .home-end { margin-top: 92px; padding: 56px; border: 1px solid rgba(100,255,218,.34); border-radius: 4px; background: linear-gradient(135deg,#102a3e,#0b1e2f); color: #fff; }
+    .home-end h2 { margin-bottom: 12px; font-size: clamp(30px,4vw,46px); letter-spacing: -.04em; }
+    .home-end p { max-width: 620px; color: #b9c2d2; line-height: 1.75; }
+    .home-end .home-actions { margin-top: 26px; }
+    .home-end .home-button { border-color: rgba(100,255,218,.28); background: transparent; color: #fff; }
+    .home-end .home-button.primary { border-color: var(--home-blue); background: var(--home-blue); color: #081522; }
+    .home-footer { padding: 34px 0 54px; color: var(--home-muted); font: 500 12px/1.6 var(--font-mono); }
+    .scene-1.active ~ .deck-arrow, .scene-1.active ~ .deck-dots { display: none; }
+    @media (max-width: 820px) {
+      .home-nav { padding: 0 20px; }
+      .home-nav-links a:not(.home-nav-resume) { display: none; }
+      .home-shell { width: min(100% - 36px,680px); }
+      .home-hero { grid-template-columns: 1fr; gap: 42px; padding: 52px 0 70px; }
+      .home-hero-copy { grid-row: 1; }
+      .home-portrait { width: min(72vw,300px); grid-row: 2; justify-self: center; }
+      .home-title { font-size: clamp(50px,15vw,72px); }
+      .home-section { padding: 76px 0; }
+      .home-section-head, .home-about-grid, .home-list-item { grid-template-columns: 1fr; gap: 12px; }
+      .home-projects { grid-template-columns: 1fr; }
+      .home-project-card-wide { grid-column: auto; }
+      .home-project-card { min-height: 340px; padding: 24px; }
+      .home-project-num { margin-bottom: 26px; }
+      .home-end { margin-top: 70px; padding: 34px 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .home-project-card, .home-button { transition: none; } }
+
+    /* Scene 2 — 连续浏览的个人内容页，沿用主页科技配色。 */
+    .scene-2 { background: #07131f; color: var(--text); scroll-behavior: smooth; }
+    .space-top {
+      position: sticky; top: 0; z-index: 45; height: 66px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 max(24px,calc((100vw - 1120px)/2)); border-bottom: 1px solid rgba(100,255,218,.14); background: rgba(7,19,31,.84); backdrop-filter: blur(18px);
+    }
+    .space-top button { padding: 8px 0; border: 0; background: none; color: var(--accent-primary); font: 600 13px/1 var(--font-mono); cursor: pointer; }
+    .space-top span { color: #60778a; font: 500 11px/1 var(--font-mono); letter-spacing: .14em; }
+    .scene-2 .scene-inner.s2-inner { max-width: none; padding: 0; display: block; }
+    .s2-hero {
+      min-height: min(760px, calc(100vh - 20px)); padding: 120px max(24px,calc((100vw - 1120px)/2)) 92px;
+      justify-content: center; border-bottom: 1px solid rgba(100,255,218,.15);
+      background: radial-gradient(circle at 72% 28%,rgba(83,128,255,.14),transparent 33%), radial-gradient(circle at 20% 64%,rgba(100,255,218,.09),transparent 28%);
+    }
+    .s2-header { width: 100%; max-width: 1120px; margin: 0 auto; text-align: left; }
+    .space-kicker { margin-bottom: 18px; color: var(--accent-primary); font: 600 12px/1.4 var(--font-mono); letter-spacing: .14em; }
+    .s2-title { font-size: clamp(48px,7vw,78px); line-height: 1; letter-spacing: -.05em; background: none; color: #eef8f7; -webkit-text-fill-color: currentColor; }
+    .s2-lead { max-width: 720px; margin-top: 24px; color: var(--text-dim); font-size: 17px; line-height: 1.85; }
+    .space-nav { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 54px; }
+    .space-nav a {
+      display: flex; align-items: center; gap: 18px; min-height: 72px; padding: 0 22px; border: 1px solid rgba(100,255,218,.16);
+      border-radius: 4px; background: rgba(13,34,52,.72); color: #d8e7e8; font-size: 15px; transition: border-color .2s,background .2s,transform .2s;
+    }
+    .space-nav a span { color: var(--accent-primary); font: 600 11px/1 var(--font-mono); }
+    .space-nav a:hover { transform: translateY(-2px); border-color: rgba(100,255,218,.5); background: rgba(19,47,67,.88); }
+    .s2-scroll-hint { margin-top: 42px; color: #60778a; font: 500 11px/1.4 var(--font-mono); letter-spacing: .12em; }
+    .s2-stage[hidden] { display: none !important; }
+    .s2-detail-wrap { width: min(1120px,calc(100% - 48px)); margin: 0 auto; padding: 0; min-height: 0; }
+    .s2-module { display: block; min-height: 0; padding: 110px 0; border-top: 1px solid rgba(100,255,218,.13); scroll-margin-top: 20px; }
+    .s2-module:first-of-type { border-top: 0; }
+    .s2-module-head {
+      display: grid; grid-template-columns: 180px 1fr; align-items: end; gap: 30px; margin-bottom: 10px; padding: 0;
+      border: 0; color: #eef8f7; font-size: clamp(30px,4vw,44px); font-weight: 700; line-height: 1.15; letter-spacing: -.035em;
+    }
+    .s2-module-no { align-self: center; color: var(--accent-primary); font: 600 12px/1.4 var(--font-mono); letter-spacing: .12em; }
+    .s2-module-icon { margin-right: 9px; color: var(--accent-primary); font-size: .45em; vertical-align: middle; }
+    .s2-module > .sec-intro { max-width: 700px; margin: 0 0 42px 210px; color: var(--text-dim); font-size: 15px; line-height: 1.7; }
+    .s2-module .hobby-card, .s2-module .reading-item, .s2-module .blog-item, .s2-module .resource-item,
+    .s2-module .catalog-section, .s2-module .mu-layout, .s2-module .gallery-empty {
+      border-color: rgba(100,255,218,.14); background-color: rgba(13,34,52,.72); box-shadow: 0 16px 50px rgba(0,0,0,.12);
+    }
+    .s2-module .hobby-card:hover, .s2-module .reading-item:hover, .s2-module .blog-item:hover, .s2-module .resource-item:hover { border-color: rgba(100,255,218,.42); }
+    .gallery-placeholders { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+    .gallery-placeholder { min-height: 220px; padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; border: 1px dashed rgba(100,255,218,.22); border-radius: 4px; background: linear-gradient(145deg,rgba(17,42,63,.76),rgba(9,25,39,.72)); }
+    .gallery-placeholder span { margin-bottom: auto; color: var(--accent-primary); font: 600 11px/1 var(--font-mono); }
+    .gallery-placeholder h3 { margin-bottom: 7px; color: #e3f0f1; font-size: 18px; }
+    .gallery-placeholder p { color: var(--text-dim); font-size: 13px; }
+    .s2-footer { width: min(1120px,calc(100% - 48px)); margin: 0 auto; padding: 60px 0 90px; border-top: 1px solid rgba(100,255,218,.15); }
+    .deck > .deck-arrow, .deck > .deck-dots { display: none !important; }
+    @media (max-width: 820px) {
+      .s2-hero { min-height: auto; padding: 92px 18px 70px; }
+      .space-nav { grid-template-columns: repeat(2,minmax(0,1fr)); margin-top: 38px; }
+      .space-nav a { min-height: 62px; padding: 0 14px; gap: 12px; font-size: 13px; }
+      .s2-detail-wrap { width: min(100% - 36px,680px); }
+      .s2-module { padding: 78px 0; }
+      .s2-module-head { grid-template-columns: 1fr; gap: 10px; }
+      .s2-module > .sec-intro { margin: 0 0 30px; }
+      .s2-footer { width: calc(100% - 36px); }
+      .gallery-placeholders { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 460px) { .space-nav { grid-template-columns: 1fr; } }
+
+    /* 2026 recruitment layout — light, compact and content-first. */
+    .scene-1 {
+      --home-bg: #fbfbfc;
+      --home-card: #ffffff;
+      --home-ink: #18181b;
+      --home-muted: #5f6068;
+      --home-line: #e4e4e7;
+      --home-blue: #202124;
+      color: var(--home-ink);
+      background:
+        radial-gradient(circle at 72% 29%, rgba(164, 177, 255, .18), transparent 28%),
+        radial-gradient(circle at 34% 44%, rgba(196, 224, 255, .22), transparent 30%),
+        #fbfbfc;
+    }
+    .home-nav {
+      height: 64px;
+      padding: 0 max(24px, calc((100vw - 1040px) / 2));
+      border-color: rgba(228, 228, 231, .86);
+      background: rgba(251, 251, 252, .9);
+      backdrop-filter: blur(16px);
+    }
+    .home-brand { color: #18181b; font-family: var(--font-sans); font-size: 14px; letter-spacing: .08em; }
+    .home-nav-links { gap: 28px; }
+    .home-nav-links a,
+    .home-nav-links button { color: #52525b; font-size: 14px; }
+    .home-nav-links a:hover,
+    .home-nav-links button:hover { color: #111113; }
+    .home-nav-links .home-nav-resume {
+      padding: 8px 14px;
+      border: 1px solid #d4d4d8;
+      border-radius: 999px;
+      background: #fff;
+      color: #27272a;
+    }
+    .home-nav-links .home-nav-space {
+      padding: 9px 15px;
+      border: 0;
+      border-radius: 999px;
+      background: #18181b;
+      color: #fff;
+    }
+    .home-shell { width: min(1040px, calc(100% - 48px)); }
+    .home-hero {
+      min-height: calc(100vh - 64px);
+      grid-template-columns: minmax(0, 1fr) 318px;
+      gap: clamp(54px, 8vw, 96px);
+      padding: 76px 0 82px;
+    }
+    .home-kicker { margin-bottom: 12px; color: #5f6068; font-size: 17px; }
+    .home-title {
+      margin-bottom: 14px;
+      color: #171719;
+      font-size: clamp(48px, 5.3vw, 66px);
+      font-weight: 760;
+      line-height: 1.04;
+      letter-spacing: -.055em;
+    }
+    .s1-role.home-role {
+      margin-bottom: 14px;
+      color: #3f3f46;
+      font-size: clamp(21px, 2.2vw, 27px);
+      font-weight: 520;
+      line-height: 1.38;
+    }
+    .home-summary { max-width: 610px; color: #55565e; font-size: 16px; line-height: 1.78; }
+    .home-actions { gap: 10px; margin-top: 24px; }
+    .home-button {
+      min-height: 42px;
+      padding: 0 18px;
+      border-color: #d9d9dd;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .9);
+      color: #27272a;
+      font-size: 13px;
+      box-shadow: none;
+    }
+    .home-button:hover { border-color: #a1a1aa; box-shadow: 0 8px 22px rgba(24, 24, 27, .08); }
+    .home-button.primary { border-color: #18181b; background: #18181b; color: #fff; }
+    .home-portrait {
+      width: 318px;
+      aspect-ratio: 4 / 4.8;
+      border-color: #dedee2;
+      border-radius: 14px;
+      background: #f1f1f3;
+      box-shadow: 0 18px 42px rgba(24, 24, 27, .13);
+    }
+    .home-portrait img { filter: none; }
+    .home-portrait::before,
+    .home-portrait::after,
+    .portrait-note { display: none; }
+    .home-section { padding: 82px 0; scroll-margin-top: 64px; }
+    .home-section + .home-section { border-color: #e7e7ea; }
+    .home-section-head { grid-template-columns: 124px 1fr; gap: 28px; margin-bottom: 34px; }
+    .home-section-index { color: #8a8a92; font-family: var(--font-sans); font-size: 11px; letter-spacing: .09em; }
+    .home-section-title { color: #18181b; font-size: clamp(29px, 3.2vw, 38px); letter-spacing: -.035em; }
+    .home-section-sub { margin-top: 9px; color: #71717a; font-size: 14px; line-height: 1.7; }
+    .home-about-grid { grid-template-columns: 124px 1fr; gap: 28px; }
+    .home-about-label { color: #929298; font-family: var(--font-sans); font-size: 11px; }
+    .home-about-copy { max-width: 790px; color: #52525b; font-size: 16px; line-height: 1.82; }
+    .home-about-copy strong { color: #202024; }
+    .home-skills { gap: 8px; margin-top: 22px; }
+    .home-tag {
+      padding: 7px 11px;
+      border-color: #e1e1e5;
+      border-radius: 6px;
+      background: #f5f5f6;
+      color: #505058;
+      font-family: var(--font-sans);
+      font-size: 12px;
+    }
+    .home-projects { gap: 16px; }
+    .home-project-card {
+      min-height: 0;
+      padding: 26px;
+      border-color: #e1e1e5;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 6px 20px rgba(24, 24, 27, .045);
+    }
+    .home-project-card:hover { transform: translateY(-3px); border-color: #c8c8ce; box-shadow: 0 14px 34px rgba(24, 24, 27, .08); }
+    .home-project-num { margin-bottom: 18px; color: #888890; font-family: var(--font-sans); font-size: 11px; letter-spacing: .04em; }
+    .home-project-card h3 { max-width: 620px; margin-bottom: 10px; color: #202024; font-size: 20px; line-height: 1.4; }
+    .home-project-card p { color: #65656e; font-size: 13px; line-height: 1.72; }
+    .home-project-points { gap: 7px; margin-top: 14px; }
+    .home-project-points li { color: #5f6068; font-size: 12.5px; line-height: 1.68; }
+    .home-project-points li::before { color: #8b8b93; }
+    .home-project-points strong { color: #242429; }
+    .home-project-card .home-skills { margin-top: 18px; }
+    .home-project-links { padding-top: 18px; }
+    .home-text-link { color: #27272a; font-size: 13px; }
+    .home-list { gap: 0; }
+    .home-list-item { grid-template-columns: 124px 1fr; gap: 28px; padding: 24px 0; border-color: #e4e4e7; }
+    .home-list-meta { color: #8c8c94; font-family: var(--font-sans); font-size: 11px; }
+    .home-list-body h3 { color: #202024; font-size: 18px; }
+    .home-list-body .eyebrow { color: #606069; font-size: 12px; }
+    .home-list-body p { color: #65656e; font-size: 13.5px; }
+    .home-end {
+      margin-top: 68px;
+      padding: 42px;
+      border-color: #e0e0e4;
+      border-radius: 14px;
+      background: #f3f3f5;
+      color: #18181b;
+    }
+    .home-end h2 { font-size: clamp(27px, 3.3vw, 38px); }
+    .home-end p { color: #61616a; }
+    .home-end .home-button { border-color: #d4d4d8; background: #fff; color: #27272a; }
+    .home-end .home-button.primary { border-color: #18181b; background: #18181b; color: #fff; }
+    .home-footer { color: #909098; font-family: var(--font-sans); }
+
+    .scene-2 {
+      --bg: #fbfbfc;
+      --bg2: #f5f5f6;
+      --bg3: #e4e4e7;
+      --text: #232328;
+      --text-dim: #686871;
+      --accent-primary: #202124;
+      --teal: #202124;
+      color: #232328;
+      background: #fbfbfc;
+    }
+    .space-top {
+      height: 64px;
+      padding: 0 max(24px, calc((100vw - 1040px) / 2));
+      border-color: #e6e6e9;
+      background: rgba(251, 251, 252, .9);
+    }
+    .space-top button { color: #222226; font-family: var(--font-sans); font-size: 13px; }
+    .space-top span { color: #929298; font-family: var(--font-sans); }
+    .s2-hero {
+      min-height: auto;
+      padding: 86px max(24px, calc((100vw - 1040px) / 2)) 76px;
+      border-color: #e7e7ea;
+      background:
+        radial-gradient(circle at 78% 28%, rgba(170, 183, 255, .2), transparent 26%),
+        radial-gradient(circle at 28% 74%, rgba(201, 226, 255, .24), transparent 30%),
+        #fbfbfc;
+    }
+    .s2-header { max-width: 1040px; }
+    .space-kicker { margin-bottom: 12px; color: #7c7c84; font-family: var(--font-sans); font-size: 11px; }
+    .s2-title { color: #18181b; -webkit-text-fill-color: currentColor; font-size: clamp(40px, 5vw, 56px); }
+    .s2-lead { max-width: 650px; margin-top: 18px; color: #61616a; font-size: 15px; line-height: 1.78; }
+    .space-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 36px; }
+    .space-nav a {
+      min-height: 58px;
+      padding: 0 17px;
+      border-color: #e0e0e4;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .82);
+      color: #38383e;
+      font-size: 13px;
+      box-shadow: 0 4px 14px rgba(24, 24, 27, .035);
+    }
+    .space-nav a span { color: #929298; font-family: var(--font-sans); }
+    .space-nav a:hover { border-color: #bfbfc5; background: #fff; }
+    .s2-scroll-hint { margin-top: 28px; color: #9a9aa1; font-family: var(--font-sans); }
+    .s2-detail-wrap { width: min(1040px, calc(100% - 48px)); }
+    .s2-module { padding: 76px 0; border-color: #e7e7ea; }
+    .s2-module-head {
+      grid-template-columns: 124px 1fr;
+      gap: 28px;
+      margin-bottom: 8px;
+      color: #18181b;
+      font-size: clamp(28px, 3.2vw, 38px);
+    }
+    .s2-module-no { color: #8a8a92; font-family: var(--font-sans); font-size: 11px; }
+    .s2-module-icon { color: #898990; }
+    .s2-module > .sec-intro { margin: 0 0 32px 152px; color: #71717a; font-size: 14px; }
+    .s2-module .hobby-card,
+    .s2-module .reading-item,
+    .s2-module .blog-item,
+    .s2-module .resource-item,
+    .s2-module .catalog-section,
+    .s2-module .mu-layout,
+    .s2-module .gallery-empty {
+      border-color: #e1e1e5;
+      background-color: #fff;
+      box-shadow: 0 5px 18px rgba(24, 24, 27, .045);
+    }
+    .s2-module .hobby-card:hover,
+    .s2-module .reading-item:hover,
+    .s2-module .blog-item:hover,
+    .s2-module .resource-item:hover { border-color: #c6c6cc; }
+    .gallery-placeholder {
+      min-height: 180px;
+      padding: 20px;
+      border-color: #d8d8dd;
+      border-radius: 12px;
+      background: #f6f6f7;
+    }
+    .gallery-placeholder span { color: #898990; }
+    .gallery-placeholder h3 { color: #25252a; }
+    .gallery-placeholder p { color: #71717a; }
+    .catalog-summary { border-color: #dedee3; background: #f6f6f7; color: #38383e; }
+    .catalog-summary:hover { border-color: #bdbdc4; }
+    .s2-footer { width: min(1040px, calc(100% - 48px)); border-color: #e5e5e8; }
+
+    @media (max-width: 820px) {
+      .home-nav { padding: 0 18px; }
+      .home-nav-links { gap: 10px; }
+      .home-nav-links .home-nav-resume { display: none; }
+      .home-shell { width: min(100% - 36px, 680px); }
+      .home-hero { grid-template-columns: 1fr; gap: 34px; padding: 54px 0 64px; }
+      .home-title { font-size: clamp(44px, 13vw, 58px); }
+      .home-portrait { width: min(68vw, 272px); grid-row: 2; justify-self: start; }
+      .home-section { padding: 62px 0; }
+      .home-section-head,
+      .home-about-grid,
+      .home-list-item { grid-template-columns: 1fr; gap: 10px; }
+      .home-projects { grid-template-columns: 1fr; }
+      .home-project-card { min-height: 0; padding: 22px; }
+      .home-end { margin-top: 52px; padding: 30px 24px; }
+      .s2-hero { padding: 64px 18px 54px; }
+      .space-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 30px; }
+      .s2-detail-wrap { width: min(100% - 36px, 680px); }
+      .s2-module { padding: 60px 0; }
+      .s2-module-head { grid-template-columns: 1fr; gap: 8px; }
+      .s2-module > .sec-intro { margin: 0 0 26px; }
+      .gallery-placeholders { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 460px) {
+      .home-nav-links a:not(.home-nav-space), .home-nav-links button:not(.home-nav-space) { display: none; }
+      .home-summary { font-size: 15px; }
+      .home-actions { align-items: stretch; }
+      .home-button { min-height: 40px; padding: 0 15px; }
+      .space-nav { grid-template-columns: 1fr; }
+    }
+
+    /* Closer alignment with the reference site's sizing and motion system. */
+    .scene { animation: sceneIn .38s cubic-bezier(.4, 0, .2, 1); }
+    .scene-1,
+    .scene-2,
+    .home-nav,
+    .space-top,
+    .home-project-card,
+    .home-tag,
+    .home-button,
+    .space-nav a { transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease; }
+    @keyframes sceneIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .home-shell { width: min(1120px, calc(100% - 48px)); }
+    .scene-1 section,
+    .scene-2 section { margin-bottom: 0; }
+    .home-hero,
+    #about,
+    #publications,
+    #experience,
+    .home-footer { width: min(1024px, 100%); margin-left: auto; margin-right: auto; }
+    .home-section + .home-section { border-top: 0; }
+    .home-section { padding: 128px 0; }
+    .home-section-head { display: block; margin-bottom: 58px; text-align: center; }
+    .home-section-index { display: none; }
+    .home-section-sub { margin: 11px auto 0; }
+    .home-about-grid { display: flex; max-width: 672px; margin: 0 auto; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+    .home-about-photo {
+      width: 112px;
+      height: 112px;
+      overflow: hidden;
+      flex: 0 0 auto;
+      border: 2px solid #e5e5e5;
+      border-radius: 50%;
+    }
+    .home-about-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+    .home-about-copy { font-size: 16px; line-height: 1.78; }
+    .home-about-grid .home-skills { justify-content: center; }
+    #projects { width: 100%; }
+    .home-projects { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
+    .home-project-card,
+    .home-project-card-wide {
+      grid-column: auto;
+      min-width: 0;
+      min-height: 520px;
+      padding: 24px;
+      overflow: hidden;
+      border-radius: 12px;
+      transition: transform .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s cubic-bezier(.4, 0, .2, 1), border-color .3s ease;
+    }
+    .home-project-card::before {
+      content: '';
+      display: block;
+      height: 146px;
+      margin: -24px -24px 22px;
+      flex: 0 0 auto;
+      border-bottom: 1px solid #e7e7ea;
+      background:
+        radial-gradient(circle at 28% 30%, rgba(255,255,255,.9) 0 2px, transparent 3px),
+        linear-gradient(135deg, rgba(168,190,255,.9), rgba(220,231,255,.55) 42%, rgba(191,227,219,.75));
+      background-size: 34px 34px, auto;
+    }
+    .home-project-card:nth-child(2)::before {
+      background:
+        linear-gradient(145deg, transparent 38%, rgba(255,255,255,.62) 38% 43%, transparent 43%),
+        linear-gradient(135deg, #c8ddff, #e7eefc 48%, #d1eadf);
+    }
+    .home-project-card:nth-child(3)::before {
+      background:
+        radial-gradient(circle at 66% 44%, rgba(255,255,255,.82) 0 18%, transparent 19%),
+        linear-gradient(135deg, #d9d3ff, #edf0ff 50%, #c9e6e2);
+    }
+    .home-project-card:hover { transform: translateY(-4px); box-shadow: 0 18px 38px rgba(24,24,27,.12); }
+    .home-project-card h3 { font-size: 18px; line-height: 1.55; }
+    .home-project-card p { font-size: 13px; line-height: 1.65; }
+    .home-project-points li { font-size: 12px; line-height: 1.62; }
+    .home-project-num { margin-bottom: 14px; }
+    .home-project-card .home-skills { margin-top: 16px; }
+    .home-project-card .home-tag { padding: 6px 9px; font-size: 11px; }
+    .home-list-item { transition: transform .3s ease, background-color .3s ease; }
+    .home-list-item:hover { transform: translateX(4px); }
+    .home-theme-toggle {
+      display: inline-grid;
+      width: 32px;
+      height: 32px;
+      padding: 0 !important;
+      place-items: center;
+      border: 0 !important;
+      border-radius: 50%;
+      background: transparent !important;
+      color: #3f3f46 !important;
+      font-size: 17px !important;
+      transition: background-color .2s ease, transform .2s ease !important;
+    }
+    .home-theme-toggle:hover { background: #eeeeef !important; transform: rotate(18deg); }
+    .home-nav.is-scrolled,
+    .space-top.is-scrolled { box-shadow: 0 8px 28px rgba(24, 24, 27, .06); }
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1);
+    }
+    .reveal-item.is-visible { opacity: 1; transform: translateY(0); }
+    .home-project-card.reveal-item:nth-child(2) { transition-delay: .08s; }
+    .home-project-card.reveal-item:nth-child(3) { transition-delay: .16s; }
+
+    body.theme-dark .scene-1,
+    body.theme-dark .scene-2 { background: #111214; color: #ededee; }
+    body.theme-dark .scene-1 {
+      --home-bg: #111214; --home-card: #191a1d; --home-ink: #f4f4f5;
+      --home-muted: #aaaab2; --home-line: #303137; --home-blue: #f4f4f5;
+      background: radial-gradient(circle at 72% 29%, rgba(84,94,142,.2), transparent 28%), #111214;
+    }
+    body.theme-dark .home-nav,
+    body.theme-dark .space-top { border-color: #2c2d31; background: rgba(17,18,20,.88); }
+    body.theme-dark .home-nav.is-scrolled,
+    body.theme-dark .space-top.is-scrolled { box-shadow: 0 8px 28px rgba(0, 0, 0, .22); }
+    body.theme-dark .home-brand,
+    body.theme-dark .home-nav-links a,
+    body.theme-dark .home-nav-links button,
+    body.theme-dark .home-title,
+    body.theme-dark .s1-role.home-role,
+    body.theme-dark .home-section-title,
+    body.theme-dark .home-project-card h3,
+    body.theme-dark .home-list-body h3,
+    body.theme-dark .home-project-points strong,
+    body.theme-dark .home-about-copy strong,
+    body.theme-dark .s2-title,
+    body.theme-dark .s2-module-head { color: #f4f4f5; }
+    body.theme-dark .home-nav-links .home-nav-space,
+    body.theme-dark .home-button.primary { border-color: #f4f4f5; background: #f4f4f5; color: #18181b; }
+    body.theme-dark .home-nav-links .home-nav-resume,
+    body.theme-dark .home-button,
+    body.theme-dark .home-project-card,
+    body.theme-dark .space-nav a,
+    body.theme-dark .s2-module .hobby-card,
+    body.theme-dark .s2-module .reading-item,
+    body.theme-dark .s2-module .blog-item,
+    body.theme-dark .s2-module .resource-item { border-color: #303137; background: #191a1d; color: #e4e4e7; }
+    body.theme-dark .home-summary,
+    body.theme-dark .home-kicker,
+    body.theme-dark .home-about-copy,
+    body.theme-dark .home-project-card p,
+    body.theme-dark .home-project-points li,
+    body.theme-dark .home-list-body p,
+    body.theme-dark .home-section-sub,
+    body.theme-dark .s2-lead,
+    body.theme-dark .s2-module > .sec-intro { color: #aaaab2; }
+    body.theme-dark .home-project-num,
+    body.theme-dark .home-list-body .eyebrow { color: #92929a; }
+    body.theme-dark .home-tag { border-color: #35363b; background: #242529; color: #c7c7cc; }
+    body.theme-dark .home-about-photo { border-color: #34353a; }
+    body.theme-dark .home-end { border-color: #303137; background: #191a1d; color: #f4f4f5; }
+    body.theme-dark .home-end p { color: #aaaab2; }
+    body.theme-dark .home-theme-toggle { color: #f4f4f5 !important; }
+    body.theme-dark .home-theme-toggle:hover { background: #292a2e !important; }
+    body.theme-dark .scene-2 {
+      --bg: #111214; --bg2: #191a1d; --bg3: #303137; --text: #ededee;
+      --text-dim: #aaaab2; --accent-primary: #ededee; --teal: #ededee;
+    }
+    body.theme-dark .s2-hero { border-color: #2c2d31; background: radial-gradient(circle at 75% 25%, rgba(84,94,142,.2), transparent 28%), #111214; }
+
+    @media (max-width: 980px) {
+      .home-projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .home-project-card:nth-child(3) { grid-column: 1 / -1; min-height: 430px; }
+    }
+    @media (max-width: 820px) {
+      .home-section { padding: 80px 0; }
+      .home-section-head { margin-bottom: 38px; }
+      .home-projects { grid-template-columns: 1fr; }
+      .home-project-card:nth-child(3) { grid-column: auto; }
+      .home-project-card, .home-project-card-wide { min-height: 0; }
+      .home-project-card::before { height: 124px; }
+      .home-theme-toggle { display: inline-grid !important; }
+    }
+    @media (max-width: 460px) {
+      .home-nav-links .home-theme-toggle { display: inline-grid !important; }
+      .home-about-photo { width: 96px; height: 96px; }
+      .home-section { padding: 68px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-item { opacity: 1; transform: none; transition: none; }
+    }
+</style>
 </head>
 <body>
 
@@ -3515,8 +4168,103 @@
 <!-- ==================== Deck (Scene 1 / 2 / 3) ==================== -->
 <div class="deck" id="deck">
 
-  <!-- ════════════════ SCENE 1: 核心简历 ════════════════ -->
+  <!-- ════════════════ SCENE 1: 简历型主页 ════════════════ -->
   <section class="scene scene-1 active" data-scene="1">
+    <div class="scene-inner home-inner">
+      <header class="home-nav">
+        <a class="home-brand" href="#home" data-home-jump="home">ZLH</a>
+        <nav class="home-nav-links" aria-label="主页导航">
+          <a href="#about" data-home-jump="about">关于</a><a href="#projects" data-home-jump="projects">项目</a><a href="#publications" data-home-jump="publications">论文</a><a href="#experience" data-home-jump="experience">经历</a>
+          <a class="home-nav-resume" href="resume.pdf" target="_blank" rel="noopener">简历 PDF</a>
+          <button class="home-nav-space" type="button" data-goto-scene="2">个人空间 ↗</button>
+          <button class="home-theme-toggle" type="button" id="home-theme-toggle" aria-label="切换深浅色主题" title="切换深浅色主题">◐</button>
+        </nav>
+      </header>
+      <main class="home-shell" id="home">
+        <section class="home-hero">
+          <div class="home-hero-copy">
+            <p class="home-kicker">你好，我是</p>
+            <h1 class="home-title">庄赖宏</h1>
+            <div class="s1-role home-role">AI 应用开发 × 生成式模型 × Agent</div>
+            <p class="home-summary">大连理工大学硕士，期待成为 AI 应用开发工程师。具备生成式模型微调、水文时序建模与 Agent 工作流实践，能够从业务需求出发完成数据集、模型、接口与部署的完整交付。</p>
+            <div class="home-actions">
+              <a class="home-button primary" href="mailto:zlh994182204@163.com">联系我</a>
+              <a class="home-button" href="resume.pdf" target="_blank" rel="noopener">查看简历 PDF ↗</a>
+              <a class="home-button" href="https://github.com/zhuanglaihong" target="_blank" rel="noopener">GitHub ↗</a>
+            </div>
+          </div>
+          <div class="home-portrait"><img src="./assets/profile.jpg" alt="庄赖宏" width="1938" height="2584" /><span class="portrait-note">PROFILE / ZLH / 2026</span></div>
+        </section>
+
+        <section class="home-section" id="about">
+          <div class="home-section-head"><div class="home-section-index">01 / ABOUT</div><div><h2 class="home-section-title">关于我</h2><p class="home-section-sub">把研究问题做成能运行、能验证、能交付的系统。</p></div></div>
+          <div class="home-about-grid">
+            <div class="home-about-photo"><img src="./assets/profile.jpg" alt="庄赖宏" /></div>
+            <div>
+              <p class="home-about-copy">本科毕业于<strong>大连理工大学人工智能专业</strong>，目前攻读<strong>智慧城市建造与管理硕士</strong>学位。具备扎实的 Python、C/C++ 与深度学习基础，熟悉 PyTorch、Transformer、LSTM 和 Seq2Seq 等模型与框架；具有 SDXL、FLUX 的 LoRA 微调、图文数据集构建、模型评测及 ComfyUI 推理工作流实践。同时熟悉 LLM Agent、RAG、MCP 与工具调用，能够使用 FastAPI、Docker 和 Linux 完成模型接口开发、系统联调与服务化部署。</p>
+              <div class="home-skills" aria-label="技能标签"><span class="home-tag">Python / C++</span><span class="home-tag">PyTorch</span><span class="home-tag">SDXL / FLUX</span><span class="home-tag">Diffusers / LoRA</span><span class="home-tag">Transformer</span><span class="home-tag">LLM / Agent</span><span class="home-tag">RAG / MCP</span><span class="home-tag">Harness Engineering</span><span class="home-tag">SFT / RLHF</span><span class="home-tag">FastAPI / Docker</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="home-section" id="projects">
+          <div class="home-section-head"><div class="home-section-index">02 / PROJECTS</div><div><h2 class="home-section-title">代表项目</h2><p class="home-section-sub">生成式 AI、时序建模与智能体研究，从实验验证推进到业务交付。</p></div></div>
+          <div class="home-projects">
+            <article class="home-project-card home-project-card-wide">
+              <div class="home-project-num">INTERNSHIP 01 · 2026.06—2026.09</div><h3>文本剧本生成无人机表演线稿工作流</h3>
+              <p>在深圳大漠大智控产品研发部探索“文本剧本 → 简笔线稿 → 无人机散点图”的自动化制作流程。</p>
+              <ul class="home-project-points">
+                <li>独立整理、筛选并标注<strong>1206 组图文数据</strong>，覆盖人物、物品和场景，并编写英文文本描述。</li>
+                <li>分别对 SDXL 与 FLUX 进行<strong>LoRA 微调</strong>和同条件评测，最终选择线稿一致性与结构稳定性更好的 SDXL。</li>
+                <li>针对过拟合、断线和结构缺失迭代数据、参数与提示词，交付 LoRA 权重及<strong>ComfyUI 推理工作流</strong>。</li>
+                <li>接入已有布点算法，完成从文本输入到散点图输出的<strong>端到端可行性验证</strong>。</li>
+              </ul>
+              <div class="home-skills"><span class="home-tag">Python</span><span class="home-tag">SDXL</span><span class="home-tag">FLUX</span><span class="home-tag">Diffusers</span><span class="home-tag">LoRA</span><span class="home-tag">ComfyUI</span></div>
+            </article>
+            <article class="home-project-card">
+              <div class="home-project-num">PROJECT 02 · MODEL & DELIVERY</div><h3>内蒙古少资料流域洪水预报</h3>
+              <p>完成大样本数据集、模型迁移训练与山洪监测预警平台服务化交付。</p>
+              <ul class="home-project-points">
+                <li>整合<strong>800+ 国内外流域</strong>公开数据和内蒙古 46 个目标流域专项数据。</li>
+                <li>设计三种迁移方案；联合微调在 26 个少资料流域取得平均 <strong>NSE 0.83</strong>，较物理模型基线提高 0.22。</li>
+                <li>负责 FastAPI、Docker 与前端联调，支持模型集成至山洪监测预警平台。</li>
+              </ul>
+              <div class="home-skills"><span class="home-tag">LSTM</span><span class="home-tag">Encoder-Decoder</span><span class="home-tag">迁移学习</span><span class="home-tag">FastAPI</span><span class="home-tag">Docker</span></div>
+              <div class="home-project-links"><a class="home-text-link" href="https://gitcode.com/dlut-water/llm-backend" target="_blank" rel="noopener">查看项目 ↗</a></div>
+            </article>
+            <article class="home-project-card">
+              <div class="home-project-num">RESEARCH 03 · AGENTIC HYDROLOGY</div><h3>HydroClaw 水文模型率定智能体</h3>
+              <p>将领域经验封装为可复用 Skill，由 LLM 协调数据检查、模型率定和结果评估，实现自然语言驱动、可追踪且可复现的自动化水文建模流程。</p>
+              <ul class="home-project-points"><li>围绕<strong>技能编排</strong>组织领域知识与工具能力。</li><li>覆盖数据检查、参数率定、结果评估与实验记录全流程。</li><li>成果形成<strong>一区论文一作</strong>，目前审稿中。</li></ul>
+              <div class="home-skills"><span class="home-tag">LLM Agent</span><span class="home-tag">Skill</span><span class="home-tag">Tool Use</span><span class="home-tag">Hydrological Modeling</span></div>
+              <div class="home-project-links"><button type="button" class="home-text-link proj-demo-btn" data-demo="hydroagent">在线演示 ↗</button><a class="home-text-link" href="https://github.com/zhuanglaihong/hydroclaw" target="_blank" rel="noopener">源代码 ↗</a></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="home-section" id="publications">
+          <div class="home-section-head"><div class="home-section-index">03 / PUBLICATIONS</div><div><h2 class="home-section-title">研究与论文</h2><p class="home-section-sub">聚焦大模型驱动的水文建模与科研工作流自动化。</p></div></div>
+          <div class="home-list">
+            <article class="home-list-item"><div class="home-list-meta">UNDER REVIEW<br>FIRST AUTHOR</div><div class="home-list-body"><h3>An LLM-powered Agentic Framework for Automated Hydrological Model Calibration with Structured Domain Knowledge</h3><p class="eyebrow">一区论文 · 一作 · 审稿中</p><p>构建基于技能编排的水文模型率定智能体，将领域经验封装为可复用 Skill，由 LLM 协调数据检查、模型率定与结果评估。</p></div></article>
+          </div>
+        </section>
+
+        <section class="home-section" id="experience">
+          <div class="home-section-head"><div class="home-section-index">04 / EXPERIENCE</div><div><h2 class="home-section-title">经历</h2><p class="home-section-sub">人工智能科班训练，从生成式模型到智慧水利的真实业务场景。</p></div></div>
+          <div class="home-list">
+            <article class="home-list-item"><div class="home-list-meta">2026.06—2026.09<br>INTERNSHIP</div><div class="home-list-body"><h3>深圳大漠大智控技术有限公司</h3><p class="eyebrow">产品研发部 · AI 应用实习生</p><p>负责无人机表演文生线稿方案的数据集构建、SDXL / FLUX LoRA 微调、效果优化和 ComfyUI 推理工作流交付。</p></div></article>
+            <article class="home-list-item"><div class="home-list-meta">2024.09—至今<br>MASTER</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">智慧城市建造与管理 · 硕士</p><p>开展 LLM 与水文模型结合的科研工作，参与实验室项目研发，并在国际期刊发表相关论文。</p></div></article>
+            <article class="home-list-item"><div class="home-list-meta">2020.09—2024.06<br>BACHELOR</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">人工智能 · 本科</p><p>主修深度学习、模式识别与机器学习、智能机器人、嵌入式开发、自然语言处理、知识工程和计算机视觉。</p></div></article>
+          </div>
+          <div class="home-end"><h2>继续了解我</h2><p>履历之外，我也在持续记录读书、技术随笔、旅行和音乐。可以进入个人空间继续逛逛，或者直接通过邮件联系我。</p><div class="home-actions"><button class="home-button primary" type="button" data-goto-scene="2">进入个人空间 ↗</button><a class="home-button" href="mailto:zlh994182204@163.com">发送邮件</a></div></div>
+        </section>
+        <footer class="home-footer">© 2026 庄赖宏 · Built for the open web.</footer>
+      </main>
+    </div>
+  </section>
+
+  <!-- 旧 Tab 简历结构保留在源码中，便于回退和内容核对。 -->
+  <section class="legacy-resume" hidden>
     <div class="scene-inner s1-inner">
 
       <!-- 中心 hero 区(头像 + 名字) -->
@@ -3702,70 +4450,80 @@
 
   <!-- ════════════════ SCENE 2: 体系架构(3D 星图) ════════════════ -->
   <section class="scene scene-2" data-scene="2">
+    <header class="space-top"><button type="button" data-goto-scene="1">← ZLH / 核心简历</button><span>PERSONAL SPACE</span></header>
     <div class="scene-inner s2-inner">
 
-      <!-- 上半屏:星图 hero -->
+      <!-- 上半屏:个人空间导览 -->
       <div class="s2-hero" id="s2-hero">
         <div class="s2-header">
+          <div class="space-kicker">BEYOND THE RESUME · 个人档案</div>
           <div class="s2-title">个人空间</div>
+          <p class="s2-lead">这里放履历之外的我：正在形成的兴趣、读过的书、写下的技术思考、看过的风景，以及长期积累的资源与音乐。</p>
+          <nav class="space-nav" aria-label="个人空间模块导航">
+            <a href="#2/hobbies" data-space-jump="hobbies"><span>01</span>兴趣爱好</a>
+            <a href="#2/reading" data-space-jump="reading"><span>02</span>读书见闻</a>
+            <a href="#2/blog" data-space-jump="blog"><span>03</span>技术随笔</a>
+            <a href="#2/gallery" data-space-jump="gallery"><span>04</span>旅行摄影</a>
+            <a href="#2/resources" data-space-jump="resources"><span>05</span>资源收藏</a>
+            <a href="#2/music" data-space-jump="music"><span>06</span>私人电台</a>
+          </nav>
         </div>
-        <div class="s2-stage" id="s2-stage">
+        <div class="s2-stage" id="s2-stage" hidden>
           <canvas id="s2-canvas"></canvas>
           <div class="s2-mobile-grid" id="s2-mobile-grid"><!-- mobile fallback,JS 挂载 --></div>
           <div class="s2-tooltip" id="s2-tooltip"></div>
         </div>
-        <div class="s2-scroll-hint">点击节点 ↓ 查看详情</div>
+        <div class="s2-scroll-hint">向下浏览全部内容 ↓</div>
       </div>
 
       <!-- 下半屏:模块详情(内联展示) -->
       <div class="s2-detail-wrap" id="s2-detail-wrap">
-        <div class="s2-detail-empty" id="s2-detail-empty">
-          <div class="s2-de-icon">✦</div>
-          <div class="s2-de-text">点击上方星图任一节点 · 详情会在这里展开</div>
-        </div>
-        <div class="s2-module" data-module="hobbies" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">◆</span>兴趣爱好</header>
+        <div class="s2-detail-empty" id="s2-detail-empty" hidden></div>
+        <div class="s2-module" data-module="hobbies">
+          <header class="s2-module-head"><span class="s2-module-no">01 / HOBBIES</span><span><span class="s2-module-icon">◆</span>兴趣爱好</span></header>
           <p class="sec-intro">职业之外,这些让我成为我。</p>
           <div class="hobbies-grid" id="hobbies-list"></div>
         </div>
-        <div class="s2-module" data-module="reading" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">◈</span>读书见闻</header>
+        <div class="s2-module" data-module="reading">
+          <header class="s2-module-head"><span class="s2-module-no">02 / READING</span><span><span class="s2-module-icon">◈</span>读书见闻</span></header>
           <p class="sec-intro">最近读过的、还在反刍的、想推荐给你的。</p>
           <div class="reading-list" id="reading-list"></div>
-          <div class="catalog-section" id="book-catalog">
+          <details class="catalog-section catalog-disclosure" id="book-catalog">
+            <summary class="catalog-summary">展开完整书单</summary>
             <div class="catalog-head">
               <span class="catalog-head-title">完整书单</span>
               <div class="catalog-tabs" id="book-catalog-tabs"></div>
             </div>
             <div class="catalog-book-table" id="catalog-book-table"></div>
-          </div>
+          </details>
         </div>
-        <div class="s2-module" data-module="blog" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">◉</span>博客 · 技术随笔</header>
+        <div class="s2-module" data-module="blog">
+          <header class="s2-module-head"><span class="s2-module-no">03 / WRITING</span><span><span class="s2-module-icon">◉</span>博客 · 技术随笔</span></header>
           <p class="sec-intro">想清楚一件事,就写下来 —— 给自己,也给可能路过的你。</p>
           <div class="blog-list" id="blog-list"></div>
         </div>
-        <div class="s2-module" data-module="gallery" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">◎</span>旅行 · 摄影</header>
+        <div class="s2-module" data-module="gallery">
+          <header class="s2-module-head"><span class="s2-module-no">04 / MOMENTS</span><span><span class="s2-module-icon">◎</span>旅行 · 摄影</span></header>
           <p class="sec-intro">一些值得停下来看的瞬间。</p>
           <div class="gallery-grid" id="gallery-list"></div>
         </div>
-        <div class="s2-module" data-module="resources" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">⌬</span>我的资源</header>
+        <div class="s2-module" data-module="resources">
+          <header class="s2-module-head"><span class="s2-module-no">05 / RESOURCES</span><span><span class="s2-module-icon">⌬</span>我的资源</span></header>
           <p class="sec-intro">书籍 PDF、好用网站、值得反复读的论文 —— 学习路上收藏的入口。</p>
           <div class="resources-list" id="resources-list"></div>
         </div>
-        <div class="s2-module" data-module="music" hidden>
-          <header class="s2-module-head"><span class="s2-module-icon">♪</span>私人电台</header>
+        <div class="s2-module" data-module="music">
+          <header class="s2-module-head"><span class="s2-module-no">06 / LISTENING</span><span><span class="s2-module-icon">♪</span>私人电台</span></header>
           <p class="sec-intro">深夜耳机里反复播放的、想分享给路过的你。</p>
           <div class="music-list" id="music-list"></div>
-          <div class="catalog-section" id="music-catalog">
+          <details class="catalog-section catalog-disclosure" id="music-catalog">
+            <summary class="catalog-summary">展开完整曲库 <span id="music-catalog-count-summary"></span></summary>
             <div class="catalog-head">
               <span class="catalog-head-title">完整曲库 <span id="music-catalog-count"></span></span>
               <input class="catalog-search" id="music-catalog-search" type="text" placeholder="搜索歌手 / 歌曲…" />
             </div>
             <div class="catalog-music-list" id="catalog-music-list"></div>
-          </div>
+          </details>
         </div>
       </div>
 
@@ -3864,7 +4622,7 @@
      ========================================================= */
   const FX = {
     BG_CANVAS: true,   // 全局背景
-    SPLASH:    true,   // 开机过场
+    SPLASH:    true,   // 保留原版启动进度页，加载结束后进入简历型主页
     TYPEWRITER:true,   // 侧栏角色打字机
   };
 
@@ -4587,9 +5345,10 @@
     const items = SITE_DATA.gallery || [];
     if (items.length === 0) {
       container.innerHTML = `
-        <div class="gallery-empty">
-          照片上传中 —— 在 <code>assets/gallery/</code> 放图片,再到 <code>data.js</code> 的
-          <code>gallery</code> 数组添加条目即可。
+        <div class="gallery-placeholders">
+          <article class="gallery-placeholder"><span>FRAME 01</span><h3>城市与海</h3><p>照片、地点与拍摄故事待补充</p></article>
+          <article class="gallery-placeholder"><span>FRAME 02</span><h3>路上的片刻</h3><p>旅行影像正在整理中</p></article>
+          <article class="gallery-placeholder"><span>FRAME 03</span><h3>下一段旅程</h3><p>保留一个继续出发的位置</p></article>
         </div>`;
       return;
     }
@@ -4876,6 +5635,7 @@
   function renderMusicCatalog() {
     const catalog = window.MUSIC_CATALOG;
     const countEl = document.getElementById('music-catalog-count');
+    const summaryCountEl = document.getElementById('music-catalog-count-summary');
     const listEl  = document.getElementById('catalog-music-list');
     const searchEl = document.getElementById('music-catalog-search');
     if (!catalog || !listEl) return;
@@ -4883,6 +5643,7 @@
 
     const total = catalog.reduce((s, g) => s + g.songs.length, 0);
     if (countEl) countEl.textContent = `(${total} 首)`;
+    if (summaryCountEl) summaryCountEl.textContent = `${total} 首`;
 
     function render(keyword) {
       keyword = (keyword || '').trim().toLowerCase();
@@ -5441,9 +6202,8 @@
     if (!module || !MODULE_TITLES[module]) return;
     const empty = document.getElementById('s2-detail-empty');
     if (empty) empty.style.display = 'none';
-    document.querySelectorAll('.s2-module').forEach(el => {
-      el.hidden = el.dataset.module !== module;
-    });
+    // 连续内容页始终展示全部模块，module 只负责深链定位。
+    document.querySelectorAll('.s2-module').forEach(el => { el.hidden = false; });
     currentModule = module;
     if (module === 'music')   renderMusicCatalog();
     if (module === 'reading') renderBookCatalog();
@@ -5452,7 +6212,9 @@
       const target = document.querySelector(`.s2-module[data-module="${module}"]`);
       const scene2 = document.querySelector('.scene-2');
       if (target && scene2) {
-        const targetTop = target.offsetTop - 40;
+        const sceneRect = scene2.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const targetTop = scene2.scrollTop + targetRect.top - sceneRect.top - 84;
         scene2.scrollTo({ top: targetTop, behavior: 'smooth' });
       }
     }
@@ -5493,7 +6255,9 @@
 
     // Scene 2 启动 / 停止
     if (scene === 2) {
-      if (typeof startConstellation === 'function') startConstellation();
+      const constellationStage = document.getElementById('s2-stage');
+      if (constellationStage && !constellationStage.hidden && typeof startConstellation === 'function') startConstellation();
+      else if (typeof stopConstellation === 'function') stopConstellation();
       if (module) {
         setTimeout(() => showModuleInline(module), 60);
         // 博客 + 有 detail(article id) → 打开文章阅读态
@@ -5511,8 +6275,10 @@
         }
       } else {
         const empty = document.getElementById('s2-detail-empty');
-        if (empty) empty.style.display = '';
-        document.querySelectorAll('.s2-module').forEach(el => el.hidden = true);
+        if (empty) empty.style.display = 'none';
+        document.querySelectorAll('.s2-module').forEach(el => { el.hidden = false; });
+        renderMusicCatalog();
+        renderBookCatalog();
         currentModule = null;
         if (_currentArticleId) closeArticle({ skipHistory: true });
         if (_currentBookIdx !== null) closeBook({ skipHistory: true });
@@ -5553,6 +6319,20 @@
   function initDeckRouter() {
     if (routerInited) return;
     routerInited = true;
+
+    // Scene 1 使用独立滚动容器，原生锚点不会自动滚动到正确位置。
+    document.querySelectorAll('[data-home-jump]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const target = document.getElementById(link.dataset.homeJump);
+        const scene1 = document.querySelector('.scene-1');
+        if (!target || !scene1) return;
+        const sceneRect = scene1.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const targetTop = scene1.scrollTop + targetRect.top - sceneRect.top - 64;
+        scene1.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+      });
+    });
 
     // 绑定博客 / 读书阅读态控件 (返回按钮 + Esc)
     bindBlogReader();
@@ -6037,6 +6817,63 @@
       constellationRaf = requestAnimationFrame(loop);
     }
   }
+
+  /* ── 招聘主页主题切换与滚动出现动效 ── */
+  (function initRecruitmentMotion() {
+    const toggle = document.getElementById('home-theme-toggle');
+    const savedTheme = localStorage.getItem('zlh-theme');
+    const useDark = savedTheme === 'dark';
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('theme-dark', dark);
+      if (toggle) {
+        toggle.textContent = dark ? '☀' : '◐';
+        toggle.setAttribute('aria-pressed', String(dark));
+        toggle.title = dark ? '切换浅色主题' : '切换深色主题';
+      }
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', dark ? '#111214' : '#fafafa');
+    }
+
+    applyTheme(useDark);
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const dark = !document.body.classList.contains('theme-dark');
+        applyTheme(dark);
+        localStorage.setItem('zlh-theme', dark ? 'dark' : 'light');
+      });
+    }
+
+    const revealSelector = [
+      '.home-section-head', '.home-about-grid', '.home-project-card',
+      '.home-list-item', '.home-end', '.s2-module-head',
+      '.s2-module > .sec-intro', '.s2-module > :not(.s2-module-head):not(.sec-intro)'
+    ].join(',');
+    const items = [...document.querySelectorAll(revealSelector)];
+    items.forEach(item => item.classList.add('reveal-item'));
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      items.forEach(item => item.classList.add('is-visible'));
+    } else {
+      document.querySelectorAll('.scene').forEach(scene => {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          });
+        }, { root: scene, threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+        scene.querySelectorAll(revealSelector).forEach(item => observer.observe(item));
+      });
+    }
+
+    const scene1 = document.querySelector('.scene-1');
+    const scene2 = document.querySelector('.scene-2');
+    const homeNav = document.querySelector('.home-nav');
+    const spaceTop = document.querySelector('.space-top');
+    if (scene1 && homeNav) scene1.addEventListener('scroll', () => homeNav.classList.toggle('is-scrolled', scene1.scrollTop > 12), { passive: true });
+    if (scene2 && spaceTop) scene2.addEventListener('scroll', () => spaceTop.classList.toggle('is-scrolled', scene2.scrollTop > 12), { passive: true });
+  })();
 </script>
 
 </body>

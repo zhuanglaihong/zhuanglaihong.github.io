@@ -11,11 +11,11 @@
 
 ```
 zhuanglaihong.github.io/
-├── index.html        # 主页 (Scene Deck:核心简历 + 个人空间)
+├── index.html        # 主页 (简历型入口 + 连续滚动个人空间)
 ├── data.js           # ⭐ 所有"会变动的内容"都在这里
 ├── post.html         # 博客文章详情页 (?id=xxx)
 ├── classic.html      # 旧滚动布局备份(右上角"经典视图"按钮废弃后留作纪念)
-├── resume.pdf        # 简历 PDF (Scene 1 底部"下载简历"按钮)
+├── resume.pdf        # 对外下载简历（当前同步自 D:\Project\Agent\resume-work\current_resume.pdf）
 ├── assets/
 │   ├── gallery/      # 旅行 / 摄影图片
 │   ├── covers/       # 书籍封面、demo 封面
@@ -34,8 +34,8 @@ zhuanglaihong.github.io/
 | 想做的事 | 改哪里 | 难度 |
 |----------|--------|------|
 | 加新读书 / 新博客 / 新资源 / 新爱好 / 新照片 | `data.js` | ★ |
-| 改名字 / 角色介绍 / 头像字 | `index.html` (搜关键词) | ★ |
-| 改经历 / 项目 / 论文 (简历内容) | `index.html` (Scene 1 tab 区) | ★★ |
+| 改名字 / 角色介绍 / 头像 | `index.html` (搜 `home-hero`) | ★ |
+| 改经历 / 项目 / 论文 (简历内容) | `index.html` (搜 `home-section`) | ★★ |
 | 加新项目演示 demo | `data.js` + `index.html`(注册函数) | ★★★ |
 | 上传图片 / 微信二维码 | 放到 `assets/` + 改 `data.js` | ★ |
 
@@ -165,30 +165,30 @@ contact: {
 
 ## 「偶尔」操作 - 改 `index.html`
 
-### 改头像字 / 名字 / 角色介绍
+### 改头像 / 名字 / 角色介绍
 
 打开 `index.html`,搜以下关键词:
 
 | 想改什么 | 搜索关键词 |
 |---------|-----------|
-| 头像里的"庄"字 | `class="s1-avatar"` |
-| 名字"庄赖宏" | `class="s1-name"` |
-| 角色介绍 | `class="s1-role"` |
+| 头像照片 | 替换 `assets/profile.jpg`（建议 3:4 竖图） |
+| 名字"庄赖宏" | `class="home-title"` |
+| 角色介绍 | `class="s1-role home-role"` |
 | 开场动画上方文案 | `splash-tagline` |
 | 网页标题 (浏览器标签) | `<title>` |
 
 ### 改 Scene 1 简历内容(经历 / 项目 / 论文 / 技能)
 
-这部分是硬编码 HTML,搜以下锚点:
+这部分是硬编码 HTML，按纵向单页顺序展示。搜以下锚点:
 
 | Tab 内容 | 搜索关键词 |
 |---------|-----------|
-| 教育与实习 (timeline) | `data-pane="exp"` |
-| 研究项目 | `data-pane="proj"` |
-| 发表论文 | `data-pane="papers"` |
-| 基本与技能 | `data-pane="skills"` |
+| 关于与技能 | `id="about"` |
+| 代表项目 | `id="projects"` |
+| 发表论文 | `id="publications"` |
+| 教育与实习 | `id="experience"` |
 
-每个 tab 内容区是一段独立 HTML,**复制粘贴整个 `<div class="tl-item">` 块**(经历/项目)或 `<div class="paper-item">` 块(论文)就能复制一项。
+新增项目可复制整个 `<article class="home-project-card">`，新增论文或经历可复制 `<article class="home-list-item">`。源码中仍保留旧 Tab 结构作为内容核对与回退参考，但页面不会展示它。
 
 ---
 
@@ -284,7 +284,7 @@ A: `body` 字段是 **HTML 字符串**,用反引号 `` ` `` 包起来支持多�
 A: 直接在数组里删掉那一项(包括前后的逗号),刷新页面就消失。
 
 **Q: 开场动画太频繁,关掉?**
-A: 同一浏览器会话只播放一次(sessionStorage 防扰民)。要完全关闭,在 `index.html` 找到 `const FX = { ... SPLASH: true ... }`,改为 `SPLASH: false`。
+A: 开场动画默认开启（`SPLASH: true`），同一浏览器会话只播放一次，避免反复打扰。如需关闭，在 `index.html` 找到 `const FX`，把它改为 `SPLASH: false`。
 
 **Q: 想看老版滚动布局?**
 A: `classic.html` 是备份。直接访问 https://zhuanglaihong.github.io/classic.html 即可。
