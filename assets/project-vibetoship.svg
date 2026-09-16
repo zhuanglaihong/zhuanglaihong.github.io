@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">VibeToShip AI 软件工程工作流</title>
+  <desc id="desc">00 到 12 的工程流程，以及推理模型、执行模型、推理模型的两模型协作分工</desc>
+  <defs>
+    <linearGradient id="bg" x1="80" y1="70" x2="1510" y2="850" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b1020"/>
+      <stop offset="0.55" stop-color="#111a35"/>
+      <stop offset="1" stop-color="#0a2530"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8da2ff"/>
+      <stop offset="1" stop-color="#56e0c5"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity=".32"/>
+    </filter>
+    <style>
+      .sans{font-family:Inter,"Noto Sans SC","Microsoft YaHei",Arial,sans-serif}
+      .mono{font-family:"JetBrains Mono",Consolas,monospace}
+      .stage{fill:#dfe6f8;font-size:27px;font-weight:650;text-anchor:middle}
+      .num{fill:#7d8aaa;font-size:18px;font-weight:700;text-anchor:middle}
+    </style>
+  </defs>
+  <rect width="1600" height="900" rx="42" fill="url(#bg)"/>
+  <circle cx="1420" cy="95" r="280" fill="#786cff" opacity=".11"/>
+  <circle cx="195" cy="825" r="300" fill="#39d6bd" opacity=".08"/>
+
+  <g class="sans">
+    <text x="92" y="100" fill="#8fa0c8" font-size="21" font-weight="700" letter-spacing="4">AI SOFTWARE ENGINEERING PLAYBOOK</text>
+    <text x="92" y="174" fill="#f7f9ff" font-size="64" font-weight="780">VibeToShip</text>
+    <text x="476" y="172" fill="#a9b5d3" font-size="28">从模糊想法到可验证交付</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="88" y="230" width="1424" height="344" rx="30" fill="#111b31" stroke="#2c3959" stroke-width="2"/>
+    <text x="126" y="278" class="mono" fill="#7f90b9" font-size="20" font-weight="700">00—12 · FULL DELIVERY FLOW</text>
+
+    <g class="sans">
+      <g transform="translate(145 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">00</text><text y="69" class="stage">分流</text></g>
+      <g transform="translate(360 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">01</text><text y="69" class="stage">需求</text></g>
+      <g transform="translate(575 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">02</text><text y="69" class="stage">计划</text></g>
+      <g transform="translate(790 320)"><circle r="34" fill="#182f42" stroke="#56e0c5" stroke-width="3"/><text y="-3" class="num">03</text><text y="69" class="stage">TDD</text></g>
+      <g transform="translate(1005 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">04</text><text y="69" class="stage">审查</text></g>
+      <g transform="translate(1220 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">05</text><text y="69" class="stage">验收</text></g>
+      <g transform="translate(1435 320)"><circle r="34" fill="#1d2a48" stroke="#788cff" stroke-width="3"/><text y="-3" class="num">10</text><text y="69" class="stage">PR 收尾</text></g>
+    </g>
+
+    <path d="M179 320H326M394 320H541M609 320H756M824 320H971M1039 320H1186M1254 320H1401" stroke="url(#accent)" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+
+    <g class="sans">
+      <rect x="126" y="438" width="216" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="234" y="490" class="stage">06 紧急修复</text>
+      <rect x="372" y="438" width="216" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="480" y="490" class="stage">07 代码重构</text>
+      <rect x="618" y="438" width="216" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="726" y="490" class="stage">08 项目脚手架</text>
+      <rect x="864" y="438" width="216" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="972" y="490" class="stage">09 任务交接</text>
+      <rect x="1110" y="438" width="170" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="1195" y="490" class="stage">11 复盘</text>
+      <rect x="1310" y="438" width="164" height="86" rx="18" fill="#18243c" stroke="#33415f"/><text x="1392" y="490" class="stage">12 排障</text>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)" class="sans">
+    <rect x="88" y="618" width="1424" height="202" rx="30" fill="#10192c" stroke="#2c3959" stroke-width="2"/>
+    <text x="126" y="667" class="mono" fill="#7f90b9" font-size="20" font-weight="700">MODEL ROLES · TWO MODELS, THREE RESPONSIBILITIES</text>
+    <g transform="translate(132 704)">
+      <rect width="360" height="76" rx="20" fill="#27345b" stroke="#8496ff" stroke-width="2"/>
+      <text x="180" y="35" fill="#f5f7ff" font-size="28" font-weight="750" text-anchor="middle">推理模型 · 想</text>
+      <text x="180" y="61" fill="#aab5d4" font-size="17" text-anchor="middle">需求、计划、架构</text>
+    </g>
+    <path d="M512 742H620" stroke="#657493" stroke-width="5" stroke-linecap="round"/>
+    <path d="M608 730l18 12-18 12" fill="none" stroke="#657493" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(640 704)">
+      <rect width="320" height="76" rx="20" fill="#183d3c" stroke="#56e0c5" stroke-width="2"/>
+      <text x="160" y="35" fill="#f5fffc" font-size="28" font-weight="750" text-anchor="middle">执行模型 · 做</text>
+      <text x="160" y="61" fill="#a8d5cd" font-size="17" text-anchor="middle">编码、TDD、修复</text>
+    </g>
+    <path d="M980 742H1088" stroke="#657493" stroke-width="5" stroke-linecap="round"/>
+    <path d="M1076 730l18 12-18 12" fill="none" stroke="#657493" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(1108 704)">
+      <rect width="360" height="76" rx="20" fill="#27345b" stroke="#8496ff" stroke-width="2"/>
+      <text x="180" y="35" fill="#f5f7ff" font-size="28" font-weight="750" text-anchor="middle">推理模型 · 审</text>
+      <text x="180" y="61" fill="#aab5d4" font-size="17" text-anchor="middle">审查、验收、复盘</text>
+    </g>
+  </g>
+</svg>
