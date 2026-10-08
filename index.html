@@ -4245,6 +4245,58 @@
     @media (prefers-reduced-motion: reduce) {
       .reveal-item { opacity: 1; transform: none; transition: none; }
     }
+
+/* Education and internships follow the same readable hierarchy. */
+.home-education { margin-top: 42px; }
+.home-subsection-title { color: var(--home-ink); font-size: 20px; margin: 30px 0 20px; }
+.home-experience-points { list-style: disc; padding-left: 20px; margin-top: 16px; color: var(--home-muted); font-size: 14px; line-height: 1.85; }
+.home-experience-points li + li { margin-top: 8px; }
+.home-experience-points strong { color: var(--home-ink); }
+/* Project collection: summary cards and a readable detail layer. */
+#projects [data-project="research-agent"] .home-project-media img { object-fit: cover; object-position: center; }
+.home-about-copy + .home-about-copy { margin-top: 18px; }
+#projects .home-project-card { min-height: 0; grid-column: auto; }
+#projects .home-project-card[hidden] { display: none; }
+#projects .home-project-media { height: 180px; }
+#projects .home-project-media img { object-position: top center; }
+#projects .home-project-links { flex-wrap: wrap; gap: 12px 18px; }
+.project-filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
+.project-filters button { padding: 10px 16px; border: 1px solid #d8d8de; border-radius: 24px; background: transparent; color: var(--home-ink); font: inherit; font-size: 13px; cursor: pointer; }
+.project-filters button span { margin-left: 6px; opacity: .65; }
+.project-filters button[aria-pressed="true"] { background: var(--home-ink); color: #fafafa; border-color: var(--home-ink); }
+.project-count { color: var(--home-muted); font-size: 13px; margin-bottom: 24px; }
+.project-detail-button { font: inherit; font-size: 13px; cursor: pointer; background: transparent; border: 0; }
+.project-dialog { position: fixed; inset: 0; width: min(780px, calc(100% - 32px)); max-height: 85vh; margin: auto; padding: 0; border: 1px solid #d8d8de; border-radius: 18px; background: #fafafa; color: #242429; box-shadow: 0 24px 90px #0004; }
+.project-dialog::backdrop { background: #10121a99; }
+.project-dialog-top { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 26px; background: inherit; border-bottom: 1px solid #ddd; z-index: 1; }
+.project-dialog-top span { font-size: 11px; letter-spacing: .08em; }
+.project-dialog-close { padding: 8px 12px; border: 1px solid #aaa; border-radius: 8px; color: inherit; background: transparent; cursor: pointer; }
+.project-dialog-body { padding: 28px 32px 36px; }
+.project-dialog-body h2 { font-size: 25px; line-height: 1.4; margin-bottom: 28px; }
+.project-dialog-body section + section { margin-top: 24px; }
+.project-dialog-body h3 { font-size: 16px; margin-bottom: 8px; }
+.project-dialog-body p, .project-dialog-body li { font-size: 15px; line-height: 1.85; }
+.project-dialog-body ul { list-style: disc; padding-left: 20px; }
+.project-dialog-body li + li { margin-top: 8px; }
+body.theme-dark .project-filters button[aria-pressed="true"] { color: #18181c; }
+body.theme-dark .project-dialog { background: #202124; color: #e5e5eb; border-color: #444; }
+body.theme-dark .project-dialog-top { border-color: #444; }
+.project-filters button:focus-visible, .project-detail-button:focus-visible, .project-dialog-close:focus-visible { outline: 3px solid #4f8cff; outline-offset: 3px; }
+@media(max-width: 700px) { #projects .home-projects { grid-template-columns: 1fr; } .project-dialog-body { padding: 24px 20px; } .project-dialog-top { padding: 14px 20px; } }
+
+
+#honors .honors-awards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#honors .home-honor-card strong { color: var(--home-ink); font-weight: 650; }
+.scholarship-panel { border: 1px solid #e1e1e6; border-radius: 12px; padding: 8px 24px; background: rgba(255,255,255,.65); }
+.scholarship-list > div { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 15px 0; }
+.scholarship-list > div + div { border-top: 1px solid #e1e1e6; }
+.scholarship-list dt { color: var(--home-ink); font-size: 15px; }
+.scholarship-list dd { color: var(--home-muted); white-space: nowrap; font-size: 13px; }
+.scholarship-list dd strong { color: var(--home-ink); font-size: 22px; margin-left: 4px; }
+body.theme-dark .scholarship-panel { background: #191a1e; border-color: #34343a; }
+body.theme-dark .scholarship-list > div + div { border-color: #34343a; }
+@media (min-width: 701px) and (max-width: 1100px) { #honors .campus-experience-grid > :last-child { grid-column: 1 / -1; } }
+@media (max-width: 700px) { #honors .honors-awards-grid { grid-template-columns: 1fr; } .scholarship-panel { padding: 8px 18px; } }
 </style>
 </head>
 <body>
@@ -4300,7 +4352,7 @@
       <header class="home-nav">
         <a class="home-brand" href="#home" data-home-jump="home">ZLH</a>
         <nav class="home-nav-links" aria-label="主页导航">
-          <a href="#about" data-home-jump="about">关于</a><a href="#projects" data-home-jump="projects">项目</a><a href="#publications" data-home-jump="publications">论文</a><a href="#experience" data-home-jump="experience">经历</a><a href="#honors" data-home-jump="honors">荣誉</a>
+          <a href="#about" data-home-jump="about">关于</a><a href="#projects" data-home-jump="projects">项目</a><a href="#experience" data-home-jump="experience">实习</a><a href="#publications" data-home-jump="publications">论文</a><a href="#honors" data-home-jump="honors">荣誉</a>
           <a class="home-nav-resume" href="resume.pdf" target="_blank" rel="noopener">简历 PDF</a>
           <button class="home-nav-space" type="button" data-goto-scene="2">个人空间 ↗</button>
           <button class="home-theme-toggle" type="button" id="home-theme-toggle" aria-label="切换深浅色主题" title="切换深浅色主题">◐</button>
@@ -4312,9 +4364,10 @@
             <p class="home-kicker">你好，我是</p>
             <h1 class="home-title">庄赖宏</h1>
             <div class="s1-role home-role">AI 应用开发 × 生成式模型 × Agent</div>
-            <p class="home-summary">大连理工大学硕士，期待成为 AI 应用开发工程师。具备生成式模型微调、水文时序建模与 Agent 工作流实践，能够从业务需求出发完成数据集、模型、接口与部署的完整交付。</p>
+            <p class="home-summary">我是庄赖宏，大连理工大学硕士在读，关注 AI 应用、生成式模型与水文智能体。我喜欢把研究中的想法做成能运行的工具，也在这里记录项目实践、技术思考，以及学习和生活中的见闻。</p>
             <div class="home-actions">
-              <a class="home-button primary" href="mailto:zlh994182204@163.com">联系我</a>
+              <a class="home-button primary" href="#projects" data-home-jump="projects">查看项目 ↓</a>
+              <button class="home-button" type="button" data-goto-scene="2">进入个人空间 ↗</button>
               <a class="home-button" href="resume.pdf" target="_blank" rel="noopener">查看简历 PDF ↗</a>
               <a class="home-button" href="https://github.com/zhuanglaihong" target="_blank" rel="noopener">GitHub ↗</a>
             </div>
@@ -4327,135 +4380,178 @@
           <div class="home-about-grid">
             <div class="home-about-photo"><img src="./assets/profile-event.png" alt="庄赖宏活动照片" /></div>
             <div>
-              <p class="home-about-copy">本科毕业于<strong>大连理工大学人工智能专业</strong>，目前攻读<strong>智慧城市建造与管理</strong>硕士学位。具备扎实的 Python、C/C++、java与深度学习基础，熟悉 PyTorch、Transformer、LSTM 和 Seq2Seq 等模型与框架；同时熟悉Agent、RAG、MCP 等大模型知识。</p>
-              <div class="home-skills" aria-label="技能标签"><span class="home-tag">Python / C++</span><span class="home-tag">PyTorch</span><span class="home-tag">SDXL / FLUX</span><span class="home-tag">Diffusers / LoRA</span><span class="home-tag">Transformer</span><span class="home-tag">LLM / Agent</span><span class="home-tag">RAG / MCP</span><span class="home-tag">Harness Engineering</span><span class="home-tag">SFT / RLHF</span><span class="home-tag">FastAPI / Docker</span></div>
+              <p class="home-about-copy">我本科就读于<strong>大连理工大学人工智能专业</strong>，目前在同校攻读<strong>智慧城市建造与管理硕士</strong>。现在的研究与实践围绕 AI 和水文领域展开，探索如何把模型、领域知识与软件工具结合起来，解决具体问题。</p>
+              <p class="home-about-copy">我的实践涉及水文时序预测、基于 RAG 的知识库问答、生成式模型微调，以及水文模型率定智能体。这些经历让我逐渐把注意力放到完整的实现过程：从整理数据、比较方案，到开发接口、验证结果和交付工具。</p>
+              <p class="home-about-copy">在这里，我会记录项目中的技术选择、实验结果和问题复盘，也分享读书、音乐和生活中的见闻。</p>
+              <div class="home-project-links"><a class="home-text-link" href="#projects" data-home-jump="projects">查看项目 ↓</a><a class="home-text-link" href="#2/blog">阅读技术随笔 ↗</a></div>
+            </div>
+          </div>
+
+          <div class="home-education" aria-labelledby="education-title">
+            <h3 id="education-title" class="home-subsection-title">教育背景</h3>
+            <div class="home-list">
+              <article class="home-list-item"><div class="home-list-meta">2024.09—至今<br>硕士在读</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">智慧城市建造与管理 · 硕士</p><p>研究方向：大模型驱动的水文建模与模型率定，开展领域知识组织、智能体工作流与实验验证。</p></div></article>
+              <article class="home-list-item"><div class="home-list-meta">2020.09—2024.06<br>本科</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">人工智能 · 本科</p><p>系统学习机器学习、深度学习、自然语言处理与计算机视觉，通过模型开发和信息安全竞赛开展实践。</p></div></article>
             </div>
           </div>
         </section>
 
         <section class="home-section" id="projects">
-          <div class="home-section-head"><div class="home-section-index">02 / PROJECTS</div><div><h2 class="home-section-title">代表项目</h2><p class="home-section-sub">AI 软件工程、知识库、生成式模型、时序预测与智能体，从研究验证推进到业务交付。</p></div></div>
-          <div class="home-projects">
-            <article class="home-project-card project-vibetoship has-media">
+ <div class="home-section-head"><div class="home-section-index">02 / PROJECTS</div><div><h2 class="home-section-title">项目与作品</h2><p class="home-section-sub">从科研助手到游戏创作，从模型实验到业务交付。先看作品，再展开背后的问题、选择与实践。</p></div></div>
+ <div class="project-filters" role="group" aria-label="按主题筛选项目"><button type="button" data-project-filter="all" aria-pressed="true">全部作品 <span>9</span></button><button type="button" data-project-filter="tools" aria-pressed="false">AI 应用与工具 <span>4</span></button><button type="button" data-project-filter="models" aria-pressed="false">模型与业务实践 <span>3</span></button><button type="button" data-project-filter="research" aria-pressed="false">研究与竞赛 <span>2</span></button></div>
+ <p class="project-count" aria-live="polite">展示全部 9 个项目 · 点击项目详情了解完整过程</p>
+ <div class="home-projects"><article class="home-project-card has-media" data-category="tools" data-project="research-agent">
+ <div class="home-project-media"><img src="assets/project-research-agent-clear.png" alt="Research Agent 工作台：实验结果分析与实测指标曲线" loading="lazy" width="1440" height="1000"><span class="home-project-media-expand" aria-hidden="true">⤢</span><span class="home-project-media-label">科研工作台 · 点击查看大图</span></div>
+ <div class="home-project-num">近期作品 01 · AI 应用与工具</div><h3>Research Agent · 本地科研编程助手</h3><p>将科研资料、代码生成、人工审批、实验执行与结果分析串联到一个本地工作台。</p>
+ <ul class="home-project-points"><li>构建<strong>项目知识检索与持久化会话</strong>，为代码任务提供带来源的上下文。</li><li>串联<strong>生成 → 审批 → 运行 → 分析</strong>，保存可核对的实验日志与指标。</li></ul>
+ <div class="home-skills"><span class="home-tag">Java</span><span class="home-tag">Spring Boot</span><span class="home-tag">LangChain4j</span><span class="home-tag">Vue</span><span class="home-tag">H2</span></div>
+ <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="research-agent">项目详情 ↗</button><a class="home-text-link" href="https://zhuanglaihong.github.io/research_agent/#/demo" target="_blank" rel="noopener">演示demo ↗</a><a class="home-text-link" href="https://github.com/zhuanglaihong/research_agent" target="_blank" rel="noopener">源码 ↗</a></div></article><template id="detail-research-agent"><h2>Research Agent · 本地科研编程助手</h2><section><h3>起因与目标</h3><p>科研资料、代码与实验结果常分散在不同工具中。这个项目把资料检索、编程任务和实验观察放进同一个本地工作台，让每一步有记录、可审阅。</p></section><section><h3>我的贡献</h3><p>围绕科研场景构建项目与任务管理、PDF 方法片段导入、项目内 BM25 检索、持久化会话、受限文件工具和实验观察工具；增加人工审批、后台 Worker、SSE 事件与只读 MCP 查询。</p></section><section><h3>实现与取舍</h3><p>Java 21 + Spring Boot 负责主后端，LangChain4j 组织模型与工具，H2 保存本地任务和会话。生成文件保存为独立产物，实验通过人工确认后交给 Java Runner，结果用于后续分析任务。</p></section><section><h3>成果与验证</h3><p>仓库保存 Ollama qwen3:8b 的真实本机链路：生成二次函数优化脚本、审批运行、读取 11 个指标点并生成分析报告。该集成案例 loss 从 4.0 降至 0.0461，属于基础链路验证，不是论文复现质量评测。</p></section><section><h3>当前进展</h3><p>公开页面为五个场景的会话回放，不调用实时模型或执行新实验。真实生成与实验在本地工作台运行；暂未实现自动调参、系统级执行沙箱或服务重启续跑。</p></section></template>
+<article class="home-project-card has-media" data-category="tools" data-project="idea2game">
+ <div class="home-project-media"><img src="assets/project-idea2game.png" alt="Idea2Game · 对话式小游戏创作台真实界面" loading="lazy"><span class="home-project-media-expand" aria-hidden="true">⤢</span><span class="home-project-media-label">PLAY · EDIT · EXPORT</span></div>
+ <div class="home-project-num">近期作品 02 · AI 应用与工具</div><h3>Idea2Game · 对话式小游戏创作台</h3><p>围绕“描述想法、试玩、选中对象修改、导出分享”构建网页小游戏创作流程。</p>
+ <ul class="home-project-points"><li>将代码生成平台扩展到<strong>Canvas / Three.js 游戏创作</strong>与实时预览。</li><li>通过<strong>稳定对象 ID</strong>传递编辑上下文，修改参数随保存与源码导出保留。</li></ul>
+ <div class="home-skills"><span class="home-tag">Java</span><span class="home-tag">LangChain4j</span><span class="home-tag">Vue</span><span class="home-tag">Canvas</span><span class="home-tag">Three.js</span></div>
+ <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="idea2game">项目详情 ↗</button><a class="home-text-link" href="https://game-forge-yu-demo.zhuanglaihong.chatgpt.site/" target="_blank" rel="noopener">试玩与参数编辑 ↗</a><a class="home-text-link" href="https://github.com/zhuanglaihong/idea2game_agent" target="_blank" rel="noopener">源码 ↗</a></div></article><template id="detail-idea2game"><h2>Idea2Game · 对话式小游戏创作台</h2><section><h3>起因与目标</h3><p>让个人创作者从一个玩法想法出发，在浏览器中试玩、修改并分享轻量游戏。基于原代码生成平台向游戏场景扩展，重点展示场景改造和新增能力。</p></section><section><h3>我的贡献</h3><p>围绕游戏创作改造工作台，增加三款可玩案例、Canvas 对象命中检测与 Three.js 射线选取、稳定对象 ID 编辑协议，以及素材库、作品参数保存和源码导出。</p></section><section><h3>实现与取舍</h3><p>沿用 Java / Spring Boot / LangChain4j 与 Vue 基础，在单文件、多文件与 Vue 工程生成策略之上补充游戏上下文。Canvas 与 Three.js 支持轻量网页游戏；公开体验采用预置案例和限定参数编辑，使试玩和导出可以直接访问。</p></section><section><h3>成果与验证</h3><p>公开创作台包含消除、射击与武侠生存三个案例；可选择对象、修改限定属性、保存作品并下载源码。素材随工程导出，保留来源和许可记录。</p></section><section><h3>当前进展</h3><p>公开体验尚未连接公网 AI 后端，制作记录为预先准备的案例，不能实时生成任意游戏。本地完整平台需配置后端和模型；分享链接复用已托管游戏与参数。</p></section></template>
+<article class="home-project-card has-media" data-category="tools" data-project="dailyinfo">
+ <div class="home-project-media"><img src="assets/project-dailyinfo.png" alt="DailyInfo · AI 科研情报与每日精选真实界面" loading="lazy"><span class="home-project-media-expand" aria-hidden="true">⤢</span><span class="home-project-media-label">COLLECT · RECOMMEND · DELIVER</span></div>
+ <div class="home-project-num">近期作品 03 · AI 应用与工具</div><h3>DailyInfo · AI 科研情报与每日精选</h3><p>聚合论文和技术动态，按研究兴趣生成中文摘要、推荐理由，并通过多渠道发送每日精选。</p>
+ <ul class="home-project-points"><li>基于原项目扩展<strong>主题筛选、相关性分析与推荐理由</strong>，连接采集到精选流程。</li><li>使用<strong>分析缓存与独立投递状态</strong>支持跨日去重和失败渠道恢复。</li></ul>
+ <div class="home-skills"><span class="home-tag">Python</span><span class="home-tag">FreshRSS</span><span class="home-tag">LLM</span><span class="home-tag">SQLite</span><span class="home-tag">Docker</span></div>
+ <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="dailyinfo">项目详情 ↗</button><a class="home-text-link" href="https://github.com/zhuanglaihong/dailyinfo" target="_blank" rel="noopener">源码 ↗</a></div></article><template id="detail-dailyinfo"><h2>DailyInfo · AI 科研情报与每日精选</h2><section><h3>起因与目标</h3><p>论文与技术信息来源分散，逐个浏览和判断相关性耗时。DailyInfo 将采集、中文归纳、主题推荐和投递组织为可重复运行的流水线。</p></section><section><h3>我的贡献</h3><p>基于 iHeadWater/dailyinfo 扩展个人主题推荐和多渠道精选推送；新增主题描述、关键词与排除词筛选、相关性阈值、分类限额、分析缓存和渠道级投递状态。</p></section><section><h3>实现与取舍</h3><p>Python 连接 FreshRSS、网页和 API 数据源，LLM 生成摘要与推荐理由，SQLite 保存分析缓存和投递记录。将采集、推荐、投递拆成 CLI 阶段，定时触发交给外部调度。</p></section><section><h3>成果与验证</h3><p>仓库提供五类信息流水线、Discord 简报截图，以及推荐和投递相关测试。支持邮箱、飞书和可选 Discord 推送；示例精选文件明确标为关键词规则演示数据，不作为真实 AI 推荐效果证据。</p></section><section><h3>当前进展</h3><p>作为本地自动化工具展示，通过截图、流程和源码了解使用方式。保留上游版权与许可证，个人扩展与原有采集能力分别说明。</p></section></template>
+<article data-category="tools" data-project="vibetoship" class="home-project-card project-vibetoship has-media">
               <div class="home-project-media">
                 <img src="assets/project-vibetoship.svg" alt="VibeToShip 00 到 12 全流程与推理、执行模型分工图">
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">WORKFLOW · 00—12</span>
               </div>
-              <div class="home-project-num">OPEN SOURCE 01 · AI SOFTWARE ENGINEERING</div><h3>VibeToShip · AI 辅助软件工程工作流</h3>
+              <div class="home-project-num">开源工具 · AI 工程工作流</div><h3>VibeToShip · AI 辅助软件工程工作流</h3>
               <p>面向 Claude Code、Codex 与 Cursor，将模糊想法沿可审查、可验证的工程路径推进到可靠交付。</p>
-              <ul class="home-project-points">
+              <ul class="home-project-points"><li>设计从 00 任务分流到 12 环境排障的<strong>完整工程流程</strong>，覆盖 TDD、审查、验收、PR 收尾与复盘。</li><li>建立“<strong>推理模型想 → 执行模型做 → 推理模型审</strong>”的模型分工体系。</li></ul>
+              <div class="home-skills"><span class="home-tag">AI Coding</span><span class="home-tag">Agent Workflow</span><span class="home-tag">Skills</span><span class="home-tag">TDD</span><span class="home-tag">Code Review</span></div>
+              <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="vibetoship">项目详情 ↗</button><a class="home-text-link" href="https://github.com/zhuanglaihong/VibeToShip" target="_blank" rel="noopener">查看 GitHub ↗</a></div>
+            </article><template id="detail-vibetoship"><h2>VibeToShip · AI 辅助软件工程工作流</h2><section><h3>起因与目标</h3><p>把 AI 编程从一次性对话组织为可审查、可验证的工程流程。</p></section><section><h3>我的贡献</h3><ul>
                 <li>设计从 00 任务分流到 12 环境排障的<strong>完整工程流程</strong>，覆盖 TDD、审查、验收、PR 收尾与复盘。</li>
                 <li>建立“<strong>推理模型想 → 执行模型做 → 推理模型审</strong>”的模型分工体系。</li>
                 <li>沉淀 <strong>16 个工程 Skill</strong>，并配套 DoD、测试策略、审查清单、Git/PR、ADR 与 RFC 规范。</li>
-              </ul>
-              <div class="home-skills"><span class="home-tag">AI Coding</span><span class="home-tag">Agent Workflow</span><span class="home-tag">Skills</span><span class="home-tag">TDD</span><span class="home-tag">Code Review</span></div>
-              <div class="home-project-links"><a class="home-text-link" href="https://github.com/zhuanglaihong/VibeToShip" target="_blank" rel="noopener">查看 GitHub ↗</a></div>
-            </article>
-            <article class="home-project-card home-project-card-wide has-media project-drone-lineart">
+              </ul></section><section><h3>实现与取舍</h3><p>以任务分流、测试、审查、验收和 PR 收尾组织工作；通过规范和 Skill 约束产物质量。</p></section><section><h3>成果与验证</h3><p>仓库提供工作流、Skill 与工程规范，访客可以直接查看具体内容。</p></section><section><h3>当前进展</h3><p>这是工程方法与工具集；不将规范数量等同于产品交付效果。</p></section></template>
+<article data-category="models" data-project="lineart" class="home-project-card home-project-card-wide has-media project-drone-lineart">
               <div class="home-project-media">
                 <img src="assets/project-drone-lineart.png" alt="文生简笔线稿模型生成的小男孩提灯笼多方案结果">
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">TEXT TO LINE ART</span>
               </div>
-              <div class="home-project-num">INTERNSHIP 02 · 2026.06—2026.09</div><h3>文本剧本生成无人机表演线稿工作流</h3>
+              <div class="home-project-num">实习实践 · 2026.06—2026.09</div><h3>文本剧本生成无人机表演线稿工作流</h3>
               <p>在深圳大漠大智控产品研发部探索“文本剧本 → 简笔线稿 → 无人机散点图”的自动化制作流程。</p>
-              <ul class="home-project-points">
+              <ul class="home-project-points"><li>独立整理、筛选并标注<strong>1206 组图文数据</strong>，覆盖人物、物品和场景，并编写英文文本描述。</li><li>分别对 SDXL 与 FLUX 进行<strong>LoRA 微调</strong>和同条件评测，最终选择线稿一致性与结构稳定性更好的 SDXL。</li></ul>
+              <div class="home-skills"><span class="home-tag">Python</span><span class="home-tag">SDXL</span><span class="home-tag">FLUX</span><span class="home-tag">Diffusers</span><span class="home-tag">LoRA</span><span class="home-tag">ComfyUI</span></div>
+            <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="lineart">项目详情 ↗</button></div></article><template id="detail-lineart"><h2>文本剧本生成无人机表演线稿工作流</h2><section><h3>起因与目标</h3><p>面向无人机表演制作，探索文本剧本到线稿、再到散点图的自动化流程。</p></section><section><h3>我的贡献</h3><ul>
                 <li>独立整理、筛选并标注<strong>1206 组图文数据</strong>，覆盖人物、物品和场景，并编写英文文本描述。</li>
                 <li>分别对 SDXL 与 FLUX 进行<strong>LoRA 微调</strong>和同条件评测，最终选择线稿一致性与结构稳定性更好的 SDXL。</li>
                 <li>针对过拟合、断线和结构缺失迭代数据、参数与提示词，交付 LoRA 权重及<strong>ComfyUI 推理工作流</strong>。</li>
                 <li>接入已有布点算法，完成从文本输入到散点图输出的<strong>端到端可行性验证</strong>。</li>
-              </ul>
-              <div class="home-skills"><span class="home-tag">Python</span><span class="home-tag">SDXL</span><span class="home-tag">FLUX</span><span class="home-tag">Diffusers</span><span class="home-tag">LoRA</span><span class="home-tag">ComfyUI</span></div>
-            </article>
-            <article class="home-project-card has-media project-flood-forecast">
+              </ul></section><section><h3>实现与取舍</h3><p>比较 SDXL 与 FLUX 在相同条件下的线稿表现，围绕过拟合、断线和结构缺失迭代数据与训练配置。</p></section><section><h3>成果与验证</h3><p>现有生成结果图展示线稿效果；交付物包含 LoRA 权重和 ComfyUI 工作流。</p></section><section><h3>当前进展</h3><p>已完成端到端可行性验证；项目详情展示个人负责的训练与工作流部分。</p></section></template>
+<article data-category="models" data-project="flood" class="home-project-card has-media project-flood-forecast">
               <div class="home-project-media">
                 <img src="assets/project-flood-forecast.png" alt="内蒙古少资料流域洪水预报的实测预测过程线、LSTM 编码器解码器模型与交付流程">
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">FLOOD FORECASTING</span>
               </div>
-              <div class="home-project-num">PROJECT 03 · MODEL & DELIVERY</div><h3>内蒙古少资料流域洪水预报</h3>
+              <div class="home-project-num">业务项目 · 建模与交付</div><h3>内蒙古少资料流域洪水预报</h3>
               <p>完成大样本数据集、模型迁移训练与山洪监测预警平台服务化交付。</p>
-              <ul class="home-project-points">
+              <ul class="home-project-points"><li>整合<strong>800+ 国内外流域</strong>公开数据和内蒙古 46 个目标流域专项数据。</li><li>设计三种迁移方案；联合微调在 26 个少资料流域取得平均 <strong>NSE 0.83</strong>，较物理模型基线提高 0.22。</li></ul>
+              <div class="home-skills"><span class="home-tag">LSTM</span><span class="home-tag">Encoder-Decoder</span><span class="home-tag">迁移学习</span><span class="home-tag">FastAPI</span><span class="home-tag">Docker</span></div>
+              <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="flood">项目详情 ↗</button><a class="home-text-link" href="https://gitcode.com/dlut-water/llm-backend" target="_blank" rel="noopener">查看项目 ↗</a></div>
+            </article><template id="detail-flood"><h2>内蒙古少资料流域洪水预报</h2><section><h3>起因与目标</h3><p>内蒙古目标流域资料有限，需要将大样本水文建模能力迁移到业务预测场景。</p></section><section><h3>我的贡献</h3><ul>
                 <li>整合<strong>800+ 国内外流域</strong>公开数据和内蒙古 46 个目标流域专项数据。</li>
                 <li>设计三种迁移方案；联合微调在 26 个少资料流域取得平均 <strong>NSE 0.83</strong>，较物理模型基线提高 0.22。</li>
                 <li>负责 FastAPI、Docker 与前端联调，支持模型集成至山洪监测预警平台。</li>
-              </ul>
-              <div class="home-skills"><span class="home-tag">LSTM</span><span class="home-tag">Encoder-Decoder</span><span class="home-tag">迁移学习</span><span class="home-tag">FastAPI</span><span class="home-tag">Docker</span></div>
-              <div class="home-project-links"><a class="home-text-link" href="https://gitcode.com/dlut-water/llm-backend" target="_blank" rel="noopener">查看项目 ↗</a></div>
-            </article>
-            <article class="home-project-card project-rag has-media">
+              </ul></section><section><h3>实现与取舍</h3><p>比较三种迁移方案，结合 LSTM 编码器解码器建模，并通过 FastAPI、Docker 完成服务化与前端联调。</p></section><section><h3>成果与验证</h3><p>现有项目记录：26 个少资料流域平均 NSE 0.83，较物理模型基线提高 0.22。</p></section><section><h3>当前进展</h3><p>指标对应项目中的目标流域与评测条件，不代表所有流域的普遍表现。</p></section></template>
+<article data-category="models" data-project="rag" class="home-project-card project-rag has-media">
               <div class="home-project-media">
                 <img src="assets/project-rag-reservoir.png" alt="水库调度知识库的父子分段、混合检索重排序与 Dify 问答工作流">
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">RAG · KNOWLEDGE FLOW</span>
               </div>
-              <div class="home-project-num">PROJECT 04 · 2024.12—2025.06</div><h3>基于 RAG 的水库调度知识库问答系统</h3>
+              <div class="home-project-num">业务项目 · 2024.12—2025.06</div><h3>基于 RAG 的水库调度知识库问答系统</h3>
               <p>面向水库调度规程问答场景，完成知识库构建、检索优化、Agent 工作流和自动化评测。</p>
-              <ul class="home-project-points">
+              <ul class="home-project-points"><li>结构化解析规程文档，使用<strong>父子分段</strong>处理长文本与表格，构建多问法测试集。</li><li>基于 Dify 搭建<strong>混合检索 + Rerank</strong> 链路，调优 Embedding、TopK 和 Score 参数。</li></ul>
+              <div class="home-skills"><span class="home-tag">RAG</span><span class="home-tag">Dify</span><span class="home-tag">Hybrid Search</span><span class="home-tag">Rerank</span><span class="home-tag">Evaluation</span></div>
+            <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="rag">项目详情 ↗</button></div></article><template id="detail-rag"><h2>基于 RAG 的水库调度知识库问答系统</h2><section><h3>起因与目标</h3><p>将水库调度规程转化为可检索、有上下文的问答知识库。</p></section><section><h3>我的贡献</h3><ul>
                 <li>结构化解析规程文档，使用<strong>父子分段</strong>处理长文本与表格，构建多问法测试集。</li>
                 <li>基于 Dify 搭建<strong>混合检索 + Rerank</strong> 链路，调优 Embedding、TopK 和 Score 参数。</li>
                 <li>编排知识检索与 LLM 调用节点，开发自动测试脚本，最终问答测试准确率达到 <strong>90%</strong>。</li>
-              </ul>
-              <div class="home-skills"><span class="home-tag">RAG</span><span class="home-tag">Dify</span><span class="home-tag">Hybrid Search</span><span class="home-tag">Rerank</span><span class="home-tag">Evaluation</span></div>
-            </article>
-            <article class="home-project-card has-media">
+              </ul></section><section><h3>实现与取舍</h3><p>以父子分段处理长文本与表格；使用混合检索、重排序及多问法测试集调优检索链路。</p></section><section><h3>成果与验证</h3><p>现有项目记录中，问答测试准确率达到 90%；配图展示知识处理与问答流程。</p></section><section><h3>当前进展</h3><p>指标限于该项目测试集；重点展示知识库建设和检索评测过程。</p></section></template>
+<article data-category="research" data-project="hydroclaw" class="home-project-card has-media">
               <div class="home-project-media">
                 <video src="https://github.com/user-attachments/assets/95648c65-c6e1-4832-ba69-783933747682" autoplay muted loop playsinline preload="metadata" aria-label="HydroAgent 水文模型率定智能体演示视频"></video>
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">DEMO · 50S</span>
               </div>
-              <div class="home-project-num">RESEARCH 05 · AGENTIC HYDROLOGY</div><h3>HydroClaw 水文模型率定智能体</h3>
+              <div class="home-project-num">研究项目 · 水文智能体</div><h3>HydroClaw 水文模型率定智能体</h3>
               <p>将领域经验封装为可复用 Skill，由 LLM 协调数据检查、模型率定和结果评估，实现自然语言驱动、可追踪且可复现的自动化水文建模流程。</p>
-              <ul class="home-project-points"><li>围绕<strong>技能编排</strong>组织领域知识与工具能力。</li><li>覆盖数据检查、参数率定、结果评估与实验记录全流程。</li><li>成果形成<strong>一区论文一作</strong>，目前审稿中。</li></ul>
+              <ul class="home-project-points"><li>围绕<strong>技能编排</strong>组织领域知识与工具能力。</li><li>覆盖数据检查、参数率定、结果评估与实验记录全流程。</li></ul>
               <div class="home-skills"><span class="home-tag">LLM Agent</span><span class="home-tag">Skill</span><span class="home-tag">Tool Use</span><span class="home-tag">Hydrological Modeling</span></div>
-              <div class="home-project-links"><button type="button" class="home-text-link proj-demo-btn" data-demo="hydroagent">在线演示 ↗</button><a class="home-text-link" href="https://github.com/iHeadWater/HydroAgent" target="_blank" rel="noopener">源代码 ↗</a></div>
-            </article>
-            <article class="home-project-card project-security has-media">
+              <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="hydroclaw">项目详情 ↗</button><button type="button" class="home-text-link proj-demo-btn" data-demo="hydroagent">在线演示 ↗</button><a class="home-text-link" href="https://github.com/iHeadWater/HydroAgent" target="_blank" rel="noopener">源代码 ↗</a></div>
+            </article><template id="detail-hydroclaw"><h2>HydroClaw 水文模型率定智能体</h2><section><h3>起因与目标</h3><p>让大模型利用结构化领域知识协调水文模型率定，减少流程中的重复人工操作。</p></section><section><h3>我的贡献</h3><ul><li>围绕<strong>技能编排</strong>组织领域知识与工具能力。</li><li>覆盖数据检查、参数率定、结果评估与实验记录全流程。</li><li>成果形成<strong>一区论文一作</strong>，目前审稿中。</li></ul></section><section><h3>实现与取舍</h3><p>围绕可复用 Skill 组织数据检查、模型率定、结果评估和实验记录。与通用科研编程助手分开，聚焦水文领域方法。</p></section><section><h3>成果与验证</h3><p>提供已有演示视频与代码入口；相关研究形成一作论文，目前审稿中。</p></section><section><h3>当前进展</h3><p>论文状态为审稿中；研究进展与应用能力分别呈现。</p></section></template>
+<article data-category="research" data-project="deepfake" class="home-project-card project-security has-media">
               <div class="home-project-media">
                 <img src="assets/project-security-deepfake.png" alt="DeepFake 音频频谱、SE-Res2Net 模型结构与信息安全竞赛证书合成图">
                 <span class="home-project-media-expand" aria-hidden="true">⤢</span>
                 <span class="home-project-media-label">DEEPFAKE AUDIO · CISC</span>
               </div>
-              <div class="home-project-num">COMPETITION 06 · 2023</div><h3>全国大学生信息安全竞赛</h3>
+              <div class="home-project-num">竞赛作品 · 2023</div><h3>谛听 · 深度伪造音频检测</h3>
               <p>2023 年国家级大创项目《谛听：深度伪造音频检测》。作为项目主要负责人带队参赛，获全国大学生信息安全竞赛国家级三等奖。</p>
-              <ul class="home-project-points">
+              <ul class="home-project-points"><li>面向 <strong>DeepFake 伪造音频检测</strong>，研发可辨别伪造语音的检测系统。</li><li>作为<strong>项目主要负责人</strong>，带领团队完成项目推进并参加 2023 年 8 月全国总决赛。</li></ul>
+              <div class="home-skills"><span class="home-tag">DeepFake Audio</span><span class="home-tag">ResNet</span><span class="home-tag">Res2Net</span><span class="home-tag">SE Block</span><span class="home-tag">Audio Detection</span></div>
+            <div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="deepfake">项目详情 ↗</button></div></article><template id="detail-deepfake"><h2>谛听 · 深度伪造音频检测</h2><section><h3>起因与目标</h3><p>面向深度伪造音频检测，研发能够辨别伪造语音的系统。</p></section><section><h3>我的贡献</h3><ul>
                 <li>面向 <strong>DeepFake 伪造音频检测</strong>，研发可辨别伪造语音的检测系统。</li>
                 <li>作为<strong>项目主要负责人</strong>，带领团队完成项目推进并参加 2023 年 8 月全国总决赛。</li>
                 <li>搭建基于<strong>残差网络</strong>的伪造语音检测系统，并将 Res2Net 与 SE 块结合为 SE-Res2Net 模块。</li>
                 <li>通过增强模型对语音伪造线索相关通道信息的关注能力，最终获得<strong>国家级三等奖</strong>。</li>
-              </ul>
-              <div class="home-skills"><span class="home-tag">DeepFake Audio</span><span class="home-tag">ResNet</span><span class="home-tag">Res2Net</span><span class="home-tag">SE Block</span><span class="home-tag">Audio Detection</span></div>
-            </article>
+              </ul></section><section><h3>实现与取舍</h3><p>结合 Res2Net 与 SE 通道注意力模块，增强模型对语音伪造相关线索的关注。</p></section><section><h3>成果与验证</h3><p>作为主要负责人带队参加 2023 年全国大学生信息安全竞赛，获国家级三等奖。</p></section><section><h3>当前进展</h3><p>属于竞赛与早期模型实践，保留方法与团队贡献记录。</p></section></template></div>
+ </section>
+ <dialog class="project-dialog" aria-labelledby="project-dialog-title"><div class="project-dialog-top"><span>PROJECT NOTES / 项目记录</span><button type="button" class="project-dialog-close" aria-label="关闭项目详情">关闭 ×</button></div><div class="project-dialog-body"></div></dialog>
+
+        <section class="home-section" id="experience">
+          <div class="home-section-head"><div class="home-section-index">03 / INTERNSHIPS</div><div><h2 class="home-section-title">实习经历</h2><p class="home-section-sub">围绕生成式模型与洪水预报，承担数据处理、模型开发和服务交付工作。</p></div></div>
+          <div class="home-list">
+            <article class="home-list-item"><div class="home-list-meta">2026.06—2026.09<br>实习</div><div class="home-list-body"><h3>深圳大漠大智控技术有限公司</h3><p class="eyebrow">产品研发部 · AI 应用实习生</p><p>负责无人机表演文生线稿方案，覆盖数据集构建、模型微调、效果评测与推理工作流交付。</p><ul class="home-experience-points"><li>独立整理、筛选并标注 <strong>1206 组图文数据</strong>，编写英文描述，为线稿模型微调提供训练数据。</li><li>对比 <strong>SDXL 与 FLUX LoRA</strong> 的生成效果，针对过拟合、断线与结构缺失迭代数据、训练参数和提示词。</li><li>交付 <strong>LoRA 权重与 ComfyUI 推理工作流</strong>，接入已有布点算法，验证文本到无人机散点图的制作流程。</li></ul><div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="lineart">查看项目详情 ↗</button></div></div></article>
+            <article class="home-list-item"><div class="home-list-meta">2025.09—2026.01<br>实习</div><div class="home-list-body"><h3>大连智水慧成科技有限责任公司</h3><p class="eyebrow">模型开发实习生</p><p>参与内蒙古山洪监测预警项目，负责洪水预报模型的数据处理、训练与服务化交付。</p><ul class="home-experience-points"><li>整合多源流域数据，完成时序数据处理与模型训练，支持少资料流域的迁移建模与预测验证。</li><li>开发 <strong>FastAPI 后端接口</strong>，通过 <strong>Docker</strong> 容器化模型服务，并完成前端联调。</li><li>支持模型接入山洪监测预警平台及后续维护，将实验模型转化为业务系统可调用的预测服务。</li></ul><div class="home-project-links"><button type="button" class="home-text-link project-detail-button" data-project-detail="flood">查看项目详情 ↗</button></div></div></article>
           </div>
         </section>
 
         <section class="home-section" id="publications">
-          <div class="home-section-head"><div class="home-section-index">03 / PUBLICATIONS</div><div><h2 class="home-section-title">研究与论文</h2><p class="home-section-sub">聚焦大模型驱动的水文建模与科研工作流自动化。</p></div></div>
+          <div class="home-section-head"><div class="home-section-index">04 / PUBLICATIONS</div><div><h2 class="home-section-title">研究与论文</h2><p class="home-section-sub">聚焦大模型驱动的水文建模与科研工作流自动化。</p></div></div>
           <div class="home-list">
             <article class="home-list-item"><div class="home-list-meta">UNDER REVIEW<br>FIRST AUTHOR</div><div class="home-list-body"><h3>An LLM-powered Agentic Framework for Automated Hydrological Model Calibration with Structured Domain Knowledge</h3><p class="eyebrow">一区论文 · 一作 · 审稿中</p><p>构建基于技能编排的水文模型率定智能体，将领域经验封装为可复用 Skill，由 LLM 协调数据检查、模型率定与结果评估。</p></div></article>
             <article class="home-list-item"><div class="home-list-meta">JOURNAL PAPER<br>FOURTH AUTHOR</div><div class="home-list-body"><h3>A Python Framework for Differentiable Hydrological Modeling and Research Workflow Automation</h3><p class="eyebrow">二区论文 · 四作</p><p>参与可微分水文建模与科研工作流自动化研究，探索以 Python 框架提升建模实验的可复用性与研究效率。</p></div></article>
           </div>
         </section>
 
-        <section class="home-section" id="experience">
-          <div class="home-section-head"><div class="home-section-index">04 / EXPERIENCE</div><div><h2 class="home-section-title">经历</h2><p class="home-section-sub">人工智能科班训练，从生成式模型到智慧水利的真实业务场景。</p></div></div>
-          <div class="home-list">
-            <article class="home-list-item"><div class="home-list-meta">2026.06—2026.09<br>INTERNSHIP</div><div class="home-list-body"><h3>深圳大漠大智控技术有限公司</h3><p class="eyebrow">产品研发部 · AI 应用实习生</p><p>负责无人机表演文生线稿方案的数据集构建、SDXL / FLUX LoRA 微调、效果优化和 ComfyUI 推理工作流交付。</p></div></article>
-            <article class="home-list-item"><div class="home-list-meta">2025.09—2026.01<br>INTERNSHIP</div><div class="home-list-body"><h3>大连智水慧成科技有限责任公司</h3><p class="eyebrow">模型开发实习生</p><p>参与内蒙古山洪监测预警项目，负责多源数据处理、时序模型训练、FastAPI 后端接口开发、Docker 容器化与前端联调，支持模型接入业务平台及后续维护。</p></div></article>
-            <article class="home-list-item"><div class="home-list-meta">2024.09—至今<br>MASTER</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">智慧城市建造与管理 · 硕士</p><p>开展 LLM 与水文模型结合的科研工作，参与实验室项目研发，并在国际期刊发表相关论文。</p></div></article>
-            <article class="home-list-item"><div class="home-list-meta">2020.09—2024.06<br>BACHELOR</div><div class="home-list-body"><h3>大连理工大学</h3><p class="eyebrow">人工智能 · 本科</p><p>主修深度学习、模式识别与机器学习、智能机器人、嵌入式开发、自然语言处理、知识工程和计算机视觉。</p></div></article>
-          </div>
-        </section>
         <section class="home-section" id="honors">
-          <div class="home-section-head"><div class="home-section-index">05 / HONORS</div><div><h2 class="home-section-title">荣誉与资质</h2><p class="home-section-sub">以竞赛成果、奖学金和学生工作记录持续的学习投入与组织责任。</p></div></div>
-          <div class="home-honors-grid">
-            <article class="home-honor-card"><span>NATIONAL COMPETITION</span><h3>全国大学生信息安全竞赛</h3><p>2023 年获国家级三等奖。</p></article>
-            <article class="home-honor-card"><span>COMPETITION</span><h3>数学与编程竞赛</h3><ul class="home-honor-list"><li>2021 年辽宁省大学生数学竞赛省三等奖</li><li>2022 年蓝桥杯编程比赛校赛二等奖</li></ul></article>
-            <article class="home-honor-card"><span>RECOGNITION</span><h3>校三好学生 · 优秀团员</h3><ul class="home-honor-list"><li>2020—2021 学年获“校三好学生”</li><li>2021—2022 学年获“优秀团员”</li></ul></article>
-            <article class="home-honor-card"><span>SCHOLARSHIP</span><h3>奖学金</h3><ul class="home-honor-list"><li>国家励志奖学金</li><li>学习优秀、社会实践、精神文明、文体活动奖学金</li></ul></article>
-            <article class="home-honor-card"><span>STUDENT LEADERSHIP</span><h3>电信学部社区实践中心副部长</h3><p>2021—2022 学年，筹办实践活动、开展培训课堂，并参与学部学生会场务工作。</p></article>
-            <article class="home-honor-card"><span>STUDENT LEADERSHIP</span><h3>人工智能专业 203 级队党支部书记</h3><p>2022—2023 学年，组织党课党日活动、整理党员资料，并指导新生推优大会。</p></article>
+          <div class="home-section-head"><div class="home-section-index">05 / HONORS</div><div><h2 class="home-section-title">荣誉与校园经历</h2><p class="home-section-sub">竞赛成果、奖学金与校园组织工作。</p></div></div>
+          <h3 class="home-subsection-title">竞赛与荣誉</h3>
+          <div class="home-honors-grid honors-awards-grid">
+            <article class="home-honor-card"><span>2023 · 国家级竞赛</span><h3>全国大学生信息安全竞赛</h3><p><strong>国家级三等奖</strong>。作为主要负责人，带队完成“谛听”深度伪造音频检测系统研发并参加全国总决赛。</p></article>
+            <article class="home-honor-card"><span>2021 / 2022 · 数学与编程</span><h3>数学与编程竞赛</h3><ul class="home-honor-list"><li>辽宁省大学生数学竞赛<strong>省级三等奖</strong>（2021）</li><li>蓝桥杯全国软件和信息技术专业人才大赛<strong>校级二等奖</strong>（2022）</li></ul></article>
+            <article class="home-honor-card"><span>2020—2022 · 校级荣誉</span><h3>校三好学生 · 优秀共青团员</h3><ul class="home-honor-list"><li>大连理工大学校三好学生（2020—2021 学年）</li><li>大连理工大学优秀共青团员（2021—2022 学年）</li></ul></article>
+            <article class="home-honor-card"><span>文体竞赛 · 舞蹈</span><h3>舞蹈比赛</h3><ul class="home-honor-list"><li>大连理工大学“峰岚杯”舞蹈类<strong>校一等奖</strong>（2023）</li><li>“悦动杯”华尔兹舞蹈比赛<strong>一等奖</strong>（2023）</li></ul></article>
+          </div>
+          <h3 class="home-subsection-title">奖学金</h3>
+          <div class="scholarship-panel">
+            <dl class="scholarship-list">
+              <div><dt>国家励志奖学金</dt><dd>前 <strong>1%</strong></dd></div>
+              <div><dt>学习优秀奖学金</dt><dd>前 <strong>15%</strong></dd></div>
+              <div><dt>社会实践奖学金</dt><dd>前 <strong>5%</strong></dd></div>
+              <div><dt>文体活动奖学金</dt><dd>前 <strong>6%</strong></dd></div>
+              <div><dt>精神文明奖学金</dt><dd>前 <strong>10%</strong></dd></div>
+            </dl>
+          </div>
+          <h3 class="home-subsection-title">校园经历</h3>
+          <div class="home-honors-grid campus-experience-grid">
+            <article class="home-honor-card"><span>2023.07—2023.08 · 支教队长</span><h3>“教育引领，侨乡振兴”义务支教</h3><p>带领 <strong>12 人团队</strong>赴青海开展为期 <strong>30 天</strong>的暑期支教，负责需求调研、课程设计、成员分工与现场协调；服务当地学生 <strong>23 人</strong>，项目获评<strong>暑期实践二等奖</strong>。</p></article>
+            <article class="home-honor-card"><span>2022—2024 · 党务负责人</span><h3>人工智能专业 2020 级队</h3><p>负责学生党支部日常党务与党员发展材料管理，组织党课、主题党日及推优大会，指导新生完成推优流程。</p></article>
+            <article class="home-honor-card"><span>2021—2022 · 副部长</span><h3>电信学部社区挂职中心</h3><p>参与策划与组织社区实践活动，负责实践培训课程、人员协调和现场执行，协助完成大型活动场务工作。</p></article>
           </div>
           <div class="home-end"><h2>继续了解我</h2><p>履历之外，我也在持续记录读书、技术随笔、旅行和音乐。可以进入个人空间继续逛逛，或者直接通过邮件联系我。</p><div class="home-actions"><button class="home-button primary" type="button" data-goto-scene="2">进入个人空间 ↗</button><a class="home-button" href="mailto:zlh994182204@163.com">发送邮件</a></div></div>
         </section>
@@ -7143,6 +7239,48 @@
     if (scene1 && homeNav) scene1.addEventListener('scroll', () => homeNav.classList.toggle('is-scrolled', scene1.scrollTop > 12), { passive: true });
     if (scene2 && spaceTop) scene2.addEventListener('scroll', () => spaceTop.classList.toggle('is-scrolled', scene2.scrollTop > 12), { passive: true });
   })();
+</script>
+
+
+<script>
+(function initProjectCollection() {
+ const cards = [...document.querySelectorAll('#projects article[data-category]')];
+ const filters = [...document.querySelectorAll('[data-project-filter]')];
+ const count = document.querySelector('.project-count');
+ filters.forEach(button => button.addEventListener('click', () => {
+   const category = button.dataset.projectFilter;
+   filters.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+   cards.forEach(card => { card.hidden = category !== 'all' && card.dataset.category !== category; if (!card.hidden) card.classList.add('is-visible'); });
+   const visible = cards.filter(card => !card.hidden).length;
+   count.textContent = `展示 ${visible} 个项目 · 点击项目详情了解完整过程`;
+ }));
+ const dialog = document.querySelector('.project-dialog');
+ const body = dialog.querySelector('.project-dialog-body');
+ let trigger;
+ document.querySelectorAll('[data-project-detail]').forEach(button => button.addEventListener('click', () => {
+   const template = document.getElementById('detail-' + button.dataset.projectDetail);
+   body.replaceChildren(template.content.cloneNode(true));
+   body.querySelector('h2').id = 'project-dialog-title';
+   const projectCard = document.querySelector('#projects [data-project="' + button.dataset.projectDetail + '"]');
+   const links = projectCard.querySelectorAll('.home-project-links a');
+   if (links.length) {
+     const footer = document.createElement('div');
+     footer.className = 'home-project-links';
+     links.forEach(link => footer.append(link.cloneNode(true)));
+     body.append(footer);
+   }
+   trigger = button;
+   dialog.showModal();
+   dialog.scrollTop = 0;
+ }));
+ dialog.querySelector('.project-dialog-close').addEventListener('click', () => dialog.close());
+ dialog.addEventListener('click', event => {
+   if (event.target !== dialog) return;
+   const rect = dialog.getBoundingClientRect();
+   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+ });
+ dialog.addEventListener('close', () => trigger?.focus());
+})();
 </script>
 
 </body>
